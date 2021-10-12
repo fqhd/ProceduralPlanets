@@ -1,0 +1,12 @@
+body {
+	margin: 0;
+}
+
+#info {
+	display: block;
+	text-align : center;
+	width: 100%;
+	position: absolute;
+	top: 10px;
+	color:aliceblue;
+}
