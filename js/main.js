@@ -1,6 +1,6 @@
 function main(){
 	// Querying the canvas from the DOM
-	const canvas = document.querySelector('#canvas');
+	const canvas = document.getElementById('canvas');
 
 	// Creating webgl context
 	const gl = canvas.getContext('webgl');
@@ -10,10 +10,9 @@ function main(){
 		alert('Failed to initialize webgl. Your browser may not support it.');
 		return;
 	}
-}
-function changeChampName(){
-	let element = document.getElementById('Champ');
-	element.innerHTML = 'Fahd Baba';
+
+	gl.clearColor(0.0, 0.0, 0.0, 1.0);
+	gl.clear(gl.COLOR_BUFFER_BIT);
 }
 
-window.onload = changeChampName;
+window.onload = main;
