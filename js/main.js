@@ -31,8 +31,37 @@ function main(){
 			gl_FragColor = vec4(1, 0, 0, 1);
 		}
 	`;
-	initShaderProgram(gl, vsSource, fsSource);
+	const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+
+	const shaderProgramInfo = {
+		program: shaderProgram,
+		attribLocations: {
+			vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+		},
+		uniformLocations: {
+			view: gl.getUniformLocations(shaderProgram, 'uModelViewMatrix'),
+			view: gl.getUniformLocations(shaderProgram, 'uProjectionMatrix'),
+		},
+	};
+
+	const positions = [
+		-1.0,  1.0,
+		1.0,  1.0,
+		-1.0, -1.0,
+		1.0, -1.0,
+    ];
+
+	ourBuffer = createBuffer(gl, positions);
 	
+}
+
+function createBuffer(gl, positions){
+	const buffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+	return buffer;
 }
 
 function initShaderProgram(gl, vsSource, fsSource){
