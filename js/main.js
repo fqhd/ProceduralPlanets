@@ -15,9 +15,41 @@ function main(){
 	gl.clear(gl.COLOR_BUFFER_BIT);
 
 
-	const fsSource = "void main(){gl_FragColor = vec4(1, 0, 0, 1);}";
+	const vsSource = `
+		attribute vec4 aVertexPosition;
 
-	loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+		uniform mat4 uModelViewMatrix;
+		uniform mat4 uProjectionMatrix;
+
+		void main() {
+		gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+		}
+	`;
+
+	const fsSource = `
+		void main(){
+			gl_FragColor = vec4(1, 0, 0, 1);
+		}
+	`;
+	initShaderProgram(gl, vsSource, fsSource);
+	
+}
+
+function initShaderProgram(gl, vsSource, fsSource){
+	const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
+	const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+	const program = gl.createProgram();
+	gl.attachShader(program, vertexShader);
+	gl.attachShader(program, fragmentShader);
+	gl.linkProgram(program);
+
+	if(!gl.getProgramParameter(program, gl.LINK_STATUS)){
+		alert('Failed to link shaders to program');
+		return null;
+	}
+
+	return program;
 }
 
 function loadShader(gl, type, source){
