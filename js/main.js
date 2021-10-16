@@ -2,7 +2,7 @@
 
 const {mat4} = glMatrix;
 
-function main(){
+function init(){
 	// Querying the canvas from the DOM
 	const canvas = document.getElementById('canvas');
 
@@ -73,7 +73,17 @@ function main(){
 
 	let ourBuffer = createBufferObject(gl, positions, colors);
 
-	renderBuffer(gl, ourBuffer, shaderProgramInfo);
+	let lastTime = 0;
+	function drawScene(currTime){
+		currTime *= 0.001;
+		let deltaTime = currTime - lastTime;
+		lastTime = currTime;
+
+		drawObject(gl, ourBuffer, shaderProgramInfo, deltaTime);
+
+		requestAnimationFrame(drawScene);
+	}
+	requestAnimationFrame(drawScene);
 }
 
 function createBufferObject(gl, positions, colors){
@@ -91,7 +101,9 @@ function createBufferObject(gl, positions, colors){
 	};
 }
 
-function renderBuffer(gl, buffer, shader){
+var zRotation = 0;
+function drawObject(gl, buffer, shader, deltaTime){
+	zRotation += deltaTime;
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	// Creating projection and view matrices
@@ -101,6 +113,7 @@ function renderBuffer(gl, buffer, shader){
 
 	proj = mat4.perspective(proj, 45, gl.canvas.clientWidth/gl.canvas.clientHeight, 0.1, 1000);
 	view = mat4.translate(view, view, [0, 0, -6]);
+	view = mat4.rotate(view, view, zRotation, [0, 0, 1]);
 
 	gl.uniformMatrix4fv(shader.uniformLocs.view, false, view);
 	gl.uniformMatrix4fv(shader.uniformLocs.proj, false, proj);
@@ -114,8 +127,8 @@ function renderBuffer(gl, buffer, shader){
 	gl.enableVertexAttribArray(shader.attribLocs.color);
 
 	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-
 }
+
 
 function initShaderProgram(gl, vsSource, fsSource){
 	const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
@@ -153,4 +166,4 @@ function loadShader(gl, type, source){
 	return shader;
 }
 
-window.onload = main;
+window.onload = init;
