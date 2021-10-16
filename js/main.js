@@ -1,3 +1,5 @@
+const {mat4} = glMatrix;
+
 function main(){
 	// Querying the canvas from the DOM
 	const canvas = document.getElementById('canvas');
@@ -11,9 +13,10 @@ function main(){
 		return;
 	}
 
+	// Setting opengl state
 	gl.clearColor(0.0, 0.0, 0.0, 1.0);
-	gl.clear(gl.COLOR_BUFFER_BIT);
-
+	gl.enable(gl.DEPTH_TEST);
+	gl.depthFunc(gl.LEQUAL);
 
 	const vsSource = `
 		attribute vec4 aVertexPosition;
@@ -39,8 +42,8 @@ function main(){
 			vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
 		},
 		uniformLocations: {
-			view: gl.getUniformLocations(shaderProgram, 'uModelViewMatrix'),
-			view: gl.getUniformLocations(shaderProgram, 'uProjectionMatrix'),
+			view: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+			proj: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
 		},
 	};
 
@@ -52,7 +55,8 @@ function main(){
     ];
 
 	ourBuffer = createBuffer(gl, positions);
-	
+
+	renderBuffer(gl, ourBuffer, shaderProgramInfo);
 }
 
 function createBuffer(gl, positions){
@@ -62,6 +66,30 @@ function createBuffer(gl, positions){
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
 	return buffer;
+}
+
+function renderBuffer(gl, buffer, shader){
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+
+	// Creating projection and view matrices
+	gl.useProgram(shader.program);
+	let proj = mat4.create();
+	let view = mat4.create();
+
+	proj = mat4.perspective(proj, 45, gl.canvas.clientWidth/gl.canvas.clientHeight, 0.1, 1000);
+	view = mat4.translate(view, view, [0, 0, -6]);
+
+	gl.uniformMatrix4fv(shader.uniformLocations.view, false, view);
+	gl.uniformMatrix4fv(shader.uniformLocations.proj, false, proj);
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+	gl.vertexAttribPointer(shader.attribLocations.vertexPosition, 2, gl.FLOAT, false, 0, 0);
+	gl.enableVertexAttribArray(shader.attribLocations.vertexPosition);
+	console.log('Attrib Position: ' + shader.attribLocations.vertexPosition);
+
+	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
 }
 
 function initShaderProgram(gl, vsSource, fsSource){
