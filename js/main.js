@@ -1,3 +1,5 @@
+'use strict';
+
 const {mat4} = glMatrix;
 
 function main(){
@@ -54,7 +56,7 @@ function main(){
 		1.0, -1.0,
     ];
 
-	ourBuffer = createBuffer(gl, positions);
+	let ourBuffer = createBuffer(gl, positions);
 
 	renderBuffer(gl, ourBuffer, shaderProgramInfo);
 }
