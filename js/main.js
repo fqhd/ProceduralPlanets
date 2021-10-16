@@ -43,19 +43,7 @@ function init(){
 		}
 	`;
 
-	const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
-
-	const shaderProgramInfo = {
-		program: shaderProgram,
-		attribLocs: {
-			vertex: gl.getAttribLocation(shaderProgram, 'aPosition'),
-			color: gl.getAttribLocation(shaderProgram, 'aColor')
-		},
-		uniformLocs: {
-			view: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
-			proj: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
-		},
-	};
+	const shader = initShader(gl, vsSource, fsSource);
 
 	const positions = [
 		-1.0,  1.0,
@@ -73,13 +61,22 @@ function init(){
 
 	let ourBuffer = createBufferObject(gl, positions, colors);
 
-	let lastTime = 0;
 	function drawScene(currTime){
-		currTime *= 0.001;
-		let deltaTime = currTime - lastTime;
-		lastTime = currTime;
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-		drawObject(gl, ourBuffer, shaderProgramInfo, deltaTime);
+		// Creating projection and view matrices
+		gl.useProgram(shader.program);
+		let proj = mat4.create();
+		let view = mat4.create();
+
+		proj = mat4.perspective(proj, 45, gl.canvas.clientWidth/gl.canvas.clientHeight, 0.1, 1000);
+		view = mat4.translate(view, view, [0, 0, -6]);
+		view = mat4.rotate(view, view, currTime*0.001, [0, 0, 1]);
+
+		gl.uniformMatrix4fv(shader.uniformLocs.view, false, view);
+		gl.uniformMatrix4fv(shader.uniformLocs.proj, false, proj);
+
+		drawObject(gl, ourBuffer, shader);
 
 		requestAnimationFrame(drawScene);
 	}
@@ -101,22 +98,8 @@ function createBufferObject(gl, positions, colors){
 	};
 }
 
-var zRotation = 0;
-function drawObject(gl, buffer, shader, deltaTime){
-	zRotation += deltaTime;
+function drawObject(gl, buffer, shader){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-	// Creating projection and view matrices
-	gl.useProgram(shader.program);
-	let proj = mat4.create();
-	let view = mat4.create();
-
-	proj = mat4.perspective(proj, 45, gl.canvas.clientWidth/gl.canvas.clientHeight, 0.1, 1000);
-	view = mat4.translate(view, view, [0, 0, -6]);
-	view = mat4.rotate(view, view, zRotation, [0, 0, 1]);
-
-	gl.uniformMatrix4fv(shader.uniformLocs.view, false, view);
-	gl.uniformMatrix4fv(shader.uniformLocs.proj, false, proj);
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffer.positions);
 	gl.vertexAttribPointer(shader.attribLocs.vertex, 2, gl.FLOAT, false, 0, 0);
@@ -130,7 +113,7 @@ function drawObject(gl, buffer, shader, deltaTime){
 }
 
 
-function initShaderProgram(gl, vsSource, fsSource){
+function initShader(gl, vsSource, fsSource){
 	const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
 	const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
 
@@ -144,7 +127,17 @@ function initShaderProgram(gl, vsSource, fsSource){
 		return null;
 	}
 
-	return program;
+	return {
+		program,
+		attribLocs: {
+			vertex: gl.getAttribLocation(program, 'aPosition'),
+			color: gl.getAttribLocation(program, 'aColor')
+		},
+		uniformLocs: {
+			view: gl.getUniformLocation(program, 'uModelViewMatrix'),
+			proj: gl.getUniformLocation(program, 'uProjectionMatrix'),
+		}
+	};
 }
 
 function loadShader(gl, type, source){
