@@ -21,29 +21,37 @@ function main(){
 	gl.depthFunc(gl.LEQUAL);
 
 	const vsSource = `
-		attribute vec4 aVertexPosition;
+		attribute vec4 aPosition;
+		attribute vec4 aColor;
 
 		uniform mat4 uModelViewMatrix;
 		uniform mat4 uProjectionMatrix;
 
+		varying lowp vec4 vColor;
+
 		void main() {
-		gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+			gl_Position = uProjectionMatrix * uModelViewMatrix * aPosition;
+			vColor = aColor;
 		}
 	`;
 
 	const fsSource = `
+		varying lowp vec4 vColor;
+
 		void main(){
-			gl_FragColor = vec4(1, 0, 0, 1);
+			gl_FragColor = vColor;
 		}
 	`;
+
 	const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
 
 	const shaderProgramInfo = {
 		program: shaderProgram,
-		attribLocations: {
-			vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+		attribLocs: {
+			vertex: gl.getAttribLocation(shaderProgram, 'aPosition'),
+			color: gl.getAttribLocation(shaderProgram, 'aColor')
 		},
-		uniformLocations: {
+		uniformLocs: {
 			view: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
 			proj: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
 		},
@@ -56,23 +64,35 @@ function main(){
 		1.0, -1.0,
     ];
 
-	let ourBuffer = createBuffer(gl, positions);
+	const colors = [
+		1, 0, 0, 1,
+		0, 1, 0, 1,
+		0, 0, 1, 1,
+		1, 1, 1, 1,
+	];
+
+	let ourBuffer = createBufferObject(gl, positions, colors);
 
 	renderBuffer(gl, ourBuffer, shaderProgramInfo);
 }
 
-function createBuffer(gl, positions){
-	const buffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-
+function createBufferObject(gl, positions, colors){
+	const posBuff = gl.createBuffer(); // Position buffer
+	gl.bindBuffer(gl.ARRAY_BUFFER, posBuff);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-	return buffer;
+	const colorBuff = gl.createBuffer(); // Color buffer
+	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuff);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+
+	return {
+		positions: posBuff,
+		colors: colorBuff
+	};
 }
 
 function renderBuffer(gl, buffer, shader){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
 
 	// Creating projection and view matrices
 	gl.useProgram(shader.program);
@@ -82,13 +102,16 @@ function renderBuffer(gl, buffer, shader){
 	proj = mat4.perspective(proj, 45, gl.canvas.clientWidth/gl.canvas.clientHeight, 0.1, 1000);
 	view = mat4.translate(view, view, [0, 0, -6]);
 
-	gl.uniformMatrix4fv(shader.uniformLocations.view, false, view);
-	gl.uniformMatrix4fv(shader.uniformLocations.proj, false, proj);
+	gl.uniformMatrix4fv(shader.uniformLocs.view, false, view);
+	gl.uniformMatrix4fv(shader.uniformLocs.proj, false, proj);
 
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-	gl.vertexAttribPointer(shader.attribLocations.vertexPosition, 2, gl.FLOAT, false, 0, 0);
-	gl.enableVertexAttribArray(shader.attribLocations.vertexPosition);
-	console.log('Attrib Position: ' + shader.attribLocations.vertexPosition);
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffer.positions);
+	gl.vertexAttribPointer(shader.attribLocs.vertex, 2, gl.FLOAT, false, 0, 0);
+	gl.enableVertexAttribArray(shader.attribLocs.vertex);
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffer.colors);
+	gl.vertexAttribPointer(shader.attribLocs.color, 4, gl.FLOAT, false, 0, 0);
+	gl.enableVertexAttribArray(shader.attribLocs.color);
 
 	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
