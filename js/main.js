@@ -18,7 +18,8 @@ function init(){
 	// Setting opengl state
 	gl.clearColor(0.0, 0.0, 0.0, 1.0);
 	gl.enable(gl.DEPTH_TEST);
-	gl.depthFunc(gl.LEQUAL);
+	gl.enable(gl.CULL_FACE);
+	gl.frontFace(gl.CCW);
 
 	const vsSource = `
 		attribute vec4 aPosition;
@@ -45,21 +46,45 @@ function init(){
 
 	const shader = initShader(gl, vsSource, fsSource);
 
-	const positions = [
-		-1.0,  1.0,
-		1.0,  1.0,
-		-1.0, -1.0,
-		1.0, -1.0,
-    ];
+	let positions = [
+		0, 0, 0,
+		0, 1, 0,
+		1, 1, 0,
+		1, 0, 0,
 
-	const colors = [
-		1, 0, 0, 1,
-		0, 1, 0, 1,
-		0, 0, 1, 1,
-		1, 1, 1, 1,
+		0, 0, 1,
+		0, 1, 1,
+		1, 1, 1,
+		1, 0, 1,
+    ];
+	positions = positions.map(pos => {return pos-0.5});
+
+	const colors = [];
+	for(let i = 0; i < 8; i++){
+		colors.push(...getRandomColor());
+	}
+
+	const indices = [
+		0, 1, 2,
+		0, 2, 3,
+
+		5, 4, 6,
+		4, 7, 6,
+
+		1, 4, 5,
+		0, 4, 1,
+
+		6, 3, 2,
+		7, 3, 6,
+
+		6, 1, 5,
+		2, 1, 6,
+
+		4, 0, 7,
+		7, 0, 3,
 	];
 
-	let ourBuffer = createBufferObject(gl, positions, colors);
+	let ourBuffer = createVBO(gl, positions, colors, indices);
 
 	function drawScene(currTime){
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -71,19 +96,24 @@ function init(){
 
 		proj = mat4.perspective(proj, 45, gl.canvas.clientWidth/gl.canvas.clientHeight, 0.1, 1000);
 		view = mat4.translate(view, view, [0, 0, -6]);
-		view = mat4.rotate(view, view, currTime*0.001, [0, 0, 1]);
+		view = mat4.rotate(view, view, currTime*0.001, [0, 1, 0]);
+		view = mat4.rotate(view, view, currTime*0.001, [1, 0, 0]);
 
 		gl.uniformMatrix4fv(shader.uniformLocs.view, false, view);
 		gl.uniformMatrix4fv(shader.uniformLocs.proj, false, proj);
 
-		drawObject(gl, ourBuffer, shader);
+		drawObject(gl, ourBuffer, shader, indices.length);
 
 		requestAnimationFrame(drawScene);
 	}
 	requestAnimationFrame(drawScene);
 }
 
-function createBufferObject(gl, positions, colors){
+function getRandomColor(){
+	return [Math.random(), Math.random(), Math.random(), 1];
+}
+
+function createVBO(gl, positions, colors, indices){
 	const posBuff = gl.createBuffer(); // Position buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, posBuff);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
@@ -92,24 +122,31 @@ function createBufferObject(gl, positions, colors){
 	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuff);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
+	const indicesBuff = gl.createBuffer(); // Color buffer
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indicesBuff);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
+
 	return {
 		positions: posBuff,
-		colors: colorBuff
+		colors: colorBuff,
+		indices: indicesBuff,
 	};
 }
 
-function drawObject(gl, buffer, shader){
+function drawObject(gl, buffer, shader, length){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffer.positions);
-	gl.vertexAttribPointer(shader.attribLocs.vertex, 2, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(shader.attribLocs.vertex, 3, gl.FLOAT, false, 0, 0);
 	gl.enableVertexAttribArray(shader.attribLocs.vertex);
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffer.colors);
 	gl.vertexAttribPointer(shader.attribLocs.color, 4, gl.FLOAT, false, 0, 0);
 	gl.enableVertexAttribArray(shader.attribLocs.color);
 
-	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.indices);
+
+	gl.drawElements(gl.TRIANGLES, length, gl.UNSIGNED_BYTE, 0);
 }
 
 
