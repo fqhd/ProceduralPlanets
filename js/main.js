@@ -24,67 +24,77 @@ function init(){
 	const vsSource = `
 		attribute vec4 aPosition;
 		attribute vec4 aColor;
+		attribute vec2 aUV;
 
 		uniform mat4 uModelViewMatrix;
 		uniform mat4 uProjectionMatrix;
 
 		varying lowp vec4 vColor;
+		varying lowp vec2 vUV;
 
 		void main() {
 			gl_Position = uProjectionMatrix * uModelViewMatrix * aPosition;
 			vColor = aColor;
+			vUV = aUV;
 		}
 	`;
 
 	const fsSource = `
 		varying lowp vec4 vColor;
+		varying lowp vec2 vUV;
+
+		uniform sampler2D uSampler;
 
 		void main(){
-			gl_FragColor = vColor;
+			gl_FragColor = texture2D(uSampler, vUV);
 		}
 	`;
 
 	const shader = initShader(gl, vsSource, fsSource);
 
 	let positions = [
-		0, 0, 0,
 		0, 1, 0,
-		1, 1, 0,
+		0, 0, 0,
 		1, 0, 0,
 
 		0, 0, 1,
-		0, 1, 1,
-		1, 1, 1,
-		1, 0, 1,
+		0, 1, 0,
+		1, 0, 0,
+
+		0, 0, 1,
+		0, 0, 0,
+		0, 1, 0,
+
+		0, 0, 0,
+		0, 0, 1,
+		1, 0, 0,
     ];
 	positions = positions.map(pos => {return pos-0.5});
 
 	const colors = [];
-	for(let i = 0; i < 8; i++){
+	for(let i = 0; i < positions.length / 3; i++){
 		colors.push(...getRandomColor());
 	}
 
-	const indices = [
-		0, 1, 2,
-		0, 2, 3,
+	const uvs = [
+		0, 1,
+		0, 0,
+		1, 0,
 
-		5, 4, 6,
-		4, 7, 6,
+		0, 1,
+		1, 0,
+		0, 0,
 
-		1, 4, 5,
-		0, 4, 1,
+		0, 1,
+		0, 0,
+		1, 0,
 
-		6, 3, 2,
-		7, 3, 6,
-
-		6, 1, 5,
-		2, 1, 6,
-
-		4, 0, 7,
-		7, 0, 3,
+		0, 0,
+		0, 1,
+		1, 1
 	];
 
-	let ourBuffer = createVBO(gl, positions, colors, indices);
+	const ourBuffer = createVBO(gl, positions, colors, uvs);
 
 	function drawScene(currTime){
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -102,7 +112,7 @@ function init(){
 		gl.uniformMatrix4fv(shader.uniformLocs.view, false, view);
 		gl.uniformMatrix4fv(shader.uniformLocs.proj, false, proj);
 
-		drawObject(gl, ourBuffer, shader, indices.length);
+		drawObject(gl, ourBuffer, shader);
 
 		requestAnimationFrame(drawScene);
 	}
@@ -113,7 +123,7 @@ function getRandomColor(){
 	return [Math.random(), Math.random(), Math.random(), 1];
 }
 
-function createVBO(gl, positions, colors, indices){
+function createVBO(gl, positions, colors, uvs, indices){
 	const posBuff = gl.createBuffer(); // Position buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, posBuff);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
@@ -122,31 +132,38 @@ function createVBO(gl, positions, colors, indices){
 	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuff);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
-	const indicesBuff = gl.createBuffer(); // Color buffer
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indicesBuff);
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
+	const uvBuff = gl.createBuffer(); // Texture coords buffer
+	gl.bindBuffer(gl.ARRAY_BUFFER, uvBuff);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
+
+	const texture = createTexture(gl);
 
 	return {
-		positions: posBuff,
-		colors: colorBuff,
-		indices: indicesBuff,
+		posBuff,
+		colorBuff,
+		uvBuff,
+		texture,
 	};
 }
 
-function drawObject(gl, buffer, shader, length){
+function drawObject(gl, obj, shader){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffer.positions);
+	gl.bindBuffer(gl.ARRAY_BUFFER, obj.posBuff);
 	gl.vertexAttribPointer(shader.attribLocs.vertex, 3, gl.FLOAT, false, 0, 0);
 	gl.enableVertexAttribArray(shader.attribLocs.vertex);
 
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffer.colors);
+	gl.bindBuffer(gl.ARRAY_BUFFER, obj.colorBuff);
 	gl.vertexAttribPointer(shader.attribLocs.color, 4, gl.FLOAT, false, 0, 0);
 	gl.enableVertexAttribArray(shader.attribLocs.color);
 
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.indices);
+	gl.bindBuffer(gl.ARRAY_BUFFER, obj.uvBuff);
+	gl.vertexAttribPointer(shader.attribLocs.uv, 2, gl.FLOAT, false, 0, 0);
+	gl.enableVertexAttribArray(shader.attribLocs.uv);
 
-	gl.drawElements(gl.TRIANGLES, length, gl.UNSIGNED_BYTE, 0);
+	gl.bindTexture(gl.TEXTURE_2D, obj.texture);
+
+	gl.drawArrays(gl.TRIANGLES, 0, 12);
 }
 
 
@@ -168,7 +185,8 @@ function initShader(gl, vsSource, fsSource){
 		program,
 		attribLocs: {
 			vertex: gl.getAttribLocation(program, 'aPosition'),
-			color: gl.getAttribLocation(program, 'aColor')
+			color: gl.getAttribLocation(program, 'aColor'),
+			uv: gl.getAttribLocation(program, 'aUV'),
 		},
 		uniformLocs: {
 			view: gl.getUniformLocation(program, 'uModelViewMatrix'),
@@ -194,6 +212,22 @@ function loadShader(gl, type, source){
 	}
 
 	return shader;
+}
+
+function createTexture(gl){
+	const texture = gl.createTexture();
+	gl.bindTexture(gl.TEXTURE_2D, texture);
+	const data = [
+		0, 0, 255, 255, 255, 255, 0, 255,
+		255, 255, 0, 255, 0, 0, 255, 255,
+	];
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 2, 2, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(data));
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+
+	return texture;
 }
 
 window.onload = init;
