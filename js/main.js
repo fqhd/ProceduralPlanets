@@ -108,6 +108,7 @@ function init(){
 		view = mat4.translate(view, view, [0, 0, -6]);
 		view = mat4.rotate(view, view, currTime*0.001, [0, 1, 0]);
 		view = mat4.rotate(view, view, currTime*0.001, [1, 0, 0]);
+		view = mat4.scale(view, view, [2, 2, 2]);
 
 		gl.uniformMatrix4fv(shader.uniformLocs.view, false, view);
 		gl.uniformMatrix4fv(shader.uniformLocs.proj, false, proj);
