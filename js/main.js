@@ -19,7 +19,7 @@ function init(){
 	gl.clearColor(0.0, 0.0, 0.0, 1.0);
 	gl.enable(gl.DEPTH_TEST);
 	gl.enable(gl.CULL_FACE);
-	gl.frontFace(gl.CCW);
+	gl.frontFace(gl.CW);
 
 	const vsSource = `
 		attribute vec4 aPosition;
@@ -94,7 +94,7 @@ function init(){
 		1, 1
 	];
 
-	const ourBuffer = createVBO(gl, positions, colors, uvs);
+	const ourBuffer = createVBO(gl, positions, colors, uvs, 'textures/bricks.png');
 
 	function drawScene(currTime){
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -123,7 +123,7 @@ function getRandomColor(){
 	return [Math.random(), Math.random(), Math.random(), 1];
 }
 
-function createVBO(gl, positions, colors, uvs, indices){
+function createVBO(gl, positions, colors, uvs, url){
 	const posBuff = gl.createBuffer(); // Position buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, posBuff);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
@@ -136,7 +136,7 @@ function createVBO(gl, positions, colors, uvs, indices){
 	gl.bindBuffer(gl.ARRAY_BUFFER, uvBuff);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
 
-	const texture = createTexture(gl);
+	const texture = createTexture(gl, url);
 
 	return {
 		posBuff,
@@ -214,20 +214,30 @@ function loadShader(gl, type, source){
 	return shader;
 }
 
-function createTexture(gl){
+function createTexture(gl, url){
 	const texture = gl.createTexture();
 	gl.bindTexture(gl.TEXTURE_2D, texture);
-	const data = [
-		0, 0, 255, 255, 255, 255, 0, 255,
-		255, 255, 0, 255, 0, 0, 255, 255,
-	];
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 2, 2, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(data));
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 255]));
 
+	const image = new Image();
+	image.onload = function(){
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+		if(isPowerOf2(image.width) && isPowerOf2(image.height)){
+			gl.generateMipmap(gl.TEXTURE_2D);
+		}else{
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		}
+	}
+	image.src = url;
 	return texture;
+}
+
+function isPowerOf2(value){
+	return (value & (value - 1)) == 0;
 }
 
 window.onload = init;
