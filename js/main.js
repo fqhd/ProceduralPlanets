@@ -1,14 +1,18 @@
-let gl = null;
+let gl;
+let program;
 
 function init(){
 	let canvas = document.querySelector('#canvas');
 	gl = canvas.getContext('webgl2');
-	if(gl === null){
+	if(gl == null){
 		console.error('Failed to initialize webgl');
 		return;
 	}
+	console.log('WebGL Version: ' + gl.getParameter(gl.VERSION));
+	console.log('GLSL Version: ' + gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
 
 	initglState();
+	shader = getShader(gl);
 	renderScene();
 }
 
