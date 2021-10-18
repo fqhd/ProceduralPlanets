@@ -7,7 +7,11 @@ function getShader(gl){
 		}`;
 
 	const fsource = `#version 300 es
-		precision highp float;
+		#if (GL_FRAGMENT_PRECISION_HIGH == 1)
+			precision highp float;
+		#else
+			precision mediump float;
+		#endif
 
 		out vec4 fragColor;
 
