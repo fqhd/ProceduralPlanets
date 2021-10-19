@@ -1,11 +1,12 @@
 'use strict';
 
-import Application from 'application.js'
+import {init, draw} from 'application.js'
 
 let gl;
+let sceneData;
 
-function init(){
-	let canvas = document.querySelector('#canvas');
+async function main(){
+	const canvas = document.querySelector('#canvas');
 	gl = canvas.getContext('webgl2');
 	if(gl == null){
 		console.error('Failed to initialize webgl');
@@ -15,15 +16,13 @@ function init(){
 	console.log('GLSL Version: ' + gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
 
 	// Initialization of the mythical super class
+	sceneData = init(gl);
 	renderScene();
 }
 
 function renderScene(){
-
-	// update mythical render class
-	// render mythical render class
-
+	draw(sceneData);
 	requestAnimationFrame(renderScene);
 }
 
-window.onload = init;
+window.onload = main;
