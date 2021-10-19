@@ -1,20 +1,23 @@
-class Shader {
-	#gl;
-	constructor(gl, vs_source, fs_source){
-		this.#gl = gl;
+'use strict';
 
-		this.program = create_shader_program(gl, vs_source, fs_source);
-	}
+async function createShader(gl, vsPath, fsPath){
+	let response = await fetch(vsPath);
+	const vsCode = await response.json();
 
-	use(){
-		this.#gl.useProgram(this.program);
-	}
+	response = await fetch(fsPath);
+	const fsCode = await response.blob();
+
+	const program = createShaderProgram(gl, vsCode, fsCode);
+
+	return program;
 }
 
-function create_shader_program(gl, vs_source, fs_source){
+async function
+
+function createShaderProgram(gl, vsSource, fsSource){
 	const program = gl.createProgram();
-	const vs = load_shader(gl, gl.VERTEX_SHADER, vs_source);
-	const fs = load_shader(gl, gl.FRAGMENT_SHADER, fs_source);
+	const vs = load_shader(gl, gl.VERTEX_SHADER, vsSource);
+	const fs = load_shader(gl, gl.FRAGMENT_SHADER, fsSource);
 	gl.attachShader(gl.VERTEX_SHADER, vs);
 	gl.attachShader(gl.FRAGMENT_SHADER, fs);
 	gl.linkProgram(program);
@@ -25,7 +28,7 @@ function create_shader_program(gl, vs_source, fs_source){
 	return program;
 }
 
-function load_shader(gl, type, source){
+function loadShader(gl, type, source){
 	const shader = gl.createShader(type);
 	gl.shaderSource(shader, source);
 	gl.compileShader(shader);
@@ -38,5 +41,3 @@ function load_shader(gl, type, source){
 	}
 	return shader;
 }
-
-export default Shader;
