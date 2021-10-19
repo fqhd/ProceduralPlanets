@@ -21,6 +21,7 @@ function create_shader_program(gl, vs_source, fs_source){
 	if(!gl.getProgramParamete(program, gl.LINK_STATUS)){
 		console.error('Failed to link program');
 	}
+
 	return program;
 }
 
