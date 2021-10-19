@@ -1,48 +1,41 @@
-function getShader(gl){
-	const vsource = `#version 300 es
-		in vec2 pos;
+class Shader {
+	#gl;
+	constructor(gl, vs_source, fs_source){
+		this.#gl = gl;
 
-		void main(){
-			gl_Position = vec4(pos, 0.0, 1.0);
-		}`;
+		this.program = create_shader_program(gl, vs_source, fs_source);
+	}
 
-	const fsource = `#version 300 es
-		#if (GL_FRAGMENT_PRECISION_HIGH == 1)
-			precision highp float;
-		#else
-			precision mediump float;
-		#endif
-
-		out vec4 fragColor;
-
-        void main() {
-            fragColor = vec4(1.0, 0.0, 0.0, 1.0);
-        }`;
-
-	return {
-		program: createShaderProgram(gl, vsource, fsource),
-	};
+	use(){
+		this.#gl.useProgram(this.program);
+	}
 }
 
-function createShaderProgram(gl, vsource, fsource){
+function create_shader_program(gl, vs_source, fs_source){
 	const program = gl.createProgram();
-	const vs = loadShader(gl, gl.VERTEX_SHADER, vsource);
-	const fs = loadShader(gl, gl.FRAGMENT_SHADER, fsource);
-	return {
-		program,
-	};
+	const vs = load_shader(gl, gl.VERTEX_SHADER, vs_source);
+	const fs = load_shader(gl, gl.FRAGMENT_SHADER, fs_source);
+	gl.attachShader(gl.VERTEX_SHADER, vs);
+	gl.attachShader(gl.FRAGMENT_SHADER, fs);
+	gl.linkProgram(program);
+	if(!gl.getProgramParamete(program, gl.LINK_STATUS)){
+		console.error('Failed to link program');
+	}
+	return program;
 }
 
-function loadShader(gl, type, source){
-	const vs = gl.createShader(type);
-	gl.shaderSource(vs, source);
-	gl.compileShader(vs);
-	if(!gl.getShaderParameter(vs, gl.COMPILE_STATUS)){
+function load_shader(gl, type, source){
+	const shader = gl.createShader(type);
+	gl.shaderSource(shader, source);
+	gl.compileShader(shader);
+	if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS)){
 		if(type == gl.VERTEX_SHADER){
-			console.log('Failed to compile vertex shader');
+			console.error('Failed to compile vertex shader');
 		}else{
-			console.log('Failed to compile fragment shader');
+			console.error('Failed to compile fragment shader');
 		}
 	}
-	return vs;
+	return shader;
 }
+
+export default Shader;
