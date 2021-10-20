@@ -1,6 +1,6 @@
 'use strict';
 
-export async function loadVAOFromFile(gl, path){
+export async function loadModelFromFile(gl, path){
 	const response = await fetch(path);
 	const text = await response.text();
 	// TODO: Use loaded text array to create VAO
@@ -18,11 +18,11 @@ export async function loadVAOFromFile(gl, path){
 	const indices = [
 		0, 1, 2,
 	];
-	const vao = createVAO(gl, positions, normals, indices);
-	return vao;
+	const model = createModel(gl, positions, normals, indices);
+	return model;
 }
 
-export function createVAO(gl, positions, normals, indices){
+export function createModel(gl, positions, normals, indices){
 	let vao = gl.createVertexArray();
 	gl.bindVertexArray(vao);
 
@@ -49,8 +49,8 @@ export function createVAO(gl, positions, normals, indices){
 	};
 }
 
-export function drawVAO(gl, vao){
-	gl.bindVertexArray(vao.vao);
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vao.indices_buff);
-	gl.drawElements(gl.TRIANGLES, vao.numVertices, gl.UNSIGNED_SHORT, 0);
+export function drawModel(gl, model){
+	gl.bindVertexArray(model.vao);
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, model.indicesBuff);
+	gl.drawElements(gl.TRIANGLES, model.numVertices, gl.UNSIGNED_SHORT, 0);
 }
