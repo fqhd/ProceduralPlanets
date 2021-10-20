@@ -17,12 +17,11 @@ async function main(){
 
 	// Initialization of the mythical super class
 	sceneData = await init(gl);
-	console.log(sceneData);
 	renderScene();
 }
 
 function renderScene(){
-	draw(sceneData);
+	draw(gl, sceneData);
 	requestAnimationFrame(renderScene);
 }
 
