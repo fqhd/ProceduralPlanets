@@ -1,9 +1,9 @@
 'use strict';
 
-export async function createShader(gl, vsPath, fsPath){
+export async function createShader(gl, shaderPath){
 	return Promise.all([
-		fetch(vsPath),
-		fetch(fsPath)
+		fetch(shaderPath+'vs.glsl'),
+		fetch(shaderPath+'fs.glsl')
 	]).then(results => {
 		return Promise.all(results.map(r => r.text())).then(strings => {
 			const program = createShaderProgram(gl, strings[0], strings[1]);

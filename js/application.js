@@ -5,7 +5,7 @@ import {loadVAOFromFile} from '/JS/Engine/vao.js'
 
 export async function init(gl){
 	const [shader, model] = await Promise.all([
-		createShader(gl, 'res/shaders/vs.glsl', 'res/shaders/fs.glsl'),
+		createShader(gl, 'res/shaders/modelShader/'),
 		loadVAOFromFile(gl, 'res/models/triangle.txt'),
 	]).then(results => {
 		console.log('Successfully resolved promises!');
@@ -16,5 +16,5 @@ export async function init(gl){
 }
 
 export function draw(gl, sceneData){
-
+	
 }
