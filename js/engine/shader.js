@@ -1,27 +1,25 @@
 'use strict';
 
-async function createShader(gl, vsPath, fsPath){
-	let response = await fetch(vsPath);
-	const vsCode = await response.json();
-
-	response = await fetch(fsPath);
-	const fsCode = await response.blob();
-
-	const program = createShaderProgram(gl, vsCode, fsCode);
-
-	return program;
+export async function createShader(gl, vsPath, fsPath){
+	return Promise.all([
+		fetch(vsPath),
+		fetch(fsPath)
+	]).then(results => {
+		return Promise.all(results.map(r => r.text())).then(strings => {
+			const program = createShaderProgram(gl, strings[0], strings[1]);
+			return program;
+		});
+	});
 }
-
-async function
 
 function createShaderProgram(gl, vsSource, fsSource){
 	const program = gl.createProgram();
-	const vs = load_shader(gl, gl.VERTEX_SHADER, vsSource);
-	const fs = load_shader(gl, gl.FRAGMENT_SHADER, fsSource);
-	gl.attachShader(gl.VERTEX_SHADER, vs);
-	gl.attachShader(gl.FRAGMENT_SHADER, fs);
+	const vs = loadShader(gl, gl.VERTEX_SHADER, vsSource);
+	const fs = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+	gl.attachShader(program, vs);
+	gl.attachShader(program, fs);
 	gl.linkProgram(program);
-	if(!gl.getProgramParamete(program, gl.LINK_STATUS)){
+	if(!gl.getProgramParameter(program, gl.LINK_STATUS)){
 		console.error('Failed to link program');
 	}
 

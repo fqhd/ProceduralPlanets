@@ -1,10 +1,7 @@
 'use strict';
 
-import {createVAO, drawVAO} from 'vao.js';
+import {createVAO, drawVAO} from '/JS/Engine/vao.js';
 
-export async function loadModel(gl, path){
-	const response = await fetch(path);
-	const blob = await response.blob();
+export async function createModel(gl, path){
 
-	console.log(blob);
 }

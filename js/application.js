@@ -1,19 +1,20 @@
 'use strict';
 
-class Application {
-	#engine
+import {createShader} from '/JS/Engine/shader.js';
+import {createModel} from '/JS/Engine/model.js'
 
-	constructor(gl){
-		// Initialize renderer
-	}
+export async function init(gl){
+	const [shader, model] = await Promise.all([
+		createShader(gl, 'res/shaders/vs.glsl', 'res/shaders/fs.glsl'),
+		createModel(gl, 'res/models/triangle.txt'),
+	]).then(results => {
+		console.log('Successfully resolved promises!');
+		return results;
+	});
 
-	update(){
-		// Update the engine and our application
-	}
-
-	render(){
-		// Render our engine and our application
-	}
+	return {shader, model};
 }
 
-export default Application;
+export function draw(sceneData){
+
+}
