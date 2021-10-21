@@ -1,7 +1,7 @@
 'use strict';
 
 import {loadModelShader} from '/JS/Engine/modelShader.js';
-import {loadModelFromFile, drawModel} from '/JS/Engine/vao.js'
+import {loadModelFromFile, drawModel} from '/JS/Engine/model.js'
 
 export async function init(gl){
 	const [shader, model] = await Promise.all([
@@ -13,8 +13,6 @@ export async function init(gl){
 		return results;
 	});
 
-
-	
 	return {shader, model};
 }
 
@@ -27,4 +25,6 @@ export function draw(gl, sceneData){
 
 async function initGLState(gl){
 	gl.clearColor(0, 0, 0, 1);
+	gl.frontFace(gl.CW);
+	gl.disable(gl.CULL_FACE);
 }
