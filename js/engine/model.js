@@ -6,9 +6,9 @@ export async function loadModelFromFile(gl, path){
 	// TODO: Use loaded text array to create VAO
 	// The hardcoded array is temporary to make sure the createVAO functions work
 	const positions = [
-		-0.5, -0.5,
-		0, 0.5,
-		0.5, -0.5,
+		-0.5, -0.5, 0,
+		0, 0.5, 0,
+		0.5, -0.5, 0,
 	];
 	const normals = [
 		0, 1, 0,
