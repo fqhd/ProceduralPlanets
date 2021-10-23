@@ -1,9 +1,9 @@
 'use strict';
 
-import {init, draw} from '/JS/application.js'
+import {init, draw} from '/js/application.js'
 
 let gl;
-let sceneData;
+let scene_data;
 
 async function main(){
 	const canvas = document.querySelector('#canvas');
@@ -16,13 +16,13 @@ async function main(){
 	console.log('GLSL Version: ' + gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
 
 	// Initialization of the mythical super class
-	sceneData = await init(gl);
-	drawGame();
+	scene_data = await init(gl);
+	draw_game();
 }
 
-function drawGame(){
-	draw(gl, sceneData);
-	requestAnimationFrame(drawGame);
+function draw_game(){
+	draw(gl, scene_data);
+	requestAnimationFrame(draw_game);
 }
 
 window.onload = main;

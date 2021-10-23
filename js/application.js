@@ -1,14 +1,14 @@
 'use strict';
 
-import {loadModelShader} from '/JS/Engine/ModelShader.js';
-import {loadModelFromFile} from '/JS/Engine/model.js';
-import {renderScene, initGLState} from '/JS/Engine/renderer.js';
+import {load_model_shader} from '/js/engine/model_shader.js';
+import {load_model_from_file} from '/js/engine/model.js';
+import {render_scene, init_gl_state} from '/js/engine/renderer.js';
 
 export async function init(gl){
 	const [shader, triangle] = await Promise.all([
-		loadModelShader(gl),
-		loadModelFromFile(gl, 'res/models/triangle.txt'),
-		initGLState(gl),
+		load_model_shader(gl),
+		load_model_from_file(gl, 'res/models/triangle.txt'),
+		init_gl_state(gl),
 	]).then(results => {
 		console.log('Successfully resolved promises!');
 		return results;
@@ -23,8 +23,8 @@ export async function init(gl){
 	};
 }
 
-export function draw(gl, sceneData){
+export function draw(gl, scene_data){
 	gl.clear(gl.COLOR_BUFFER_BIT);
 
-	renderScene(gl, sceneData);
+	render_scene(gl, scene_data);
 }

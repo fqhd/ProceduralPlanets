@@ -1,6 +1,6 @@
 'use strict';
 
-export async function loadModelFromFile(gl, path){
+export async function load_model_from_file(gl, path){
 	const response = await fetch(path);
 	const text = await response.text();
 	// TODO: Use loaded text array to create VAO
@@ -18,33 +18,33 @@ export async function loadModelFromFile(gl, path){
 	const indices = [
 		0, 1, 2,
 	];
-	const model = createModel(gl, positions, normals, indices);
+	const model = create_model(gl, positions, normals, indices);
 	return model;
 }
 
-export function createModel(gl, positions, normals, indices){
+export function create_model(gl, positions, normals, indices){
 	const vao = gl.createVertexArray();
 	gl.bindVertexArray(vao);
 
-	const posBuff = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, posBuff);
+	const pos_buff = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, pos_buff);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 	gl.enableVertexAttribArray(0);
 	gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
 
-	const normalBuff = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, normalBuff);
+	const normal_buff = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, normal_buff);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
 	gl.enableVertexAttribArray(1);
 	gl.vertexAttribPointer(1, 3, gl.FLOAT, false, 0, 0);
 
-	const indicesBuff = gl.createBuffer();
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indicesBuff);
+	const indices_buff = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indices_buff);
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
 
 	return {
 		vao,
-		indicesBuff,
-		numIndices: indices.length,
+		indices_buff,
+		num_indices: indices.length,
 	};
 }
