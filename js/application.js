@@ -15,7 +15,13 @@ export async function init(gl){
 		shader,
 		entity: {
 			model: triangle,
-			position: [0, 1, 0],
+			position: [0, 0, -2],
+		},
+		camera: {
+			position: [0, 0, 1],
+			ratio: gl.canvas.clientWidth / gl.canvas.clientHeight,
+			pitch: 20,
+			yaw: -20,
 		},
 	};
 }

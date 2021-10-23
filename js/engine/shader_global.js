@@ -7,6 +7,8 @@ export async function load_model_shader(gl){
 	return {
 		program,
 		model_loc: gl.getUniformLocation(program, 'model'),
+		view_loc: gl.getUniformLocation(program, 'view'),
+		proj_loc: gl.getUniformLocation(program, 'proj'),
 	};
 }
 

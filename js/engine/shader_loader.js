@@ -6,8 +6,7 @@ export async function create_shader(gl, shader_path){
 		fetch(shader_path+'fs.glsl'),
 	]).then(results => {
 		return Promise.all(results.map(r => r.text())).then(strings => {
-			const program = create_shader_program(gl, strings[0], strings[1]);
-			return program;
+			return create_shader_program(gl, strings[0], strings[1]);
 		});
 	});
 }
