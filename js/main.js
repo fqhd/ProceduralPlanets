@@ -17,12 +17,12 @@ async function main(){
 
 	// Initialization of the mythical super class
 	sceneData = await init(gl);
-	renderScene();
+	drawGame();
 }
 
-function renderScene(){
+function drawGame(){
 	draw(gl, sceneData);
-	requestAnimationFrame(renderScene);
+	requestAnimationFrame(drawGame);
 }
 
 window.onload = main;
