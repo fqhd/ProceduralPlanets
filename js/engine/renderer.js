@@ -7,6 +7,7 @@ export async function initGLState(gl){
 }
 
 export function renderScene(gl, sceneData){
+	gl.useProgram(sceneData.shader.program);
 	drawModel(gl, sceneData.entity.model);
 }
 

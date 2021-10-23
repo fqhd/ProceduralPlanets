@@ -1,6 +1,6 @@
 'use strict';
 
-import {loadModelShader} from '/JS/Engine/modelShader.js';
+import {loadModelShader} from '/JS/Engine/ModelShader.js';
 import {loadModelFromFile} from '/JS/Engine/model.js';
 import {renderScene, initGLState} from '/JS/Engine/renderer.js';
 
