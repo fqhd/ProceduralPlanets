@@ -8,11 +8,11 @@ export async function init_gl_state(gl){
 }
 
 export function render_scene(gl, scene_data){
-	gl.useProgram(scene_data.shader.program);
+	gl.useProgram(scene_data.shaders.model_shader.program);
 
-	load_camera_to_shader(gl, scene_data.shader, scene_data.camera);
+	load_camera_to_shader(gl, scene_data.shaders.model_shader, scene_data.camera);
 
-	draw_entity(gl, scene_data.shader, scene_data.entity);
+	draw_entity(gl, scene_data.shaders.model_shader, scene_data.entity);
 }
 
 function load_camera_to_shader(gl, shader, camera){
