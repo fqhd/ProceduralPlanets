@@ -7,8 +7,8 @@ import {to_radians} from '/js/engine/utils.js';
 export function create_camera(ratio){
 	const cam = {
 		position: [0, 0, 0],
-		pitch: 20,
-		yaw: -20,
+		pitch: 0,
+		yaw: 0,
 		view: mat4.create(),
 	};
 	calc_view_matrix(cam);

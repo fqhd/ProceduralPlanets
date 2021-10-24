@@ -4,6 +4,7 @@ import {load_model_shader} from '/js/engine/shader_global.js';
 import {load_model_from_file} from '/js/engine/model.js';
 import {render_scene, init_gl_state} from '/js/engine/renderer.js';
 import {create_camera} from '/js/engine/camera.js';
+import {init_transform} from '/js/engine/transform.js';
 
 export async function init(gl){
 	const [shader, triangle] = await Promise.all([
@@ -16,7 +17,7 @@ export async function init(gl){
 		shader,
 		entity: {
 			model: triangle,
-			position: [0, 0, -2],
+			transform: init_transform([0, 0, -2], [0, 0, 0], [1, 1 ,1]),
 		},
 		camera: create_camera(gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};

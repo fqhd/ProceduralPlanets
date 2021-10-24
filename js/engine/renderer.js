@@ -1,7 +1,5 @@
 'use strict';
 
-const {mat4} = glMatrix;
-
 export async function init_gl_state(gl){
 	gl.clearColor(0, 0, 0, 1);
 	gl.frontFace(gl.CW);
@@ -23,9 +21,7 @@ function load_camera_to_shader(gl, shader, camera){
 }
 
 function draw_entity(gl, shader, entity){
-	const model_matrix = mat4.create();
-	mat4.translate(model_matrix, model_matrix, entity.position);
-	gl.uniformMatrix4fv(shader.model_loc, false, model_matrix);
+	gl.uniformMatrix4fv(shader.model_loc, false, entity.transform.matrix);
 	draw_model(gl, entity.model);
 }
 
