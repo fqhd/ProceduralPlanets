@@ -19,7 +19,7 @@ export async function init(gl){
 			model: triangle,
 			transform: init_transform([0, 0, -2], [0, 0, 0], [1, 1 ,1]),
 		},
-		camera: create_camera(gl.canvas.clientWidth / gl.canvas.clientHeight),
+		camera: create_camera([0, 0, 0], 0, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
 }
 

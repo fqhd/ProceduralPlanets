@@ -4,11 +4,11 @@ const {mat4} = glMatrix;
 
 import {to_radians} from '/js/engine/utils.js';
 
-export function create_camera(ratio){
+export function create_camera(position, pitch, yaw, ratio){
 	const cam = {
-		position: [0, 0, 0],
-		pitch: 0,
-		yaw: 0,
+		position,
+		pitch,
+		yaw,
 		view: mat4.create(),
 	};
 	calc_view_matrix(cam);
