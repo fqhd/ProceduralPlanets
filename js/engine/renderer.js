@@ -2,8 +2,6 @@
 
 const {mat4} = glMatrix;
 
-import {calc_cam_matrix} from '/js/engine/camera.js';
-
 export async function init_gl_state(gl){
 	gl.clearColor(0, 0, 0, 1);
 	gl.frontFace(gl.CW);
@@ -19,9 +17,7 @@ export function render_scene(gl, scene_data){
 	draw_entity(gl, scene_data.shader, scene_data.entity);
 }
 
-function load_camera_to_shader(gl, shader, {position, ratio, pitch, yaw}){
-	const camera = calc_cam_matrix(position, ratio, pitch, yaw);
-
+function load_camera_to_shader(gl, shader, camera){
 	gl.uniformMatrix4fv(shader.view_loc, false, camera.view);
 	gl.uniformMatrix4fv(shader.proj_loc, false, camera.proj);
 }

@@ -3,6 +3,7 @@
 import {load_model_shader} from '/js/engine/shader_global.js';
 import {load_model_from_file} from '/js/engine/model.js';
 import {render_scene, init_gl_state} from '/js/engine/renderer.js';
+import {create_camera} from '/js/engine/camera.js';
 
 export async function init(gl){
 	const [shader, triangle] = await Promise.all([
@@ -17,12 +18,7 @@ export async function init(gl){
 			model: triangle,
 			position: [0, 0, -2],
 		},
-		camera: {
-			position: [0, 0, 1],
-			ratio: gl.canvas.clientWidth / gl.canvas.clientHeight,
-			pitch: 20,
-			yaw: -20,
-		},
+		camera: create_camera(gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
 }
 
