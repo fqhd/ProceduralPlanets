@@ -2,9 +2,7 @@
 
 export async function init_gl_state(gl){
 	gl.clearColor(0, 0, 0, 1);
-	gl.frontFace(gl.CW);
 	gl.disable(gl.CULL_FACE);
-	gl.viewport(0, 0, 300, 300);
 }
 
 export function render_scene(gl, scene_data){
@@ -27,6 +25,5 @@ function draw_entity(gl, shader, entity){
 
 function draw_model(gl, model){
 	gl.bindVertexArray(model.vao);
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, model.indices_buff);
-	gl.drawElements(gl.TRIANGLES, model.num_indices, gl.UNSIGNED_SHORT, 0);
+	gl.drawArrays(gl.TRIANGLES, 0, model.num_vertices);
 }
