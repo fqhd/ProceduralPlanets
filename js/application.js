@@ -18,7 +18,7 @@ export async function init(gl){
 		entities: [
 			{
 				model: models.bunny,
-				transform: init_transform([2, 0, -10], [35, 0, 0], [1, 1 ,1]),
+				transform: init_transform([2, 0, -10], [35, 0, 0], [15, 15 ,15]),
 			},
 			{
 				model: models.cube,
