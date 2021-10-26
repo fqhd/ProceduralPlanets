@@ -18,7 +18,11 @@ export async function init(gl){
 		entities: [
 			{
 				model: models.bunny,
-				transform: init_transform([0, 0, -5], [35, 0, 0], [1, 1 ,1]),
+				transform: init_transform([2, 0, -10], [35, 0, 0], [1, 1 ,1]),
+			},
+			{
+				model: models.cube,
+				transform: init_transform([-2, 0, -10], [35, 0, 0], [1, 1 ,1]),
 			},
 		],
 		camera: create_camera([0, 0, 0], 0, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
