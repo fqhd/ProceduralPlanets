@@ -7,7 +7,6 @@ export async function init_gl_state(gl){
 
 export function render_scene(gl, scene_data){
 	draw_entities(gl, scene_data);
-
 }
 
 function draw_entities(gl, scene_data){
@@ -22,7 +21,6 @@ function draw_entities(gl, scene_data){
 	for(const e of entities){
 		draw_entity(gl, shader, e);
 	}
-
 }
 
 function load_camera_to_shader(gl, shader, camera){
