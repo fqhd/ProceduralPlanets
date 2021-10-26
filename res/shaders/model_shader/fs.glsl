@@ -6,8 +6,14 @@
 	precision mediump float;
 #endif
 
+in vec3 pass_normal;
+
 out vec4 out_color;
 
+const vec3 light_dir = vec3(0, 0, -1);
+
 void main(){
-	out_color = vec4(1.0, 0.0, 1.0, 1.0);
+	float brightness = dot(-light_dir, pass_normal);
+	brightness = clamp(brightness, 0.2, 1.0);
+	out_color = vec4(vec3(0.0, 3.0, 8.0) * brightness, 1.0);
 }
