@@ -15,10 +15,12 @@ export async function init(gl){
 
 	return {
 		shaders,
-		entity: {
-			model: models.bunny,
-			transform: init_transform([0, 0, -5], [35, 0, 0], [1, 1 ,1]),
-		},
+		entities: [
+			{
+				model: models.bunny,
+				transform: init_transform([0, 0, -5], [35, 0, 0], [1, 1 ,1]),
+			},
+		],
 		camera: create_camera([0, 0, 0], 0, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
 }
