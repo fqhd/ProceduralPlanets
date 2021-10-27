@@ -2,7 +2,9 @@
 
 export async function init_gl_state(gl){
 	gl.clearColor(0, 0, 0, 1);
-	gl.disable(gl.CULL_FACE);
+	gl.enable(gl.CULL_FACE);
+	gl.enable(gl.DEPTH_TEST);
+
 }
 
 export function render_scene(gl, scene_data){

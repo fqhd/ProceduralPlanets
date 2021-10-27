@@ -18,7 +18,7 @@ export async function init(gl){
 		entities: [
 			{
 				model: models.bunny,
-				transform: init_transform([2, 0, -10], [35, 0, 0], [1, 1, 1]),
+				transform: init_transform([0, 0, -10], [35, 0, 0], [2, 2, 2]),
 			},
 			{
 				model: models.cube,
@@ -30,7 +30,7 @@ export async function init(gl){
 }
 
 export function draw(gl, scene_data){
-	gl.clear(gl.COLOR_BUFFER_BIT);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	translate_transform(scene_data.entities[1].transform, [0, 0.01, 0]);
 	rotate_transform(scene_data.entities[0].transform, [0, 0.5, 0]);
