@@ -16,10 +16,10 @@ export async function init(gl){
 	return {
 		shaders,
 		entities: [
-			// {
-			// 	model: models.bunny,
-			// 	transform: init_transform([2, 0, -10], [35, 0, 0], [15, 15 ,15]),
-			// },
+			{
+				model: models.bunny,
+				transform: init_transform([2, 0, -10], [35, 0, 0], [1, 1, 1]),
+			},
 			{
 				model: models.cube,
 				transform: init_transform([-2, 0, -10], [35, 0, 0], [1, 1 ,1]),

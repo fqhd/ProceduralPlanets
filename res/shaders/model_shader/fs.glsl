@@ -10,7 +10,7 @@ in vec3 pass_normal;
 
 out vec4 out_color;
 
-const vec3 light_dir = vec3(-10.0, 0.0, -0.5);
+const vec3 light_dir = vec3(-5.0, 0.0, -1.0);
 
 void main(){
 	float brightness = dot(normalize(light_dir), normalize(pass_normal));
