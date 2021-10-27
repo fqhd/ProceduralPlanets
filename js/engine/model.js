@@ -42,14 +42,14 @@ export async function load_model_from_file(gl, path){
 				positions.push(positions_lookup[pos_index*3+1]);
 				positions.push(positions_lookup[pos_index*3+2]);
 
-				const normal_index = curr_token_indices[1]-1;
+				const uv_index = curr_token_indices[1]-1;
+				uvs.push(uvs_lookup[uv_index*2]);
+				uvs.push(uvs_lookup[uv_index*2+1]);
+
+				const normal_index = curr_token_indices[2]-1;
 				normals.push(normals_lookup[normal_index*3]);
 				normals.push(normals_lookup[normal_index*3+1]);
 				normals.push(normals_lookup[normal_index*3+2]);
-
-				const uv_index = curr_token_indices[2]-1;
-				uvs.push(uvs_lookup[uv_index*2]);
-				uvs.push(uvs_lookup[uv_index*2+1]);
 			}
 		}
 	}
