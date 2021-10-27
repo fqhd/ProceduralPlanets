@@ -19,19 +19,19 @@ export function init_transform(pos, rot, scale){
 	};
 }
 
-export function move_transform(dist, transform){
+export function translate_transform(transform, dist){
 	mat4.translate(transform.matrix, transform.matrix, dist);
 	transform.pos += dist;
 }
 
-export function rotate_transform(rot, transform){
+export function rotate_transform(transform, rot){
 	mat4.rotate(transform.matrix, transform.matrix, to_radians(rot[0]), [1, 0, 0]);
 	mat4.rotate(transform.matrix, transform.matrix, to_radians(rot[1]), [0, 1, 0]);
 	mat4.rotate(transform.matrix, transform.matrix, to_radians(rot[2]), [0, 0, 1]);
 	transform.rot += rot;
 }
 
-export function scale_transform(scale, transform){
+export function scale_transform(transform, scale){
 	mat4.scale(transform.matrix, transform.matrix, scale);
 	transform.scale += scale;
 }

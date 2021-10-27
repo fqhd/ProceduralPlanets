@@ -4,7 +4,7 @@ import {load_shaders} from '/js/engine/shader_global.js';
 import {load_models} from '/js/engine/model_global.js';
 import {render_scene, init_gl_state} from '/js/engine/renderer.js';
 import {create_camera} from '/js/engine/camera.js';
-import {init_transform} from '/js/engine/transform.js';
+import {init_transform, translate_transform, rotate_transform} from '/js/engine/transform.js';
 
 export async function init(gl){
 	const [shaders, models] = await Promise.all([
@@ -31,6 +31,9 @@ export async function init(gl){
 
 export function draw(gl, scene_data){
 	gl.clear(gl.COLOR_BUFFER_BIT);
+
+	translate_transform(scene_data.entities[1].transform, [0, 0.01, 0]);
+	rotate_transform(scene_data.entities[0].transform, [0, 0.5, 0]);
 
 	render_scene(gl, scene_data);
 }
