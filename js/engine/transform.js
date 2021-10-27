@@ -18,3 +18,20 @@ export function init_transform(pos, rot, scale){
 		matrix: m,
 	};
 }
+
+export function move_transform(dist, transform){
+	mat4.translate(transform.matrix, transform.matrix, dist);
+	transform.pos += dist;
+}
+
+export function rotate_transform(rot, transform){
+	mat4.rotate(transform.matrix, transform.matrix, to_radians(rot[0]), [1, 0, 0]);
+	mat4.rotate(transform.matrix, transform.matrix, to_radians(rot[1]), [0, 1, 0]);
+	mat4.rotate(transform.matrix, transform.matrix, to_radians(rot[2]), [0, 0, 1]);
+	transform.rot += rot;
+}
+
+export function scale_transform(scale, transform){
+	mat4.scale(transform.matrix, transform.matrix, scale);
+	transform.scale += scale;
+}
