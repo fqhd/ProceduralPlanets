@@ -32,8 +32,8 @@ export async function init(gl){
 export function draw(gl, scene_data){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-	translate_transform(scene_data.entities[0].transform, [0.01, 0, 0]);
-	rotate_transform(scene_data.entities[1].transform, [0, 0.5, 0]);
+	rotate_transform(scene_data.entities[0].transform, [0, -0.3, 0]);
+	rotate_transform(scene_data.entities[1].transform, [0, 0.3, 0]);
 
 	render_scene(gl, scene_data);
 }
