@@ -1,6 +1,6 @@
 'use strict';
 
-export async function init_gl_state(gl){
+export function init_gl_state(gl){
 	gl.clearColor(0, 0, 0, 1);
 	gl.enable(gl.CULL_FACE);
 	gl.enable(gl.DEPTH_TEST);
@@ -31,6 +31,7 @@ function load_camera_to_shader(gl, shader, camera){
 }
 
 function draw_entity(gl, shader, entity){
+	gl.bindTexture(gl.TEXTURE_2D, entity.texture);
 	gl.uniformMatrix4fv(shader.model_loc, false, entity.transform.matrix);
 	draw_model(gl, entity.model);
 }

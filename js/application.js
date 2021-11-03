@@ -1,27 +1,32 @@
 'use strict';
 
 import {load_shaders} from '/js/engine/shader_global.js';
-import {load_models} from '/js/engine/model_global.js';
+import {load_models} from '/js/engine/models_global.js';
+import {load_textures} from '/js/engine/textures_global.js';
 import {render_scene, init_gl_state} from '/js/engine/renderer.js';
 import {create_camera} from '/js/engine/camera.js';
 import {init_transform, translate_transform, rotate_transform} from '/js/engine/transform.js';
 
 export async function init(gl){
-	const [shaders, models] = await Promise.all([
+	const [shaders, models, textures] = await Promise.all([
 		load_shaders(gl),
 		load_models(gl),
-		init_gl_state(gl),
+		load_textures(gl),
 	]);
+
+	init_gl_state(gl);
 
 	return {
 		shaders,
 		entities: [
 			{
 				model: models.bunny,
+				texture: textures.bricks,
 				transform: init_transform([-2, 0, -10], [35, 0, 0], [1, 1, 1]),
 			},
 			{
 				model: models.monkey,
+				texture: textures.bricks,
 				transform: init_transform([2, 0, -10], [35, 0, 0], [1, 1 ,1]),
 			},
 		],
