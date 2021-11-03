@@ -1,11 +1,11 @@
 'use strict';
 
-import {load_shaders} from '/js/engine/shader_global.js';
-import {load_models} from '/js/engine/models_global.js';
-import {load_textures} from '/js/engine/textures_global.js';
-import {render_scene, init_gl_state} from '/js/engine/renderer.js';
-import {create_camera} from '/js/engine/camera.js';
-import {init_transform, translate_transform, rotate_transform} from '/js/engine/transform.js';
+import {load_shaders} from './engine/shader_global.js';
+import {load_models} from './engine/models_global.js';
+import {load_textures} from './engine/textures_global.js';
+import {render_scene, init_gl_state} from './engine/renderer.js';
+import {create_camera} from './engine/camera.js';
+import {init_transform, rotate_transform} from './engine/transform.js';
 
 export async function init(gl){
 	const [shaders, models, textures] = await Promise.all([

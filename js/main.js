@@ -1,6 +1,6 @@
 'use strict';
 
-import {init, draw} from '/js/application.js'
+import {init, draw} from './application.js'
 
 let gl;
 let scene_data;

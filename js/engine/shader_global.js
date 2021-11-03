@@ -1,6 +1,6 @@
 'use strict';
 
-import {create_shader} from 'shader_loader.js'
+import {create_shader} from './shader_loader.js'
 
 export async function load_shaders(gl){
 	return {

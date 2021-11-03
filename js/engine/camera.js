@@ -2,7 +2,7 @@
 
 const {mat4} = glMatrix;
 
-import {to_radians} from 'utils.js';
+import {to_radians} from './utils.js';
 
 export function create_camera(position, pitch, yaw, ratio){
 	const cam = {

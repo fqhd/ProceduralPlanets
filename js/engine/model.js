@@ -1,5 +1,7 @@
 'use strict';
 
+const {vec3} = glMatrix;
+
 export async function load_model_from_file(gl, path){
 	const response = await fetch(path);
 	const text = await response.text();
@@ -55,7 +57,12 @@ export async function load_model_from_file(gl, path){
 	}
 
 	const model = create_model(gl, positions, normals, uvs);
+	calc_tangents(model);
 	return model;
+}
+
+function calc_tangents(model){
+	
 }
 
 export function create_model(gl, positions, normals, tex_coords){

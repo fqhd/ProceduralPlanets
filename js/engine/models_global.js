@@ -1,6 +1,6 @@
 'use strict';
 
-import {load_model_from_file} from 'model.js';
+import {load_model_from_file} from './model.js';
 
 export async function load_models(gl){
 	return {
