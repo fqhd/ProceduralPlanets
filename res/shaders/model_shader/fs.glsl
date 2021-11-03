@@ -6,6 +6,7 @@
 	precision mediump float;
 #endif
 
+in vec3 pass_tangent;
 in vec3 pass_normal;
 in vec2 pass_uv;
 
@@ -19,5 +20,5 @@ void main(){
 	vec4 fragment_color = texture(ourTexture, pass_uv);
 	float brightness = dot(normalize(light_dir), normalize(pass_normal));
 	brightness = clamp(brightness, 0.2, 1.0);
-	out_color = vec4(fragment_color.rgb * brightness, 1.0);
+	out_color = vec4(pass_tangent * brightness, 1.0);
 }
