@@ -6,7 +6,8 @@ let gl;
 let scene_data;
 
 async function main(){
-	const canvas = document.querySelector('#canvas');
+	const canvas = document.getElementById('canvas');
+
 	gl = canvas.getContext('webgl2');
 	if(gl == null){
 		console.error('Failed to initialize webgl');
@@ -15,7 +16,11 @@ async function main(){
 	console.log('WebGL Version: ' + gl.getParameter(gl.VERSION));
 	console.log('GLSL Version: ' + gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
 
-	// Initialization of the mythical super class
+	// Updating the canvas size
+	canvas.width = gl.canvas.clientWidth;
+	canvas.height = gl.canvas.clientHeight;
+
+	// Initialization of the mythical super data structure
 	scene_data = await init(gl);
 	draw_game();
 }
