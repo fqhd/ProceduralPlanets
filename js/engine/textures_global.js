@@ -1,6 +1,6 @@
 'use strict';
 
-import {load_texture_from_file} from '/js/engine/texture.js';
+import {load_texture_from_file} from 'texture.js';
 
 export async function load_textures(gl){
     return {
