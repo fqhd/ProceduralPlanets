@@ -10,9 +10,9 @@ export function create_camera(position, pitch, yaw, ratio){
 		pitch,
 		yaw,
 		view: mat4.create(),
+		proj: calc_proj_matrix(ratio),
 	};
 	calc_view_matrix(cam);
-	cam.proj = calc_proj_matrix(ratio);
 	return cam;
 }
 
