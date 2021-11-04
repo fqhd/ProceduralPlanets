@@ -32,11 +32,17 @@ function load_light_to_shader(gl, shader, light){
 }
 
 function load_camera_to_shader(gl, shader, camera){
+	gl.uniform3fv(gl.getUniformLocation(shader.program, 'cam_pos'), camera.position);
 	gl.uniformMatrix4fv(shader.view_loc, false, camera.view);
 	gl.uniformMatrix4fv(shader.proj_loc, false, camera.proj);
 }
 
 function draw_entity(gl, shader, entity){
+	// Loading reflectivity and shine damper
+	gl.uniform1f(gl.getUniformLocation(shader.program, 'reflectivity'), entity.reflectivity);
+	gl.uniform1f(gl.getUniformLocation(shader.program, 'shine_damper'), entity.shine_damper);
+
+
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, entity.texture);
 

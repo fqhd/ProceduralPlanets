@@ -5,9 +5,11 @@ layout(location = 1) in vec3 a_normal;
 layout(location = 2) in vec2 a_uv;
 
 out vec3 pass_to_light_vector;
+out vec3 pass_to_camera_vector;
 out vec3 pass_normal;
 out vec2 pass_uv;
 
+uniform vec3 cam_pos;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
@@ -22,4 +24,5 @@ void main(){
 	pass_uv = a_uv;
 
 	pass_to_light_vector = normalize(light_position - world_position.xyz);
+	pass_to_camera_vector = normalize(cam_pos - world_position.xyz);
 }

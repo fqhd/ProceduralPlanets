@@ -20,11 +20,15 @@ export async function init(gl){
 		shaders,
 		entities: [
 			{
+				reflectivity: 1,
+				shine_damper: 10,
 				model: models.bunny,
 				texture: textures.bricks_texture,
 				transform: init_transform([6, 0, -7], [0, 120, 0], [1.5, 1.5, 1.5]),
 			},
 			{
+				reflectivity: 1,
+				shine_damper: 10,
 				model: models.plane,
 				texture: textures.bricks_texture,
 				normal_map: textures.bricks_normal,
