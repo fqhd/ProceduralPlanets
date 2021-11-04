@@ -14,7 +14,7 @@ export async function init(gl){
 		load_textures(gl),
 	]);
 
-	init_gl_state(gl);
+	init_gl_state(gl); // Initializing gl state out of promise
 
 	return {
 		shaders,
