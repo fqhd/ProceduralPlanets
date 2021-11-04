@@ -28,9 +28,13 @@ export async function init(gl){
 				model: models.plane,
 				texture: textures.bricks_texture,
 				normal_map: textures.bricks_normal,
-				transform: init_transform([5, 0, -13], [0, 90, 0], [10, 10 , 10]),
+				transform: init_transform([5, 0, -12], [0, 90, 0], [10, 10 , 10]),
 			},
 		],
+		light: {
+			position: [-3, 1, -3],
+			color: [1, 1, 1],
+		},
 		camera: create_camera([0, 2, 0], 5, 20, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
 }
