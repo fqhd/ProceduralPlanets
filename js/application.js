@@ -27,7 +27,7 @@ export async function init(gl){
 				transform: init_transform([6, 0, -7], [0, 120, 0], [1.5, 1.5, 1.5]),
 			},
 			{
-				reflectivity: 1,
+				reflectivity: 0.5,
 				shine_damper: 10,
 				model: models.plane,
 				texture: textures.bricks_texture,
@@ -36,7 +36,7 @@ export async function init(gl){
 			},
 		],
 		light: {
-			position: [-3, 1, -3],
+			position: [-3, 1, 5],
 			color: [1, 1, 1],
 		},
 		camera: create_camera([0, 2, 0], 5, 20, gl.canvas.clientWidth / gl.canvas.clientHeight),

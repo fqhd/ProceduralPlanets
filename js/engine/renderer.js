@@ -42,12 +42,16 @@ function draw_entity(gl, shader, entity){
 	gl.uniform1f(gl.getUniformLocation(shader.program, 'reflectivity'), entity.reflectivity);
 	gl.uniform1f(gl.getUniformLocation(shader.program, 'shine_damper'), entity.shine_damper);
 
-
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, entity.texture);
 
-	gl.activeTexture(gl.TEXTURE1);
-	gl.bindTexture(gl.TEXTURE_2D, entity.normal_map);
+	if(entity.normal_map != undefined){
+		gl.activeTexture(gl.TEXTURE1);
+		gl.bindTexture(gl.TEXTURE_2D, entity.normal_map);
+		gl.uniform1i(gl.getUniformLocation(shader.program, 'is_normal_mapped'), 1);
+	}else{
+		gl.uniform1i(gl.getUniformLocation(shader.program, 'is_normal_mapped'), 0);
+	}
 
 	gl.uniformMatrix4fv(shader.model_loc, false, entity.transform.matrix);
 	draw_model(gl, entity.model);
