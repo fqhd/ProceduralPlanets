@@ -6,7 +6,6 @@
 	precision mediump float;
 #endif
 
-in vec3 pass_tangent;
 in vec3 pass_normal;
 in vec2 pass_uv;
 
