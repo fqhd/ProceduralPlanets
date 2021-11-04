@@ -2,7 +2,6 @@
 
 export function init_gl_state(gl){
 	gl.clearColor(0, 0, 0, 1);
-	gl.enable(gl.CULL_FACE);
 	gl.enable(gl.DEPTH_TEST);
 	gl.viewport(0, 0, gl.canvas.clientWidth, gl.canvas.clientHeight);
 }
