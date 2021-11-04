@@ -30,7 +30,12 @@ function load_camera_to_shader(gl, shader, camera){
 }
 
 function draw_entity(gl, shader, entity){
+	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, entity.texture);
+
+	gl.activeTexture(gl.TEXTURE1);
+	gl.bindTexture(gl.TEXTURE_2D, entity.normal_map);
+
 	gl.uniformMatrix4fv(shader.model_loc, false, entity.transform.matrix);
 	draw_model(gl, entity.model);
 }

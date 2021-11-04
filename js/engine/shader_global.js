@@ -10,6 +10,9 @@ export async function load_shaders(gl){
 
 async function load_model_shader(gl){
 	const program = await create_shader(gl, 'res/shaders/model_shader/');
+	gl.useProgram(program);
+	gl.uniform1i(gl.getUniformLocation(program, 'our_texture'), 0);
+	gl.uniform1i(gl.getUniformLocation(program, 'our_normal_map'), 1);
 	return {
 		program,
 		model_loc: gl.getUniformLocation(program, 'model'),

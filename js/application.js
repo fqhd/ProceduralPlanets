@@ -27,6 +27,7 @@ export async function init(gl){
 			{
 				model: models.plane,
 				texture: textures.bricks_texture,
+				normal_map: textures.bricks_normal,
 				transform: init_transform([0, 0, -10], [35, 0, 0], [1, 1 ,1]),
 			},
 		],
