@@ -14,14 +14,21 @@ function draw_entities(gl, scene_data){
 	const shader = scene_data.shaders.model_shader;
 	const camera = scene_data.camera;
 	const entities = scene_data.entities;
+	const light = scene_data.light;
 
 	gl.useProgram(shader.program);
 
+	load_light_to_shader(gl, shader, light);
 	load_camera_to_shader(gl, shader, camera);
 
 	for(const e of entities){
 		draw_entity(gl, shader, e);
 	}
+}
+
+function load_light_to_shader(gl, shader, light){
+	gl.uniform3fv(gl.getUniformLocation(shader.program, 'light_position'), light.position);
+	gl.uniform3fv(gl.getUniformLocation(shader.program, 'light_color'), light.color);
 }
 
 function load_camera_to_shader(gl, shader, camera){

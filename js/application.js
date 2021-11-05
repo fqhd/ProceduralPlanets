@@ -31,6 +31,10 @@ export async function init(gl){
 				transform: init_transform([0, 0, -10], [35, 0, 0], [1, 1 ,1]),
 			},
 		],
+		light: {
+			position: [1, 1, 1],
+			color: [1, 1, 1],
+		},
 		camera: create_camera([0, 0, 0], 0, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
 }
