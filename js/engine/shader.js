@@ -1,12 +1,22 @@
 'use strict';
 
-export async function create_shader(gl, shader_path){
+export async function load_shaders(gl){
+	return await Promise.all([
+		load_shader_from_dir(gl, '/res/shaders/model_shader/'),
+		// load_shader_from_dir(gl, '/res/shaders/normal_entity_shader/'),
+	]);
+}
+
+async function load_shader_from_dir(gl, shader_path){
 	return Promise.all([
 		fetch(shader_path+'vs.glsl'),
 		fetch(shader_path+'fs.glsl'),
-	]).then(results => {
-		return Promise.all(results.map(r => r.text())).then(strings => {
-			return create_shader_program(gl, strings[0], strings[1]);
+	]).then(async results => {
+		return await Promise.all(results.map(r => r.text())).then(strings => {
+			return {
+				program: create_shader_program(gl, strings[0], strings[1]),
+				uniform_locations: {},
+			};
 		});
 	});
 }

@@ -7,13 +7,16 @@ export function init_gl_state(gl){
 }
 
 export function draw_scene(gl, scene){
-	gl.useProgram(scene.shaders.model_shader.program);
+	const model_shader = scene.shaders[0];
+	const {light, camera, bunny, plane} = scene;
 
-	load_light_to_shader(gl, scene.shaders.model_shader, scene.light);
-	load_camera_to_shader(gl, scene.shaders.model_shader, scene.camera);
+	gl.useProgram(model_shader.program);
 
-	draw_entity(gl, scene.shaders.model_shader, scene.bunny);
-	draw_entity(gl, scene.shaders.model_shader, scene.plane);
+	load_light_to_shader(gl, model_shader, light);
+	load_camera_to_shader(gl, model_shader, camera);
+
+	draw_entity(gl, model_shader, bunny);
+	draw_entity(gl, model_shader, plane);
 }
 
 function load_light_to_shader(gl, shader, light){

@@ -1,6 +1,6 @@
 'use strict';
 
-import {load_shaders} from './engine/shader_global.js';
+import {load_shaders} from './engine/shader.js';
 import {load_models} from './engine/models_global.js';
 import {load_textures} from './engine/textures_global.js';
 import {draw_scene, init_gl_state} from './engine/renderer.js';
