@@ -3,7 +3,7 @@
 import {load_shaders} from './engine/shader_global.js';
 import {load_models} from './engine/models_global.js';
 import {load_textures} from './engine/textures_global.js';
-import {render_scene, init_gl_state} from './engine/renderer.js';
+import {draw_scene, init_gl_state} from './engine/renderer.js';
 import {create_camera} from './engine/camera.js';
 import {init_transform, rotate_transform} from './engine/transform.js';
 
@@ -18,19 +18,17 @@ export async function init(gl){
 
 	return {
 		shaders,
-		entities: [
-			{
-				model: models.bunny,
-				texture: textures.bricks_texture,
-				transform: init_transform([-2, 0, -5], [0, 0, 0], [1, 1, 1]),
-			},
-			{
-				model: models.plane,
-				texture: textures.bricks_texture,
-				normal_map: textures.bricks_normal,
-				transform: init_transform([0, 0, -10], [0, 0, 0], [10, 10 ,10]),
-			},
-		],
+		bunny: {
+			model: models.bunny,
+			texture: textures.bricks_texture,
+			transform: init_transform([-2, 0, -5], [0, 0, 0], [1, 1, 1]),
+		},
+		plane: {
+			model: models.plane,
+			texture: textures.bricks_texture,
+			normal_map: textures.bricks_normal,
+			transform: init_transform([0, 0, -10], [0, 0, 0], [10, 10 ,10]),
+		},
 		light: {
 			position: [1, 10, 1],
 			color: [1, 1, 1],
@@ -39,10 +37,10 @@ export async function init(gl){
 	};
 }
 
-export function draw(gl, scene_data){
+export function draw(gl, scene){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-	rotate_transform(scene_data.entities[0].transform, [0, -0.3, 0]);
+	rotate_transform(scene.bunny.transform, [0, -0.3, 0]);
 
-	render_scene(gl, scene_data);
+	draw_scene(gl, scene);
 }

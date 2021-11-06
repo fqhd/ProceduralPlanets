@@ -6,24 +6,14 @@ export function init_gl_state(gl){
 	gl.viewport(0, 0, gl.canvas.clientWidth, gl.canvas.clientHeight);
 }
 
-export function render_scene(gl, scene_data){
-	draw_entities(gl, scene_data);
-}
+export function draw_scene(gl, scene){
+	gl.useProgram(scene.shaders.model_shader.program);
 
-function draw_entities(gl, scene_data){
-	const shader = scene_data.shaders.model_shader;
-	const camera = scene_data.camera;
-	const entities = scene_data.entities;
-	const light = scene_data.light;
+	load_light_to_shader(gl, scene.shaders.model_shader, scene.light);
+	load_camera_to_shader(gl, scene.shaders.model_shader, scene.camera);
 
-	gl.useProgram(shader.program);
-
-	load_light_to_shader(gl, shader, light);
-	load_camera_to_shader(gl, shader, camera);
-
-	for(const e of entities){
-		draw_entity(gl, shader, e);
-	}
+	draw_entity(gl, scene.shaders.model_shader, scene.bunny);
+	draw_entity(gl, scene.shaders.model_shader, scene.plane);
 }
 
 function load_light_to_shader(gl, shader, light){
