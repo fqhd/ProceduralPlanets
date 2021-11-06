@@ -22,20 +22,20 @@ export async function init(gl){
 			{
 				model: models.bunny,
 				texture: textures.bricks_texture,
-				transform: init_transform([-2, 0, -10], [35, 0, 0], [1, 1, 1]),
+				transform: init_transform([-2, 0, -5], [0, 0, 0], [1, 1, 1]),
 			},
 			{
 				model: models.plane,
 				texture: textures.bricks_texture,
 				normal_map: textures.bricks_normal,
-				transform: init_transform([0, 0, -10], [35, 0, 0], [1, 1 ,1]),
+				transform: init_transform([0, 0, -10], [0, 0, 0], [10, 10 ,10]),
 			},
 		],
 		light: {
-			position: [1, 1, 1],
+			position: [1, 10, 1],
 			color: [1, 1, 1],
 		},
-		camera: create_camera([0, 0, 0], 0, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
+		camera: create_camera([0, 2, 4], 0, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
 }
 
@@ -43,7 +43,6 @@ export function draw(gl, scene_data){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	rotate_transform(scene_data.entities[0].transform, [0, -0.3, 0]);
-	rotate_transform(scene_data.entities[1].transform, [0, 0.3, 0]);
 
 	render_scene(gl, scene_data);
 }
