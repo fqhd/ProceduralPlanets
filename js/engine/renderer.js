@@ -1,5 +1,6 @@
 'use strict';
 
+import { update_transform } from "/js/engine/transform.js";
 import { set_uniform_mat4, set_uniform_vec3, set_uniform_f } from "/js/engine/shader.js";
 
 export function init_gl_state(gl){
@@ -43,6 +44,8 @@ function draw_entity(gl, shader, entity){
 
 	set_uniform_f(gl, shader, 'reflectivity', entity.reflectivity);
 	set_uniform_f(gl, shader, 'shine_damper', entity.shine_damper);
+
+	update_transform(entity.transform);
 
 	set_uniform_mat4(gl, shader, 'model', entity.transform.matrix);
 	draw_model(gl, entity.model);

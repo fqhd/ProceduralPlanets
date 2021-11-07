@@ -5,7 +5,7 @@ import {load_models} from '/js/engine/model.js';
 import {load_textures} from '/js/engine/texture.js';
 import {draw_scene, init_gl_state} from '/js/engine/renderer.js';
 import {create_camera} from '/js/engine/camera.js';
-import {init_transform, rotate_transform} from '/js/engine/transform.js';
+import {init_transform} from '/js/engine/transform.js';
 
 export async function init(gl){
 	const [shaders, models, textures] = await Promise.all([
@@ -45,7 +45,7 @@ export async function init(gl){
 export function draw(gl, scene){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-	rotate_transform(scene.bunny.transform, [0, -0.3, 0]);
+	scene.bunny.transform.rotation[1] += 1;
 
 	draw_scene(gl, scene);
 }
