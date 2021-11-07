@@ -20,11 +20,15 @@ export async function init(gl){
 	return {
 		shaders,
 		bunny: {
+			reflectivity: 1,
+			shine_damper: 10,
 			model: models.bunny,
 			texture: textures.bricks_texture,
 			transform: init_transform([-2, 0, -5], [0, 0, 0], [1, 1, 1]),
 		},
 		plane: {
+			reflectivity: 1,
+			shine_damper: 10,
 			model: models.plane,
 			texture: textures.bricks_texture,
 			normal_map: textures.bricks_normal,
@@ -34,7 +38,7 @@ export async function init(gl){
 			position: [1, 10, 1],
 			color: [1, 1, 1],
 		},
-		camera: create_camera([0, 2, 4], 0, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
+		camera: create_camera([0, 2, 6], 0, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
 }
 

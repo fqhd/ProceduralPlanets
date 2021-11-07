@@ -15,6 +15,13 @@ export function bind_shader_tex_attribs(gl, shaders){
 	set_uniform_i(gl, entity_shader, 'our_texture', 0);
 }
 
+export function set_uniform_f(gl, shader, name, value){
+	if(!shader.uniform_locations[name]){
+		shader.uniform_locations[name] = gl.getUniformLocation(shader.program, name);
+	}
+	gl.uniform1f(shader.uniform_locations[name], value);
+}
+
 export function set_uniform_i(gl, shader, name, value){
 	if(!shader.uniform_locations[name]){
 		shader.uniform_locations[name] = gl.getUniformLocation(shader.program, name);

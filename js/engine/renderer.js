@@ -1,6 +1,6 @@
 'use strict';
 
-import { set_uniform_mat4, set_uniform_vec3 } from "/js/engine/shader.js";
+import { set_uniform_mat4, set_uniform_vec3, set_uniform_f } from "/js/engine/shader.js";
 
 export function init_gl_state(gl){
 	gl.clearColor(0, 0, 0, 1);
@@ -29,6 +29,7 @@ function load_light_to_shader(gl, shader, light){
 function load_camera_to_shader(gl, shader, camera){
 	set_uniform_mat4(gl, shader, 'projection', camera.projection);
 	set_uniform_mat4(gl, shader, 'view', camera.view);
+	set_uniform_vec3(gl, shader, 'camera_position', camera.position);
 }
 
 function draw_entity(gl, shader, entity){
@@ -39,6 +40,9 @@ function draw_entity(gl, shader, entity){
 		gl.activeTexture(gl.TEXTURE1);
 		gl.bindTexture(gl.TEXTURE_2D, entity.normal_map);
 	}
+
+	set_uniform_f(gl, shader, 'reflectivity', entity.reflectivity);
+	set_uniform_f(gl, shader, 'shine_damper', entity.shine_damper);
 
 	set_uniform_mat4(gl, shader, 'model', entity.transform.matrix);
 	draw_model(gl, entity.model);
