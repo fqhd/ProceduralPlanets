@@ -13,6 +13,7 @@ export function bind_shader_tex_attribs(gl, shaders){
 
 	gl.useProgram(entity_shader.program);
 	set_uniform_i(gl, entity_shader, 'our_texture', 0);
+	set_uniform_i(gl, entity_shader, 'our_normal_map', 1);
 }
 
 export function set_uniform_f(gl, shader, name, value){

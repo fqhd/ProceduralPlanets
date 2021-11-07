@@ -37,10 +37,8 @@ function draw_entity(gl, shader, entity){
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, entity.texture);
 
-	if(entity.normal_map){
-		gl.activeTexture(gl.TEXTURE1);
-		gl.bindTexture(gl.TEXTURE_2D, entity.normal_map);
-	}
+	gl.activeTexture(gl.TEXTURE1);
+	gl.bindTexture(gl.TEXTURE_2D, entity.normal_map);
 
 	set_uniform_f(gl, shader, 'reflectivity', entity.reflectivity);
 	set_uniform_f(gl, shader, 'shine_damper', entity.shine_damper);

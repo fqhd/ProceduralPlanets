@@ -22,9 +22,10 @@ export async function init(gl){
 		bunny: {
 			reflectivity: 1,
 			shine_damper: 10,
-			model: models.bunny,
+			model: models.plane,
 			texture: textures.bricks_texture,
-			transform: init_transform([-2, 0, -5], [0, 0, 0], [1, 1, 1]),
+			normal_map: textures.bricks_normal,
+			transform: init_transform([-2, 1, -8], [45, 0, 0], [5, 5, 5]),
 		},
 		plane: {
 			reflectivity: 1,

@@ -6,6 +6,7 @@
 	precision mediump float;
 #endif
 
+in mat3 pass_tangent_space_matrix;
 in vec3 pass_to_camera_vector;
 in vec3 pass_to_light_vector;
 in vec3 pass_normal;
@@ -21,7 +22,11 @@ uniform vec3 light_color;
 
 void main(){
 	vec3 fragment_color = texture(our_texture, pass_uv).rgb;
-	vec3 unit_normal = normalize(pass_normal);
+
+	// Calculating normal
+	vec3 unit_normal = texture(our_normal_map, pass_uv).xyz * 2.0 - 1.0;
+	unit_normal = pass_tangent_space_matrix * normalize(unit_normal);
+	
 	vec3 unit_to_light_vector = normalize(pass_to_light_vector);
 	vec3 unit_to_camera_vector = normalize(pass_to_camera_vector);
 	vec3 reflected_light_dir = reflect(-unit_to_light_vector, unit_normal);
