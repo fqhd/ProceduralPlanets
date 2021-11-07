@@ -17,9 +17,9 @@ export function create_camera(position, pitch, yaw, ratio){
 }
 
 export function calc_view_matrix({position, view, pitch, yaw}){
-	mat4.translate(view, view, position.map(n => n * -1));
 	mat4.rotate(view, view, to_radians(pitch), [1, 0, 0]);
 	mat4.rotate(view, view, to_radians(yaw), [0, 1, 0]);
+	mat4.translate(view, view, position.map(n => n * -1));
 }
 
 function calc_proj_matrix(ratio){
