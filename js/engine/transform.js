@@ -2,7 +2,7 @@
 
 const {mat4} = glMatrix;
 
-import {to_radians} from './utils.js'
+import {to_radians} from '/js/engine/utils.js'
 
 export function init_transform(pos, rot, scale){
 	const m = mat4.create();

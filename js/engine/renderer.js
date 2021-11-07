@@ -1,6 +1,6 @@
 'use strict';
 
-import { set_uniform_mat4, set_uniform_vec3 } from "./shader.js";
+import { set_uniform_mat4, set_uniform_vec3 } from "/js/engine/shader.js";
 
 export function init_gl_state(gl){
 	gl.clearColor(0, 0, 0, 1);
