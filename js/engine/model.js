@@ -87,12 +87,12 @@ function calc_tangents(positions, uvs){
 	let j = 0;
 
 	for(let i = 0; i < positions.length; i+=9){
-		const P0 = [positions[i], positions[i+1], positions[i+2]];
-		const P1 = [positions[i+3], positions[i+4], positions[i+5]];
+		const P1 = [positions[i], positions[i+1], positions[i+2]];
+		const P0 = [positions[i+3], positions[i+4], positions[i+5]];
 		const P2 = [positions[i+6], positions[i+7], positions[i+8]];
 
-		const T0 = [uvs[j], uvs[j+1]];
-		const T1 = [uvs[j+2], uvs[j+3]];
+		const T1 = [uvs[j], uvs[j+1]];
+		const T0 = [uvs[j+2], uvs[j+3]];
 		const T2 = [uvs[j+4], uvs[j+5]];
 		j+=6;
 		

@@ -2,18 +2,19 @@
 
 export async function load_shaders(gl){
 	return {
-		entity_shader: await load_shader_from_dir(gl, '/res/shaders/model_shader/'),	
+		normal_mapped_entity_shader: await load_shader_from_dir(gl, '/res/shaders/normal_mapped_entity_shader/'),	
 	};
 }
 
 export function bind_shader_tex_attribs(gl, shaders){
-	const {entity_shader} = shaders;
+	const {normal_mapped_entity_shader} = shaders;
 
-	// Binding texture locations
+	// Normal Mapped Entity Shader
+	gl.useProgram(normal_mapped_entity_shader.program);
+	set_uniform_i(gl, normal_mapped_entity_shader, 'our_texture', 0);
+	set_uniform_i(gl, normal_mapped_entity_shader, 'our_normal_map', 1);
 
-	gl.useProgram(entity_shader.program);
-	set_uniform_i(gl, entity_shader, 'our_texture', 0);
-	set_uniform_i(gl, entity_shader, 'our_normal_map', 1);
+	
 }
 
 export function set_uniform_f(gl, shader, name, value){

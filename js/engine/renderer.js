@@ -13,21 +13,24 @@ export function init_gl_state(gl){
 export function draw_scene(gl, scene){
 	update_camera(scene.camera);
 
-	draw_entities(gl, scene);
+	draw_normal_mapped_entities(gl, scene);
 }
 
-function draw_entities(gl, scene){
-	const {entity_shader} = scene.shaders;
-	const {light, camera, bunny, plane} = scene;
+function draw_normal_mapped_entities(gl, scene){
+	const shader = scene.shaders.normal_mapped_entity_shader;
+	const entities = scene.normal_mapped_entities;
+	const {light, camera} = scene;
 
-	gl.useProgram(entity_shader.program);
+	gl.useProgram(shader.program);
 
-	load_light_to_shader(gl, entity_shader, light);
-	load_camera_to_shader(gl, entity_shader, camera);
+	load_light_to_shader(gl, shader, light);
+	load_camera_to_shader(gl, shader, camera);
 
-	draw_entity(gl, entity_shader, bunny);
-	draw_entity(gl, entity_shader, plane);
+	entities.forEach(e => {
+		draw_normal_mapped_entity(gl, shader, e);
+	});
 }
+
 
 function load_light_to_shader(gl, shader, light){
 	set_uniform_vec3(gl, shader, 'light_position', light.position);
@@ -40,7 +43,7 @@ function load_camera_to_shader(gl, shader, camera){
 	set_uniform_vec3(gl, shader, 'camera_position', camera.position);
 }
 
-function draw_entity(gl, shader, entity){
+function draw_normal_mapped_entity(gl, shader, entity){
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, entity.texture);
 
