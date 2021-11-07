@@ -1,7 +1,8 @@
 'use strict';
 
-import { update_transform } from "/js/engine/transform.js";
-import { set_uniform_mat4, set_uniform_vec3, set_uniform_f } from "/js/engine/shader.js";
+import { update_transform } from '/js/engine/transform.js';
+import { set_uniform_mat4, set_uniform_vec3, set_uniform_f } from '/js/engine/shader.js';
+import { update_camera } from '/js/engine/camera.js';
 
 export function init_gl_state(gl){
 	gl.clearColor(0, 0, 0, 1);
@@ -12,6 +13,8 @@ export function init_gl_state(gl){
 export function draw_scene(gl, scene){
 	const {entity_shader} = scene.shaders;
 	const {light, camera, bunny, plane} = scene;
+
+	update_camera(camera);
 
 	gl.useProgram(entity_shader.program);
 

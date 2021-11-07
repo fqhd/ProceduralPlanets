@@ -12,11 +12,12 @@ export function create_camera(position, pitch, yaw, ratio){
 		view: mat4.create(),
 		projection: calc_proj_matrix(ratio),
 	};
-	calc_view_matrix(cam);
 	return cam;
 }
 
-export function calc_view_matrix({position, view, pitch, yaw}){
+export function update_camera(camera){
+	const {view, position, pitch, yaw} = camera;
+	mat4.identity(view);
 	mat4.rotate(view, view, to_radians(pitch), [1, 0, 0]);
 	mat4.rotate(view, view, to_radians(yaw), [0, 1, 0]);
 	mat4.translate(view, view, position.map(n => n * -1));

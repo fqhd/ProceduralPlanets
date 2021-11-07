@@ -33,6 +33,4 @@ void main(){
 	pass_to_light_vector = tangent_space_matrix * (light_position - world_position.xyz);
 	pass_to_camera_vector = tangent_space_matrix * (camera_position - world_position.xyz);
 	pass_uv = a_uv;
-	
-
 }
