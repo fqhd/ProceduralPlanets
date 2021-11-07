@@ -2,14 +2,14 @@
 
 const {vec3} = glMatrix;
 
-export async function load_models(gl){
+export async function load_textured_models(gl){
 	return {
-		bunny: await load_model_from_file(gl, 'res/models/bunny.obj'),
-		plane: await load_model_from_file(gl, 'res/models/plane.obj'),
+		bunny: await load_textured_model_from_file(gl, 'res/models/bunny.obj'),
+		plane: await load_textured_model_from_file(gl, 'res/models/plane.obj'),
 	};
 }
 
-async function load_model_from_file(gl, path){
+async function load_textured_model_from_file(gl, path){
 	const response = await fetch(path);
 	const text = await response.text();
 	const lines = text.split('\n');
