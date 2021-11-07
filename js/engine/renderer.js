@@ -27,7 +27,7 @@ function load_light_to_shader(gl, shader, light){
 }
 
 function load_camera_to_shader(gl, shader, camera){
-	set_uniform_mat4(gl, shader, 'proj', camera.proj);
+	set_uniform_mat4(gl, shader, 'projection', camera.projection);
 	set_uniform_mat4(gl, shader, 'view', camera.view);
 }
 
