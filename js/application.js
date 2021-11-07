@@ -21,11 +21,11 @@ export async function init(gl){
 		shaders,
 		bunny: {
 			reflectivity: 1,
-			shine_damper: 10,
-			model: models.plane,
+			shine_damper: 6,
+			model: models.bunny,
 			texture: textures.bricks_texture,
 			normal_map: textures.bricks_normal,
-			transform: init_transform([-2, 1, -8], [45, 0, 0], [5, 5, 5]),
+			transform: init_transform([-2, 100, -8], [0, 0, 0], [3, 3, 3]),
 		},
 		plane: {
 			reflectivity: 1,
@@ -36,17 +36,17 @@ export async function init(gl){
 			transform: init_transform([0, 0, -10], [0, 0, 0], [10, 10 ,10]),
 		},
 		light: {
-			position: [1, 10, 1],
+			position: [0, 5, -10],
 			color: [1, 1, 1],
 		},
-		camera: create_camera([0, 2, 6], 0, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
+		camera: create_camera([0, 20, 16], 35, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
 }
 
 export function draw(gl, scene){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-	scene.bunny.transform.rotation[1] += 1;
+	scene.plane.transform.rotation[1] += 0.5;
 
 	draw_scene(gl, scene);
 }
