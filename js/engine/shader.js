@@ -1,30 +1,65 @@
 'use strict';
 
 export async function load_shaders(gl){
-	return await Promise.all([
-		load_shader_from_dir(gl, '/res/shaders/model_shader/'),
-		// load_shader_from_dir(gl, '/res/shaders/normal_entity_shader/'),
-	]);
+	return {
+		entity_shader: await load_shader_from_dir(gl, '/res/shaders/model_shader/'),	
+	};
+}
+
+export function bind_shader_tex_attribs(gl, shaders){
+	const {entity_shader} = shaders;
+
+	// Binding texture locations
+
+	gl.useProgram(entity_shader.program);
+	set_uniform_i(gl, entity_shader, 'our_texture', 0);
+}
+
+export function set_uniform_i(gl, shader, name, value){
+	if(!shader.uniform_locations[name]){
+		shader.uniform_locations[name] = gl.getUniformLocation(shader.program, name);
+	}
+	gl.uniform1i(shader.uniform_locations[name], value);
+}
+
+export function set_uniform_vec3(gl, shader, name, value){
+	if(!shader.uniform_locations[name]){
+		shader.uniform_locations[name] = gl.getUniformLocation(shader.program, name);
+	}
+	gl.uniform3fv(shader.uniform_locations[name], value);
+}
+
+export function set_uniform_mat4(gl, shader, name, value){
+	if(!shader.uniform_locations[name]){
+		shader.uniform_locations[name] = gl.getUniformLocation(shader.program, name);
+	}
+	gl.uniformMatrix4fv(shader.uniform_locations[name], false, value);
 }
 
 async function load_shader_from_dir(gl, shader_path){
-	return Promise.all([
-		fetch(shader_path+'vs.glsl'),
-		fetch(shader_path+'fs.glsl'),
-	]).then(async results => {
-		return await Promise.all(results.map(r => r.text())).then(strings => {
-			return {
-				program: create_shader_program(gl, strings[0], strings[1]),
-				uniform_locations: {},
-			};
-		});
-	});
+    // Fetching shader files from path(directory)
+    let responses = await Promise.all([
+        fetch(shader_path+'vs.glsl'),
+        fetch(shader_path+'fs.glsl'),
+    ]);
+
+	// Converting shader file fetch requests into array of promises to convert them to text
+	let shader_string_promises = responses.map(r => r.text());
+
+	// Awaiting the promises
+	let shader_strings = await Promise.all(shader_string_promises);
+
+	// Creating a shader program from the promises
+    return {
+        program: create_shader_program(gl, shader_strings[0], shader_strings[1]),
+        uniform_locations: {},
+    };
 }
 
 function create_shader_program(gl, vs_source, fs_source){
 	const program = gl.createProgram();
-	const vs = load_shader(gl, gl.VERTEX_SHADER, vs_source);
-	const fs = load_shader(gl, gl.FRAGMENT_SHADER, fs_source);
+	const vs = create_shader(gl, gl.VERTEX_SHADER, vs_source);
+	const fs = create_shader(gl, gl.FRAGMENT_SHADER, fs_source);
 	gl.attachShader(program, vs);
 	gl.attachShader(program, fs);
 	gl.linkProgram(program);
@@ -35,7 +70,7 @@ function create_shader_program(gl, vs_source, fs_source){
 	return program;
 }
 
-function load_shader(gl, type, source){
+function create_shader(gl, type, source){
 	const shader = gl.createShader(type);
 	gl.shaderSource(shader, source);
 	gl.compileShader(shader);

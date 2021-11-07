@@ -1,5 +1,7 @@
 'use strict';
 
+import { set_uniform_mat4, set_uniform_vec3 } from "./shader.js";
+
 export function init_gl_state(gl){
 	gl.clearColor(0, 0, 0, 1);
 	gl.enable(gl.DEPTH_TEST);
@@ -7,36 +9,38 @@ export function init_gl_state(gl){
 }
 
 export function draw_scene(gl, scene){
-	const model_shader = scene.shaders[0];
+	const {entity_shader} = scene.shaders;
 	const {light, camera, bunny, plane} = scene;
 
-	gl.useProgram(model_shader.program);
+	gl.useProgram(entity_shader.program);
 
-	load_light_to_shader(gl, model_shader, light);
-	load_camera_to_shader(gl, model_shader, camera);
+	load_light_to_shader(gl, entity_shader, light);
+	load_camera_to_shader(gl, entity_shader, camera);
 
-	draw_entity(gl, model_shader, bunny);
-	draw_entity(gl, model_shader, plane);
+	draw_entity(gl, entity_shader, bunny);
+	draw_entity(gl, entity_shader, plane);
 }
 
 function load_light_to_shader(gl, shader, light){
-	gl.uniform3fv(gl.getUniformLocation(shader.program, 'light_position'), light.position);
-	gl.uniform3fv(gl.getUniformLocation(shader.program, 'light_color'), light.color);
+	set_uniform_vec3(gl, shader, 'light_position', light.position);
+	set_uniform_vec3(gl, shader, 'light_color', light.color);
 }
 
 function load_camera_to_shader(gl, shader, camera){
-	gl.uniformMatrix4fv(shader.view_loc, false, camera.view);
-	gl.uniformMatrix4fv(shader.proj_loc, false, camera.proj);
+	set_uniform_mat4(gl, shader, 'proj', camera.proj);
+	set_uniform_mat4(gl, shader, 'view', camera.view);
 }
 
 function draw_entity(gl, shader, entity){
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, entity.texture);
 
-	gl.activeTexture(gl.TEXTURE1);
-	gl.bindTexture(gl.TEXTURE_2D, entity.normal_map);
+	if(entity.normal_map){
+		gl.activeTexture(gl.TEXTURE1);
+		gl.bindTexture(gl.TEXTURE_2D, entity.normal_map);
+	}
 
-	gl.uniformMatrix4fv(shader.model_loc, false, entity.transform.matrix);
+	set_uniform_mat4(gl, shader, 'model', entity.transform.matrix);
 	draw_model(gl, entity.model);
 }
 

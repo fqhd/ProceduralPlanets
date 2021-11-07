@@ -1,6 +1,6 @@
 'use strict';
 
-import {load_shaders} from './engine/shader.js';
+import {load_shaders, bind_shader_tex_attribs} from './engine/shader.js';
 import {load_models} from './engine/models_global.js';
 import {load_textures} from './engine/textures_global.js';
 import {draw_scene, init_gl_state} from './engine/renderer.js';
@@ -15,6 +15,7 @@ export async function init(gl){
 	]);
 
 	init_gl_state(gl); // Initializing gl state out of promise
+	bind_shader_tex_attribs(gl, shaders); // Send 0 or 1 to shader textures
 
 	return {
 		shaders,
