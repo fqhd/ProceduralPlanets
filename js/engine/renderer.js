@@ -11,10 +11,14 @@ export function init_gl_state(gl){
 }
 
 export function draw_scene(gl, scene){
+	update_camera(scene.camera);
+
+	draw_entities(gl, scene);
+}
+
+function draw_entities(gl, scene){
 	const {entity_shader} = scene.shaders;
 	const {light, camera, bunny, plane} = scene;
-
-	update_camera(camera);
 
 	gl.useProgram(entity_shader.program);
 
