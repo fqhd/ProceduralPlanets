@@ -1,9 +1,9 @@
 'use strict';
 
-import {init, draw} from './application.js'
+import {init, draw} from '/js/application.js'
 
 let gl;
-let scene_data;
+let scene;
 
 async function main(){
 	const canvas = document.getElementById('canvas');
@@ -18,12 +18,12 @@ async function main(){
 	console.log('GLSL Version: ' + gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
 
 	// Initialization of the mythical super data structure
-	scene_data = await init(gl);
+	scene = await init(gl);
 	draw_game();
 }
 
 function draw_game(){
-	draw(gl, scene_data);
+	draw(gl, scene);
 	requestAnimationFrame(draw_game);
 }
 

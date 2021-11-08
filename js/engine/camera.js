@@ -10,20 +10,21 @@ export function create_camera(position, pitch, yaw, ratio){
 		pitch,
 		yaw,
 		view: mat4.create(),
-		proj: calc_proj_matrix(ratio),
+		projection: calc_proj_matrix(ratio),
 	};
-	calc_view_matrix(cam);
 	return cam;
 }
 
-export function calc_view_matrix({position, view, pitch, yaw}){
-	mat4.translate(view, view, position.map(n => n * -1));
+export function update_camera(camera){
+	const {view, position, pitch, yaw} = camera;
+	mat4.identity(view);
 	mat4.rotate(view, view, to_radians(pitch), [1, 0, 0]);
 	mat4.rotate(view, view, to_radians(yaw), [0, 1, 0]);
+	mat4.translate(view, view, position.map(n => n * -1));
 }
 
 function calc_proj_matrix(ratio){
 	const proj = mat4.create();
-	mat4.perspective(proj, 70, ratio, 0.1, 1000.0);
+	mat4.perspective(proj, to_radians(70), ratio, 0.1, 1000.0);
 	return proj;
 }
