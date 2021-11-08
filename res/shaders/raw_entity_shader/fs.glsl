@@ -25,7 +25,7 @@ void main() {
 	vec3 reflected_light_dir = reflect(-unit_to_light_vector, unit_normal);
 
 	// Diffuse Calculation
-	float brightness = max(dot(unit_to_light_vector, unit_normal), 0.2);
+	float brightness = max(dot(unit_to_light_vector, unit_normal), 0.1);
 	vec3 diffuse = light_color * brightness;
 
 	// Specular Calculation
