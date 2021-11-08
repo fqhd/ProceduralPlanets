@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build" : "webpack"
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,8 @@
   "devDependencies": {
     "webpack": "^5.62.1",
     "webpack-cli": "^4.9.1"
+  },
+  "dependencies": {
+    "gl-matrix": "^3.4.3"
   }
 }
