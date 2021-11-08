@@ -39,11 +39,18 @@ export async function init(gl){
 				transform: init_transform([0, 0, -7], [0, 90, 0], [50, 50, 50]),
 			},
 		],
-		light: {
-			position: [0, 1, -2],
-			color: [0.1, 0.6, 1],
-			attenuation: [0.4, 0.08, 0.08],
-		},
+		lights: [
+			{
+				position: [0, 1, -2],
+				color: [0.1, 0.6, 1],
+				attenuation: [0.4, 0.08, 0.08],
+			},
+			{
+				position: [-2, 1, -2],
+				color: [0.9, 0.4, 0.2],
+				attenuation: [0.4, 0.08, 0.08],
+			},
+		],
 		camera: create_camera([-3, 1.5, 3], 5, 20, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
 }
@@ -51,7 +58,8 @@ export async function init(gl){
 export function draw(gl, scene, delta_time){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-	scene.light.position[2] = Math.sin(delta_time * 0.001) * 5 - 5;
+	scene.lights[0].position[2] = Math.sin(delta_time * 0.0015) * 4 - 4;
+	scene.lights[1].position[2] = Math.cos(delta_time * 0.0015) * 4 - 4;
 
 	draw_scene(gl, scene);
 }

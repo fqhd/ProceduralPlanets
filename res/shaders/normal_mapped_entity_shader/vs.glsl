@@ -6,13 +6,13 @@ layout(location = 2) in vec3 a_tangent;
 layout(location = 3) in vec2 a_uv;
 
 out vec3 pass_to_camera_vector;
-out vec3 pass_to_light_vector;
+out vec3 pass_to_light_vector[2];
 out vec2 pass_uv;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
-uniform vec3 light_position;
+uniform vec3 light_position[2];
 uniform vec3 camera_position;
 
 void main(){
@@ -30,7 +30,10 @@ void main(){
 		tangent.z, bitangent.z, normal.z
 	);
 
-	pass_to_light_vector = tangent_space_matrix * (light_position - world_position.xyz);
+	for(int i = 0; i < 2; i++){
+		pass_to_light_vector[i] = tangent_space_matrix * (light_position[i] - world_position.xyz);
+	}
+	
 	pass_to_camera_vector = tangent_space_matrix * (camera_position - world_position.xyz);
 	pass_uv = a_uv;
 }

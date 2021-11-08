@@ -20,11 +20,11 @@ export function draw_scene(gl, scene){
 function draw_raw_entities(gl, scene){
 	const shader = scene.shaders.raw_entity_shader;
 	const entities = scene.raw_entities;
-	const {light, camera} = scene;
+	const {lights, camera} = scene;
 
 	gl.useProgram(shader.program);
 
-	load_light_to_shader(gl, shader, light);
+	load_lights_to_shader(gl, shader, lights);
 	load_camera_to_shader(gl, shader, camera);
 
 	entities.forEach(e => {
@@ -46,11 +46,11 @@ function draw_raw_entity(gl, shader, entity){
 function draw_normal_mapped_entities(gl, scene){
 	const shader = scene.shaders.normal_mapped_entity_shader;
 	const entities = scene.normal_mapped_entities;
-	const {light, camera} = scene;
+	const {lights, camera} = scene;
 
 	gl.useProgram(shader.program);
 
-	load_light_to_shader(gl, shader, light);
+	load_lights_to_shader(gl, shader, lights);
 	load_camera_to_shader(gl, shader, camera);
 
 	entities.forEach(e => {
@@ -58,10 +58,13 @@ function draw_normal_mapped_entities(gl, scene){
 	});
 }
 
-function load_light_to_shader(gl, shader, light){
-	set_uniform_vec3(gl, shader, 'light_position', light.position);
-	set_uniform_vec3(gl, shader, 'light_color', light.color);
-	set_uniform_vec3(gl, shader, 'light_attenuation', light.attenuation);
+function load_lights_to_shader(gl, shader, lights){
+	for(let i = 0; i < lights.length; i++){
+		set_uniform_vec3(gl, shader, 'light_position[' + i + ']', lights[i].position);
+		set_uniform_vec3(gl, shader, 'light_color[' + i + ']', lights[i].color);
+		set_uniform_vec3(gl, shader, 'light_attenuation[' + i + ']', lights[i].attenuation);
+	}
+	
 }
 
 function load_camera_to_shader(gl, shader, camera){
