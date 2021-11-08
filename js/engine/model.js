@@ -1,14 +1,51 @@
 'use strict';
 
-const {vec3} = glMatrix;
-
 export async function load_textured_models(gl){
 	return {
-		plane: await load_textured_model_from_file(gl, 'res/models/plane.obj'),
+		plane: await load_textured_model(gl, '/res/models/textured_models/plane.obj'),
 	};
 }
 
-async function load_textured_model_from_file(gl, path){
+export async function load_raw_models(gl){
+	return {
+		bunny: await load_raw_model(gl, '/res/models/raw_models/bunny.obj'),
+	};
+}
+
+async function load_raw_model(gl, path){
+    const response = await fetch(path);
+    const text = await response.text();
+    const lines = text.split('\n');
+
+    const positions = [];
+    const normals = [];
+    const indices = [];
+
+    for(let i = 0; i < lines.length; i++){
+        const tokens = lines[i].split(' ');
+        switch(tokens[0]){
+            case 'v':
+                positions.push(tokens[1]);
+                positions.push(tokens[2]);
+                positions.push(tokens[3]);
+            break;
+            case 'vn':
+                normals.push(tokens[1]);
+                normals.push(tokens[2]);
+                normals.push(tokens[3]);
+            break;
+            case 'f':
+                indices.push(tokens[1]);
+                indices.push(tokens[2]);
+                indices.push(tokens[3]);
+            break;
+        }
+    }
+
+	return create_raw_model(gl, positions, normals, indices);
+}
+
+async function load_textured_model(gl, path){
 	const response = await fetch(path);
 	const text = await response.text();
 	const lines = text.split('\n');
@@ -64,8 +101,7 @@ async function load_textured_model_from_file(gl, path){
 
 	const tangents = calc_tangents(positions, uvs);
 
-	const model = create_model(gl, positions, normals, tangents, uvs);
-	return model;
+	return create_textured_model(gl, positions, normals, tangents, uvs);
 }
 
 function sub_vec2(a, b){
@@ -119,7 +155,34 @@ function calc_tangents(positions, uvs){
 	return tangents;
 }
 
-export function create_model(gl, positions, normals, tangents, tex_coords){
+function create_raw_model(gl, positions, normals, indices){
+	const vao = gl.createVertexArray();
+	gl.bindVertexArray(vao);
+
+	const pos_buff = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, pos_buff);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+	gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
+	gl.enableVertexAttribArray(0);
+
+	const normal_buff = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, normal_buff);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+	gl.vertexAttribPointer(1, 3, gl.FLOAT, false, 0, 0);
+	gl.enableVertexAttribArray(1);
+
+	const indices_buff = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indices_buff);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+
+	return {
+		vao,
+		indices_buff,
+		num_indices: indices.length,
+	};
+}
+
+function create_textured_model(gl, positions, normals, tangents, tex_coords){
 	const vao = gl.createVertexArray();
 	gl.bindVertexArray(vao);
 
