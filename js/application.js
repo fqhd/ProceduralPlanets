@@ -42,6 +42,7 @@ export async function init(gl){
 		light: {
 			position: [0, 1, -2],
 			color: [1, 1, 1],
+			attenuation: [0.4, 0.08, 0.08],
 		},
 		camera: create_camera([-3, 1.5, 3], 5, 20, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};

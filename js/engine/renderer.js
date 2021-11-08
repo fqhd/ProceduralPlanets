@@ -26,7 +26,6 @@ function draw_raw_entities(gl, scene){
 
 	load_light_to_shader(gl, shader, light);
 	load_camera_to_shader(gl, shader, camera);
-	load_light_to_shader(gl, shader, light);
 
 	entities.forEach(e => {
 		draw_raw_entity(gl, shader, e);
@@ -62,6 +61,7 @@ function draw_normal_mapped_entities(gl, scene){
 function load_light_to_shader(gl, shader, light){
 	set_uniform_vec3(gl, shader, 'light_position', light.position);
 	set_uniform_vec3(gl, shader, 'light_color', light.color);
+	set_uniform_vec3(gl, shader, 'light_attenuation', light.attenuation);
 }
 
 function load_camera_to_shader(gl, shader, camera){
