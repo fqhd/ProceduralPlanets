@@ -24,6 +24,7 @@ export async function init(gl){
 			{
 				reflectivity: 1,
 				shine_damper: 10,
+				color: [1, 1, 1],
 				model: raw_models.bunny,
 				transform: init_transform([0, 0, -7], [0, 0, 0], [1, 1, 1]),
 			}
