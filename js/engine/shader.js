@@ -3,6 +3,7 @@
 export async function load_shaders(gl){
 	return {
 		normal_mapped_entity_shader: await load_shader_from_dir(gl, '/res/shaders/normal_mapped_entity_shader/'),	
+		raw_entity_shader: await load_shader_from_dir(gl, '/res/shaders/raw_entity_shader/'),
 	};
 }
 
@@ -13,7 +14,6 @@ export function bind_shader_tex_attribs(gl, shaders){
 	gl.useProgram(normal_mapped_entity_shader.program);
 	set_uniform_i(gl, normal_mapped_entity_shader, 'our_texture', 0);
 	set_uniform_i(gl, normal_mapped_entity_shader, 'our_normal_map', 1);
-
 	
 }
 

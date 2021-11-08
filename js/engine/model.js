@@ -35,9 +35,10 @@ async function load_raw_model(gl, path){
                 normals.push(tokens[3]);
             break;
             case 'f':
-                indices.push(tokens[1]);
-                indices.push(tokens[2]);
-                indices.push(tokens[3]);
+				// We subtract one from the indices because blender starts counting from 1 instead of 0(like opengl expects)
+                indices.push(tokens[1]-1);
+                indices.push(tokens[2]-1);
+                indices.push(tokens[3]-1);
             break;
         }
     }

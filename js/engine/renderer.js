@@ -13,7 +13,34 @@ export function init_gl_state(gl){
 export function draw_scene(gl, scene){
 	update_camera(scene.camera);
 
+	draw_raw_entities(gl, scene);
 	draw_normal_mapped_entities(gl, scene);
+}
+
+function draw_raw_entities(gl, scene){
+	const shader = scene.shaders.raw_entity_shader;
+	const entities = scene.raw_entities;
+	const {light, camera} = scene;
+
+	gl.useProgram(shader.program);
+
+	load_light_to_shader(gl, shader, light);
+	load_camera_to_shader(gl, shader, camera);
+
+	entities.forEach(e => {
+		draw_raw_entity(gl, shader, e);
+	});
+}
+
+function draw_raw_entity(gl, shader, entity){
+	set_uniform_vec3(gl, shader, 'object_color', entity.color);
+	set_uniform_f(gl, shader, 'reflectivity', entity.reflectivity);
+	set_uniform_f(gl, shader, 'shine_damper', entity.shine_damper);
+
+	update_transform(entity.transform);
+
+	set_uniform_mat4(gl, shader, 'model', entity.transform.matrix);
+	draw_model_indices(gl, entity.model);
 }
 
 function draw_normal_mapped_entities(gl, scene){
@@ -30,7 +57,6 @@ function draw_normal_mapped_entities(gl, scene){
 		draw_normal_mapped_entity(gl, shader, e);
 	});
 }
-
 
 function load_light_to_shader(gl, shader, light){
 	set_uniform_vec3(gl, shader, 'light_position', light.position);
@@ -56,10 +82,16 @@ function draw_normal_mapped_entity(gl, shader, entity){
 	update_transform(entity.transform);
 
 	set_uniform_mat4(gl, shader, 'model', entity.transform.matrix);
-	draw_model(gl, entity.model);
+	draw_model_arrays(gl, entity.model);
 }
 
-function draw_model(gl, model){
+function draw_model_arrays(gl, model){
 	gl.bindVertexArray(model.vao);
 	gl.drawArrays(gl.TRIANGLES, 0, model.num_vertices);
+}
+
+function draw_model_indices(gl, model){
+	gl.bindVertexArray(model.vao);
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, model.indices_buff);
+	gl.drawElements(gl.TRIANGLES, model.num_indices, gl.UNSIGNED_SHORT, 0);
 }
