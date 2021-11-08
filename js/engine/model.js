@@ -4,7 +4,6 @@ const {vec3} = glMatrix;
 
 export async function load_textured_models(gl){
 	return {
-		bunny: await load_textured_model_from_file(gl, 'res/models/bunny.obj'),
 		plane: await load_textured_model_from_file(gl, 'res/models/plane.obj'),
 	};
 }

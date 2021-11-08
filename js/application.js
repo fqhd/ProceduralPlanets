@@ -23,18 +23,10 @@ export async function init(gl){
 			{
 				reflectivity: 1,
 				shine_damper: 10,
-				model: textured_models.bunny,
-				texture: textures.bricks_texture,
-				normal_map: textures.bricks_normal,
-				transform: init_transform([-2, 0, -8], [0, 0, 0], [4, 4, 4]),
-			},
-			{
-				reflectivity: 1,
-				shine_damper: 10,
 				model: textured_models.plane,
 				texture: textures.bricks_texture,
 				normal_map: textures.bricks_normal,
-				transform: init_transform([0, 0, -5], [0, 0, 0], [10, 10 ,10]),
+				transform: init_transform([0, 0, -7], [0, 0, 0], [10, 10 ,10]),
 			},
 		],
 		light: {
@@ -48,7 +40,6 @@ export async function init(gl){
 export function draw(gl, scene){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-	scene.normal_mapped_entities[0].transform.rotation[1] += 1;
 
 	draw_scene(gl, scene);
 }
