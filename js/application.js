@@ -20,6 +20,14 @@ export async function init(gl){
 
 	return {
 		shaders,
+		raw_entities: [
+			{
+				reflectivity: 1,
+				shine_damper: 10,
+				model: raw_models.bunny,
+				transform: init_transform([0, 0, -7], [0, 0, 0], [1, 1, 1]),
+			}
+		],
 		normal_mapped_entities: [
 			{
 				reflectivity: 1,
