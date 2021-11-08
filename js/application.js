@@ -22,11 +22,11 @@ export async function init(gl){
 		shaders,
 		raw_entities: [
 			{
-				reflectivity: 1,
-				shine_damper: 10,
-				color: [1, 1, 1],
+				reflectivity: 2,
+				shine_damper: 50,
+				color: [0.5, 0.5, 0.5],
 				model: raw_models.bunny,
-				transform: init_transform([0, 0, -7], [0, 0, 0], [1, 1, 1]),
+				transform: init_transform([-4, 1.75, -3], [0, 230, 0], [30, 30, 30]),
 			}
 		],
 		normal_mapped_entities: [
@@ -36,20 +36,21 @@ export async function init(gl){
 				model: textured_models.plane,
 				texture: textures.bricks_texture,
 				normal_map: textures.bricks_normal,
-				transform: init_transform([0, 0, -7], [0, 0, 0], [10, 10 ,10]),
+				transform: init_transform([0, 0, -7], [0, 90, 0], [50, 50, 50]),
 			},
 		],
 		light: {
-			position: [0, 20, -10],
+			position: [0, 1, -10],
 			color: [1, 1, 1],
 		},
-		camera: create_camera([0, 20, 16], 35, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
+		camera: create_camera([3, 1.5, 3], 5, -20, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
 }
 
 export function draw(gl, scene){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+	scene.raw_entities[0].transform.rotation[1] += 1;
 
 	draw_scene(gl, scene);
 }

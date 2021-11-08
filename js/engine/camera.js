@@ -25,6 +25,6 @@ export function update_camera(camera){
 
 function calc_proj_matrix(ratio){
 	const proj = mat4.create();
-	mat4.perspective(proj, 70, ratio, 0.1, 1000.0);
+	mat4.perspective(proj, to_radians(70), ratio, 0.1, 1000.0);
 	return proj;
 }
