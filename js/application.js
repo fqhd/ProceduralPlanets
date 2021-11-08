@@ -48,9 +48,10 @@ export async function init(gl){
 	};
 }
 
-export function draw(gl, scene){
+export function draw(gl, scene, delta_time){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+	scene.light.position[2] = Math.sin(delta_time * 0.001) * 5 - 5;
 
 	draw_scene(gl, scene);
 }
