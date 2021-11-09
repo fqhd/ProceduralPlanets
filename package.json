@@ -1,0 +1,27 @@
+{
+  "name": "learningwebgl",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iluvpy/LearningWebGL.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iluvpy/LearningWebGL/issues"
+  },
+  "homepage": "https://github.com/iluvpy/LearningWebGL#readme",
+  "devDependencies": {
+    "webpack": "^5.62.1",
+    "webpack-cli": "^4.9.1"
+  },
+  "dependencies": {
+    "gl-matrix": "^3.4.3"
+  }
+}
