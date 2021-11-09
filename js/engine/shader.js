@@ -50,7 +50,7 @@ async function load_shader_from_dir(gl, shader_path){
     let responses = await Promise.all([
         fetch(shader_path+'vs.glsl'),
         fetch(shader_path+'fs.glsl'),
-    ]);
+    ]).catch(() => console.error('Failed to catch get shader files from: ' + shader_path));
 
 	// Converting shader file fetch requests into array of promises to convert them to text
 	let shader_string_promises = responses.map(r => r.text());
