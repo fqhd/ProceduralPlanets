@@ -1,6 +1,6 @@
 'use strict';
 
-import {mat4} from "gl-matrix";
+const {mat4} = glMatrix;
 
 import {to_radians} from './utils.js';
 

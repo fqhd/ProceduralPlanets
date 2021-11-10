@@ -1,8 +1,8 @@
 'use strict';
 
-import { update_transform } from '/js/engine/transform.js';
-import { set_uniform_mat4, set_uniform_vec3, set_uniform_f } from '/js/engine/shader.js';
-import { update_camera } from '/js/engine/camera.js';
+import { update_transform } from './transform.js';
+import { set_uniform_mat4, set_uniform_vec3, set_uniform_f } from './shader.js';
+import { update_camera } from './camera.js';
 
 export function init_gl_state(gl){
 	gl.clearColor(0, 0, 0, 1);

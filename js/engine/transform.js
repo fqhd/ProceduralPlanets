@@ -1,8 +1,8 @@
 'use strict';
 
-import {mat4} from "gl-matrix";
+const {mat4} = glMatrix;
 
-import {to_radians} from '/js/engine/utils.js'
+import {to_radians} from './utils.js'
 
 export function init_transform(position, rotation, scale){
 	return {
