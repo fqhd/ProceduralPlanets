@@ -2,8 +2,8 @@
 
 export async function load_shaders(gl){
 	return {
-		normal_mapped_entity_shader: await load_shader_from_dir(gl, '/res/shaders/normal_mapped_entity_shader/'),	
-		raw_entity_shader: await load_shader_from_dir(gl, '/res/shaders/raw_entity_shader/'),
+		normal_mapped_entity_shader: await load_shader_from_dir(gl, 'res/shaders/normal_mapped_entity_shader/'),	
+		raw_entity_shader: await load_shader_from_dir(gl, 'res/shaders/raw_entity_shader/'),
 	};
 }
 

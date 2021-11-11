@@ -2,13 +2,13 @@
 
 export async function load_textured_models(gl){
 	return {
-		plane: await load_textured_model(gl, '/res/models/textured_models/plane.obj'),
+		plane: await load_textured_model(gl, 'res/models/textured_models/plane.obj'),
 	};
 }
 
 export async function load_raw_models(gl){
 	return {
-		bunny: await load_raw_model(gl, '/res/models/raw_models/bunny.obj'),
+		bunny: await load_raw_model(gl, 'res/models/raw_models/bunny.obj'),
 	};
 }
 
