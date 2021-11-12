@@ -1,3 +1,5 @@
+const {mat4} = glMatrix;
+
 import * as Utils from './utils.js'
 
 export function init_transform(position, rotation, scale){
