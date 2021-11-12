@@ -4,6 +4,7 @@ import {load_textures} from './engine/texture.js';
 import {draw_scene, init_gl_state} from './engine/renderer.js';
 import {create_camera} from './engine/camera.js';
 import {init_transform} from './engine/transform.js';
+import {init_controls} from './controller.js';
 
 export async function init_application(gl){
 	const [shaders, textured_models, raw_models, textures] = await Promise.all([
@@ -51,6 +52,7 @@ export async function init_application(gl){
 
 	init_gl_state(gl); // Initializing gl state out of promise
 	bind_shader_tex_attribs(gl, shaders); // Send 0 or 1 to shader textures
+	init_controls(scene);
 
 	return scene;
 }
