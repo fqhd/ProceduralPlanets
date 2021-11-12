@@ -1,5 +1,7 @@
 'use strict';
 
+import * as Utils from './utils.js'
+
 export async function load_textured_models(gl){
 	return {
 		plane: await load_textured_model(gl, 'res/models/textured_models/plane.obj'),
@@ -105,18 +107,6 @@ async function load_textured_model(gl, path){
 	return create_textured_model(gl, positions, normals, tangents, uvs);
 }
 
-function sub_vec2(a, b){
-	return [a[0] - b[0], a[1] - b[1]];
-}
-
-function sub_vec3(a, b){
-	return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
-}
-
-function mul_vec3(a, b){
-	return [a[0] * b, a[1] * b, a[2] * b];
-}
-
 function calc_tangents(positions, uvs){
 	const tangents = [];
 
@@ -132,15 +122,15 @@ function calc_tangents(positions, uvs){
 		const T2 = [uvs[j+4], uvs[j+5]];
 		j+=6;
 		
-		const delta_pos_1 = sub_vec3(P1, P0);
-		const delta_pos_2 = sub_vec3(P2, P0);
+		const delta_pos_1 = Utils.sub_vec3(P1, P0);
+		const delta_pos_2 = Utils.sub_vec3(P2, P0);
 
-		const delta_uv_1 = sub_vec2(T1, T0);
-		const delta_uv_2 = sub_vec2(T2, T0);
+		const delta_uv_1 = Utils.sub_vec2(T1, T0);
+		const delta_uv_2 = Utils.sub_vec2(T2, T0);
 
 		const r = 1 / (delta_uv_1[0] * delta_uv_2[1] - delta_uv_1[1] * delta_uv_2[0]);
 
-		const tangent = mul_vec3(sub_vec3(mul_vec3(delta_pos_1, delta_uv_2[1]), mul_vec3(delta_pos_2, delta_uv_1[1])), r);
+		const tangent = Utils.mul_vec3(Utils.sub_vec3(Utils.mul_vec3(delta_pos_1, delta_uv_2[1]), Utils.mul_vec3(delta_pos_2, delta_uv_1[1])), r);
 
 		tangents.push(tangent[0]);
 		tangents.push(tangent[1]);

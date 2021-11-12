@@ -1,6 +1,6 @@
 'use strict';
 
-import {init, draw} from './application.js'
+import {init_application, draw} from './application.js'
 
 let gl;
 let scene;
@@ -18,7 +18,7 @@ async function main(){
 	console.log('GLSL Version: ' + gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
 
 	// Initialization of the mythical super data structure
-	scene = await init(gl);
+	scene = await init_application(gl);
 	draw_game();
 }
 

@@ -7,7 +7,7 @@ import {draw_scene, init_gl_state} from './engine/renderer.js';
 import {create_camera} from './engine/camera.js';
 import {init_transform} from './engine/transform.js';
 
-export async function init(gl){
+export async function init_application(gl){
 	const [shaders, textured_models, raw_models, textures] = await Promise.all([
 		load_shaders(gl),
 		load_textured_models(gl),
@@ -15,10 +15,7 @@ export async function init(gl){
 		load_textures(gl),
 	]);
 
-	init_gl_state(gl); // Initializing gl state out of promise
-	bind_shader_tex_attribs(gl, shaders); // Send 0 or 1 to shader textures
-
-	return {
+	const scene = {
 		shaders,
 		raw_entities: [
 			{
@@ -53,6 +50,11 @@ export async function init(gl){
 		],
 		camera: create_camera([-3, 1.5, 3], 5, 20, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
+
+	init_gl_state(gl); // Initializing gl state out of promise
+	bind_shader_tex_attribs(gl, shaders); // Send 0 or 1 to shader textures
+
+	return scene;
 }
 
 export function draw(gl, scene, delta_time){
