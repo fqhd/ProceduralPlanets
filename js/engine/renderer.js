@@ -1,5 +1,3 @@
-'use strict';
-
 import { update_transform } from './transform.js';
 import { set_uniform_mat4, set_uniform_vec3, set_uniform_f } from './shader.js';
 import { update_camera } from './camera.js';

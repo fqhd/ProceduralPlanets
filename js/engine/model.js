@@ -1,5 +1,3 @@
-'use strict';
-
 import * as Utils from './utils.js'
 
 export async function load_textured_models(gl){

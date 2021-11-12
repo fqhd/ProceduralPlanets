@@ -1,5 +1,3 @@
-'use strict';
-
 import {load_shaders, bind_shader_tex_attribs} from './engine/shader.js';
 import {load_textured_models, load_raw_models} from './engine/model.js';
 import {load_textures} from './engine/texture.js';

@@ -1,5 +1,3 @@
-'use strict';
-
 const {mat4} = glMatrix;
 
 import * as Utils from './utils.js';

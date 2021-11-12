@@ -1,5 +1,3 @@
-'use strict';
-
 import {init_application, draw} from './application.js'
 
 let gl;

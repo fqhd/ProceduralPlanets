@@ -1,5 +1,3 @@
-'use strict';
-
 export function deg_to_rad(degrees) {
 	return degrees * (Math.PI / 180);
 };
