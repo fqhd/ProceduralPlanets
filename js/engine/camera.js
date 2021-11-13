@@ -19,7 +19,7 @@ export function create_camera(position, pitch, yaw, ratio){
 }
 
 export function update_camera(camera, delta_time){
-	let {view, position, pitch, yaw, distance, target_pitch, target_yaw, target_distance} = camera;
+	const {view, position, pitch, yaw, distance, target_pitch, target_yaw, target_distance} = camera;
 
 	camera.distance += (target_distance - distance) * 0.1;
 	camera.pitch += (target_pitch - pitch) * 0.1;
@@ -33,7 +33,7 @@ export function update_camera(camera, delta_time){
 	const x = Math.sin(Utils.deg_to_rad(yaw)) * horiz_distance;
 	const z = Math.cos(Utils.deg_to_rad(yaw)) * horiz_distance;
 
-	position = [x, y, z];
+	camera.position = [x, y, z];
 
 	// Calculate view matrix
 	mat4.identity(view);

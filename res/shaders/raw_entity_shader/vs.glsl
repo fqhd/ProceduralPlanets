@@ -23,5 +23,6 @@ void main(){
 	for(int i = 0; i < 2; i++){
 		pass_to_light_vector[i] = light_position[i] - world_position.xyz;
 	}
+
 	pass_to_camera_vector = camera_position - world_position.xyz;
 }
