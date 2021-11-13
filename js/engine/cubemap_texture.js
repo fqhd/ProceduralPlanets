@@ -1,4 +1,4 @@
-export function load_cubemap_textures(){
+export function load_cubemap_textures(gl){
 	return {
 		day: load_cubemap_from_file(gl, 'res/textures/cubemaps/day/'),
 	};
