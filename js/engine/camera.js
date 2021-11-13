@@ -9,7 +9,7 @@ export function create_camera(position, pitch, yaw, ratio){
 		yaw,
 		distance: 1,
 		target_pitch: pitch,
-		target_distance: 1,
+		target_distance: 10,
 		target_yaw: yaw,
 		origin: [0, 0, 0],
 		view: mat4.create(),
