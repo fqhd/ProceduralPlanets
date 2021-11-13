@@ -8,8 +8,8 @@ export function init_gl_state(gl){
 	gl.viewport(0, 0, gl.canvas.clientWidth, gl.canvas.clientHeight);
 }
 
-export function draw_scene(gl, scene){
-	update_camera(scene.camera);
+export function draw_scene(gl, scene, delta_time){
+	update_camera(scene.camera, delta_time);
 
 	draw_raw_entities(gl, scene);
 	draw_normal_mapped_entities(gl, scene);

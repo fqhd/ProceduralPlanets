@@ -11,11 +11,21 @@ export function init_controls(s){
 
 function on_mouse_move(event){
 	if(!is_mouse_down) return;
-	scene.camera.pitch += event.movementY;
-	scene.camera.yaw -= event.movementX;
+	scene.camera.target_pitch += event.movementY * 0.6;
+	scene.camera.target_yaw -= event.movementX * 0.6;
+
+	// Clamping
+	if(scene.camera.target_pitch > 89) scene.camera.target_pitch = 89;
+	if(scene.camera.target_pitch < -89) scene.camera.target_pitch = -89;
+
 }
 
 function on_mouse_wheel(event){
-	scene.camera.distance += event.deltaY * 0.05;
+	scene.camera.target_distance += event.deltaY * 0.02;
+
+	// Clamping
+	if(scene.camera.target_distance < 1) scene.camera.target_distance = 1;
+	if(scene.camera.target_distance > 100) scene.camera.target_distance = 100;
+
 }
 
