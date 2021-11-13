@@ -62,7 +62,6 @@ function load_lights_to_shader(gl, shader, lights){
 		set_uniform_vec3(gl, shader, 'light_color[' + i + ']', lights[i].color);
 		set_uniform_vec3(gl, shader, 'light_attenuation[' + i + ']', lights[i].attenuation);
 	}
-	
 }
 
 function load_camera_to_shader(gl, shader, camera){

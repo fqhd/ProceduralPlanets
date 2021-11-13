@@ -47,7 +47,7 @@ export async function init_application(gl){
 				attenuation: [0.4, 0.08, 0.08],
 			},
 		],
-		camera: create_camera([-3, 1.5, 3], 5, 20, gl.canvas.clientWidth / gl.canvas.clientHeight),
+		camera: create_camera([-3, 1.5, 3], 40, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
 
 	init_gl_state(gl); // Initializing gl state out of promise
