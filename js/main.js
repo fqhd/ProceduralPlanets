@@ -5,8 +5,11 @@ let scene;
 
 async function main(){
 	const canvas = document.getElementById('canvas');
-
+	canvas.width = canvas.clientWidth;
+	canvas.height = canvas.clientHeight;
+	
 	gl = canvas.getContext('webgl2');
+
 
 	if(gl == null){
 		console.error('Failed to initialize webgl');
