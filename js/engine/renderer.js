@@ -12,8 +12,8 @@ export function init_gl_state(gl){
 	gl.enable(gl.CULL_FACE);
 }
 
-export function draw_scene(gl, scene, delta_time){
-	update_camera(scene.camera, delta_time);
+export function draw_scene(gl, scene){
+	update_camera(scene.camera);
 
 	draw_planet(gl, scene);
 	draw_raw_entities(gl, scene);
