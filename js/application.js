@@ -5,19 +5,24 @@ import {draw_scene, init_gl_state} from './engine/renderer.js';
 import {create_camera} from './engine/camera.js';
 import {init_transform} from './engine/transform.js';
 import {init_controls} from './controller.js';
-import {load_cubemap_textures} from './engine/cubemap_texture.js';
+import {load_cubemap_from_file} from './engine/cubemap.js';
+import {init_cube_model} from './engine/cube.js';
+
 
 export async function init_application(gl){
-	const [shaders, textured_models, raw_models, textures, cubemap_textures] = await Promise.all([
+	const [shaders, textured_models, raw_models, textures] = await Promise.all([
 		load_shaders(gl),
 		load_textured_models(gl),
 		load_raw_models(gl),
 		load_textures(gl),
-		load_cubemap_textures(gl),
 	]);
 
 	const scene = {
 		shaders,
+		skybox: {
+			model: init_cube_model(gl),
+			texture: load_cubemap_from_file(gl, 'res/textures/skybox/'),
+		},
 		raw_entities: [
 			{
 				reflectivity: 2,

@@ -2,6 +2,8 @@ import { update_transform } from './transform.js';
 import { set_uniform_mat4, set_uniform_vec3, set_uniform_f } from './shader.js';
 import { update_camera } from './camera.js';
 
+const {mat4} = glMatrix;
+
 export function init_gl_state(gl){
 	gl.clearColor(0, 0, 0, 1);
 	gl.enable(gl.DEPTH_TEST);
@@ -11,8 +13,36 @@ export function init_gl_state(gl){
 export function draw_scene(gl, scene, delta_time){
 	update_camera(scene.camera, delta_time);
 
+	draw_skybox(gl, scene);
 	draw_raw_entities(gl, scene);
 	draw_normal_mapped_entities(gl, scene);
+}
+
+let once = true;
+
+function draw_skybox(gl, scene){
+	const shader = scene.shaders.skybox_shader;
+	const {camera, skybox} = scene;
+
+	gl.useProgram(shader.program);
+
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_CUBE_MAP, skybox.texture);
+
+	set_uniform_mat4(gl, shader, 'projection', camera.projection);
+	const our_mat = mat4.clone(camera.view);
+
+	// Removing the translation from the cameras view matrix
+	our_mat[12] = 0;
+	our_mat[13] = 0;
+	our_mat[14] = 0;
+	our_mat[15] = 1;
+
+	set_uniform_mat4(gl, shader, 'view', our_mat);
+
+	gl.depthMask(false);
+	draw_model_indices(gl, skybox.model);
+	gl.depthMask(true);
 }
 
 function draw_raw_entities(gl, scene){
