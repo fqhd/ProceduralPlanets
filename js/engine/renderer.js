@@ -8,14 +8,15 @@ export function init_gl_state(gl){
 	gl.clearColor(0, 0, 0, 1);
 	gl.enable(gl.DEPTH_TEST);
 	gl.viewport(0, 0, gl.canvas.clientWidth, gl.canvas.clientHeight);
+	gl.depthFunc(gl.LEQUAL);
 }
 
 export function draw_scene(gl, scene, delta_time){
 	update_camera(scene.camera, delta_time);
 
-	draw_skybox(gl, scene);
 	draw_raw_entities(gl, scene);
 	draw_normal_mapped_entities(gl, scene);
+	draw_skybox(gl, scene);
 }
 
 let once = true;
