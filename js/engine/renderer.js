@@ -9,6 +9,7 @@ export function init_gl_state(gl){
 	gl.enable(gl.DEPTH_TEST);
 	gl.viewport(0, 0, gl.canvas.clientWidth, gl.canvas.clientHeight);
 	gl.depthFunc(gl.LEQUAL);
+	gl.enable(gl.CULL_FACE);
 }
 
 export function draw_scene(gl, scene, delta_time){
