@@ -21,6 +21,7 @@ uniform vec3 light_attenuation[2];
 
 void main(){
 	vec3 fragment_color = texture(our_texture, pass_uv).rgb;
+	vec3 ambient = fragment_color * 0.1;
 	vec3 unit_normal = texture(our_normal_map, pass_uv).rgb * 2.0 - 1.0;
 	vec3 unit_to_camera_vector = normalize(pass_to_camera_vector);
 
@@ -35,7 +36,7 @@ void main(){
 		float attenuation_factor = light_attenuation[i].x + (light_attenuation[i].y * dist) + (light_attenuation[i].z * dist * dist); // Calculating the attenuation factor based on light attenuation values and distance
 
 		// Diffuse Calculation
-		float brightness = max(dot(unit_to_light_vector, unit_normal), 0.1);
+		float brightness = max(dot(unit_to_light_vector, unit_normal), 0.0);
 		vec3 diffuse = (light_color[i] * brightness) / attenuation_factor;
 
 		// Specular Calculation
@@ -49,5 +50,5 @@ void main(){
 	}
 	
 
-	out_color = vec4(fragment_color * total_diffuse + total_specular, 1.0);
+	out_color = vec4(fragment_color * total_diffuse + total_specular + ambient, 1.0);
 }

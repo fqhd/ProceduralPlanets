@@ -20,6 +20,7 @@ uniform vec3 light_attenuation[2];
 
 void main() {
 	vec3 fragment_color = object_color;
+	vec3 ambient = fragment_color * 0.1;
 	vec3 unit_normal = normalize(pass_normal);
 	vec3 unit_to_camera_vector = normalize(pass_to_camera_vector);
 
@@ -47,5 +48,5 @@ void main() {
 		total_specular += final_specular;
 	}
 	
-	out_color = vec4(fragment_color * total_diffuse + total_specular, 1.0);
+	out_color = vec4(fragment_color * total_diffuse + total_specular + ambient, 1.0);
 }

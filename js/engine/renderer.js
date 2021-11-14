@@ -19,8 +19,6 @@ export function draw_scene(gl, scene, delta_time){
 	draw_skybox(gl, scene);
 }
 
-let once = true;
-
 function draw_skybox(gl, scene){
 	const shader = scene.shaders.skybox_shader;
 	const {camera, skybox} = scene;

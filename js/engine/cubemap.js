@@ -8,12 +8,12 @@ export function load_cubemap_from_file(gl, path_to_file){
 	gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
 	const image_order = [
-		'right',
-		'left',
-		'top',
 		'bottom',
 		'front',
+		'top',
 		'back',
+		'right',
+		'left',
 	];
 
 	for(let i = 0; i < 6; i++){

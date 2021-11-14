@@ -25,7 +25,7 @@ function on_mouse_wheel(event){
 
 	// Clamping
 	if(scene.camera.target_distance < 1) scene.camera.target_distance = 1;
-	if(scene.camera.target_distance > 100) scene.camera.target_distance = 100;
+	if(scene.camera.target_distance > 300) scene.camera.target_distance = 300;
 
 }
 
