@@ -15,9 +15,22 @@ export function init_gl_state(gl){
 export function draw_scene(gl, scene, delta_time){
 	update_camera(scene.camera, delta_time);
 
+	draw_planet(gl, scene);
 	draw_raw_entities(gl, scene);
 	draw_normal_mapped_entities(gl, scene);
 	draw_skybox(gl, scene);
+}
+
+function draw_planet(gl, scene){
+	const shader = scene.shaders.planet_shader;
+	const {camera, planet} = scene;
+
+	gl.useProgram(shader.program);
+
+	set_uniform_mat4(gl, shader, 'projection', camera.projection);
+	set_uniform_mat4(gl, shader, 'view', camera.view);
+
+	draw_model_indices(gl, planet.model);
 }
 
 function draw_skybox(gl, scene){

@@ -7,6 +7,7 @@ import {init_transform} from './engine/transform.js';
 import {init_controls} from './controller.js';
 import {load_cubemap_from_file} from './engine/cubemap.js';
 import {init_cube_model} from './engine/cube.js';
+import {create_planet_model} from './engine/planet.js';
 
 
 export async function init_application(gl){
@@ -22,6 +23,9 @@ export async function init_application(gl){
 		skybox: {
 			model: init_cube_model(gl),
 			texture: load_cubemap_from_file(gl, 'res/textures/skybox/'),
+		},
+		planet: {
+			model: create_planet_model(gl),
 		},
 		raw_entities: [
 			{

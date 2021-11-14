@@ -3,6 +3,7 @@ export async function load_shaders(gl){
 		normal_mapped_entity_shader: await load_shader_from_dir(gl, 'res/shaders/normal_mapped_entity_shader/'),	
 		raw_entity_shader: await load_shader_from_dir(gl, 'res/shaders/raw_entity_shader/'),
 		skybox_shader: await load_shader_from_dir(gl, 'res/shaders/skybox_shader/'),
+		planet_shader: await load_shader_from_dir(gl, 'res/shaders/planet_shader/'),
 	};
 }
 
