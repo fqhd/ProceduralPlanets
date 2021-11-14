@@ -25,8 +25,6 @@ export function update_camera(camera, delta_time){
 	camera.pitch += (target_pitch - pitch) * 0.1;
 	camera.yaw += (target_yaw - yaw) * 0.1;
 
-	const delta_distance = (target_distance - distance) * 0.01;
-
 	// Calculate camera position based on pitch and yaw
 	const y = Math.sin(Utils.deg_to_rad(pitch)) * distance;
 	const horiz_distance = Math.cos(Utils.deg_to_rad(pitch)) * distance;

@@ -72,11 +72,12 @@ let previous_time = 0;
 export function draw(gl, scene, current_time){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+	current_time *= 0.001; // Converting from milliseconds to seconds
 	const delta_time = (current_time - previous_time);
 	previous_time = current_time;
 
-	scene.lights[0].position[2] = Math.sin(current_time * 0.0015) * 4 - 4;
-	scene.lights[1].position[2] = Math.cos(current_time * 0.0015) * 4 - 4;
+	scene.lights[0].position[2] = Math.sin(current_time * 1.5) * 5 - 6;
+	scene.lights[1].position[2] = Math.cos(current_time * 1.5) * 5 - 6;
 
 	draw_scene(gl, scene, delta_time);
 }
