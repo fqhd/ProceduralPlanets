@@ -21,9 +21,10 @@ export function create_camera(position, pitch, yaw, ratio){
 export function update_camera(camera, delta_time){
 	const {view, position, pitch, yaw, distance, target_pitch, target_yaw, target_distance} = camera;
 
-	camera.distance += (target_distance - distance) * 0.1;
-	camera.pitch += (target_pitch - pitch) * 0.1;
-	camera.yaw += (target_yaw - yaw) * 0.1;
+	camera.distance += (target_distance - distance) * 7.0 * (delta_time || 0.1);
+	camera.pitch += (target_pitch - pitch) * 7.0 * (delta_time || 0.1);
+	camera.yaw += (target_yaw - yaw) * 7.0 * (delta_time || 0.1);
+
 
 	// Calculate camera position based on pitch and yaw
 	const y = Math.sin(Utils.deg_to_rad(pitch)) * distance;
