@@ -1,13 +1,13 @@
-import {load_shaders, bind_shader_tex_attribs} from './engine/shader.js';
-import {load_textured_models, load_raw_models} from './engine/model.js';
-import {load_textures} from './engine/texture.js';
-import {draw_scene, init_gl_state} from './engine/renderer.js';
-import {create_camera} from './engine/camera.js';
-import {init_transform} from './engine/transform.js';
-import {init_controls} from './controller.js';
-import {load_cubemap_from_file} from './engine/cubemap.js';
-import {init_cube_model} from './engine/cube.js';
-import {create_planet_model} from './engine/planet.js';
+import { load_shaders, bind_shader_tex_attribs } from './engine/shader.js';
+import { load_textured_models, load_raw_models } from './engine/model.js';
+import { load_textures } from './engine/texture.js';
+import { draw_scene, init_gl_state } from './engine/renderer.js';
+import { create_camera } from './engine/camera.js';
+import { init_transform } from './engine/transform.js';
+import { init_controls } from './controller.js';
+import { load_cubemap_from_file } from './engine/cubemap.js';
+import { init_cube_model } from './engine/cube.js';
+import { create_planet_model } from './engine/planet.js';
 
 
 export async function init_application(gl){
