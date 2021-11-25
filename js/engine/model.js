@@ -1,4 +1,3 @@
-import * as Utils from './utils.js'
 const {vec3, vec2} = glMatrix;
 
 export async function load_textured_models(gl){

@@ -1,3 +1,5 @@
+import { load_image } from './utils.js';
+
 export async function load_textures(gl){
 	return {
 		bricks_texture: await load_texture_from_file(gl, 'res/textures/bricks_texture.jpg'),
@@ -28,12 +30,4 @@ async function load_texture_from_file(gl, path_to_file){
 	}
 
 	return texture;
-}
-
-function load_image(url){
-	return new Promise((resolve) => {
-		const img = new Image();
-		img.onload = () => resolve(img);
-		img.src = url;
-	});
 }
