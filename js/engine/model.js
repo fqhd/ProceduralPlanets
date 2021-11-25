@@ -1,4 +1,5 @@
 import * as Utils from './utils.js'
+const {vec3, vec2} = glMatrix;
 
 export async function load_textured_models(gl){
 	return {
@@ -110,25 +111,40 @@ function calc_tangents(positions, uvs){
 
 	let j = 0;
 
-	for(let i = 0; i < positions.length; i+=9){
-		const P1 = [positions[i], positions[i+1], positions[i+2]];
-		const P0 = [positions[i+3], positions[i+4], positions[i+5]];
-		const P2 = [positions[i+6], positions[i+7], positions[i+8]];
+	for (let i = 0; i < positions.length; i+=9) {
+		const P1 = vec3.fromValues([positions[i], positions[i+1], positions[i+2]]);
+		const P0 = vec3.fromValues([positions[i+3], positions[i+4], positions[i+5]]);
+		const P2 = vec3.fromValues([positions[i+6], positions[i+7], positions[i+8]]);
 
-		const T1 = [uvs[j], uvs[j+1]];
-		const T0 = [uvs[j+2], uvs[j+3]];
-		const T2 = [uvs[j+4], uvs[j+5]];
+		const T1 = vec2.fromValues([uvs[j], uvs[j+1]]);
+		const T0 = vec2.fromValues([uvs[j+2], uvs[j+3]]);
+		const T2 = vec2.fromValues([uvs[j+4], uvs[j+5]]);
+
 		j+=6;
-		
-		const delta_pos_1 = Utils.sub_vec3(P1, P0);
-		const delta_pos_2 = Utils.sub_vec3(P2, P0);
 
-		const delta_uv_1 = Utils.sub_vec2(T1, T0);
-		const delta_uv_2 = Utils.sub_vec2(T2, T0);
+		const delta_pos_1 = vec3.create();
+		const delta_pos_2 = vec3.create();
+		
+		const delta_uv_1 = vec2.create();
+		const delta_uv_2 = vec2.create();
+		
+		vec3.sub(delta_pos_1, P1, P0);
+		vec3.sub(delta_pos_2, P2, P0);
+
+		vec2.sub(delta_uv_1, T1, T0);
+		vec2.sub(delta_uv_2, T2, T0);
 
 		const r = 1 / (delta_uv_1[0] * delta_uv_2[1] - delta_uv_1[1] * delta_uv_2[0]);
 
-		const tangent = Utils.mul_vec3(Utils.sub_vec3(Utils.mul_vec3(delta_pos_1, delta_uv_2[1]), Utils.mul_vec3(delta_pos_2, delta_uv_1[1])), r);
+		const V0 = vec3.create();
+		const V1 = vec3.create();
+		const SV01 = vec3.create();
+		const tangent = vec3.create();
+
+		vec3.scale(V0, delta_pos_1, delta_uv_2[1]);
+		vec3.scale(V1, delta_pos_2, delta_uv_2[1]);
+		vec3.sub(SV01, V0, V1);
+		vec3.scale(tangent, SV01, r);
 
 		tangents.push(tangent[0]);
 		tangents.push(tangent[1]);

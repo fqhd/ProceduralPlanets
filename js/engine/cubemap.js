@@ -16,12 +16,15 @@ export function load_cubemap_from_file(gl, path_to_file){
 		'left',
 	];
 
+	const temp_data = [255, 255, 255];
 	for(let i = 0; i < 6; i++){
 		const image = new Image();
 		image.onload = function(){
 			gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
 			gl.texImage2D(gl.TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
 		}
+		gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+		gl.texImage2D(gl.TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, gl.RGB, 1, 1, 0, gl.RGB, gl.UNSIGNED_BYTE, new Uint8Array(temp_data));
 		image.src = path_to_file + image_order[i] + '.jpg';
 	}
 
