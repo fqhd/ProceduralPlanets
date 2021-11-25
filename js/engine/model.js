@@ -112,13 +112,13 @@ function calc_tangents(positions, uvs){
 	let j = 0;
 
 	for (let i = 0; i < positions.length; i+=9) {
-		const P1 = vec3.fromValues([positions[i], positions[i+1], positions[i+2]]);
-		const P0 = vec3.fromValues([positions[i+3], positions[i+4], positions[i+5]]);
-		const P2 = vec3.fromValues([positions[i+6], positions[i+7], positions[i+8]]);
+		const P1 = vec3.fromValues(positions[i], positions[i+1], positions[i+2]);
+		const P0 = vec3.fromValues(positions[i+3], positions[i+4], positions[i+5]);
+		const P2 = vec3.fromValues(positions[i+6], positions[i+7], positions[i+8]);
 
-		const T1 = vec2.fromValues([uvs[j], uvs[j+1]]);
-		const T0 = vec2.fromValues([uvs[j+2], uvs[j+3]]);
-		const T2 = vec2.fromValues([uvs[j+4], uvs[j+5]]);
+		const T1 = vec2.fromValues(uvs[j], uvs[j+1]);
+		const T0 = vec2.fromValues(uvs[j+2], uvs[j+3]);
+		const T2 = vec2.fromValues(uvs[j+4], uvs[j+5]);
 
 		j+=6;
 
@@ -142,7 +142,7 @@ function calc_tangents(positions, uvs){
 		const tangent = vec3.create();
 
 		vec3.scale(V0, delta_pos_1, delta_uv_2[1]);
-		vec3.scale(V1, delta_pos_2, delta_uv_2[1]);
+		vec3.scale(V1, delta_pos_2, delta_uv_1[1]);
 		vec3.sub(SV01, V0, V1);
 		vec3.scale(tangent, SV01, r);
 
