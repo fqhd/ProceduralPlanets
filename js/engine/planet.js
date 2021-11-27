@@ -19,10 +19,9 @@ export function create_planet_model(gl){
 
 	normalize_positions(positions);
 
-	const memoryUsage = 32 * positions.length + 16 * indices.length;
+	// const memoryUsage = 32 * positions.length + 16 * indices.length;
 	// console.log(`Using ${memoryUsage} bytes of memory`);
 	// console.log(`Num vertices: ${positions.length/3}`);
-
 
 	const pos_buff = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, pos_buff);
