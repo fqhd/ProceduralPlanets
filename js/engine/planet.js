@@ -9,16 +9,20 @@ export function create_planet_model(gl){
 	const positions = create_icosahedron_vertices();
 	const indices = create_icosahedron_indices();
 
-	for(let i = 0; i < 5; i++){
+	// Subdivide icosahedron triangles
+	for(let i = 0; i < 6; i++){
 		const num_indices = indices.length;
 		for(let j = 0; j < num_indices; j+=3){
 			subdivide_triangle(positions, positions_map, indices, j+0, j+1, j+2);
 		}
 	}
 
+	normalize_positions(positions);
+
 	const memoryUsage = 32 * positions.length + 16 * indices.length;
-	console.log(`Using ${memoryUsage} bytes of memory`);
-	console.log(`Num positions: ${positions.length}`);
+	// console.log(`Using ${memoryUsage} bytes of memory`);
+	// console.log(`Num vertices: ${positions.length/3}`);
+
 
 	const pos_buff = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, pos_buff);
@@ -123,4 +127,14 @@ function get_middle_point(positions, positions_map, v0, v1){
 
 function hash_vector(vec){
 	return vec.toString();
+}
+
+function normalize_positions(positions){
+	for(let i = 0; i < positions.length; i+=3){
+		const l = vec3.create();
+		vec3.normalize(l, vec3.fromValues(positions[i], positions[i+1], positions[i+2]));
+		positions[i] = l[0];
+		positions[i+1] = l[1];
+		positions[i+2] = l[2];
+	}
 }
