@@ -10,6 +10,7 @@ export function init_gl_state(gl){
 	gl.viewport(0, 0, gl.canvas.clientWidth, gl.canvas.clientHeight);
 	gl.depthFunc(gl.LEQUAL);
 	gl.enable(gl.CULL_FACE);
+	gl.frontFace(gl.CCW);
 }
 
 export function draw_scene(gl, scene){
@@ -137,5 +138,5 @@ function draw_model_arrays(gl, model){
 function draw_model_indices(gl, model){
 	gl.bindVertexArray(model.vao);
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, model.indices_buff);
-	gl.drawElements(gl.TRIANGLES, model.num_indices, gl.UNSIGNED_SHORT, 0);
+	gl.drawElements(gl.POINTS, model.num_indices, gl.UNSIGNED_SHORT, 0);
 }
