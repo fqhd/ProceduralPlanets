@@ -1,16 +1,15 @@
 // Icosphere generation inspired by Andreas Kahler
 const {vec3} = glMatrix;
 
-export function create_planet_model(gl){
-	const vao = gl.createVertexArray();
-	gl.bindVertexArray(vao);
+import { deg_to_rad } from './utils.js';
 
+export function create_planet_model(gl){
 	const positions_map = new Map();
 	const positions = create_icosahedron_vertices();
 	const indices = create_icosahedron_indices();
 
 	// Subdivide icosahedron triangles
-	for(let i = 0; i < 6; i++){
+	for(let i = 0; i < 5; i++){
 		const num_indices = indices.length;
 		for(let j = 0; j < num_indices; j+=3){
 			subdivide_triangle(positions, positions_map, indices, j+0, j+1, j+2);
@@ -19,15 +18,21 @@ export function create_planet_model(gl){
 
 	normalize_positions(positions);
 
+	scale_positions(positions);
+
 	// const memoryUsage = 32 * positions.length + 16 * indices.length;
 	// console.log(`Using ${memoryUsage} bytes of memory`);
 	// console.log(`Num vertices: ${positions.length/3}`);
 
+	// Upload data to GPU as VAO
+	const vao = gl.createVertexArray();
+	gl.bindVertexArray(vao);
+
 	const pos_buff = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, pos_buff);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 	gl.enableVertexAttribArray(0);
 	gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
 	const indices_buff = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indices_buff);
@@ -136,4 +141,19 @@ function normalize_positions(positions){
 		positions[i+1] = l[1];
 		positions[i+2] = l[2];
 	}
+}
+
+function scale_positions(positions){
+	for(let i = 0; i < positions.length; i+=3){
+		const pos = vec3.fromValues(positions[i], positions[i+1], positions[i+2]);
+		const height = get_height_from_vec(pos);
+		vec3.scale(pos, pos, height);
+		positions[i] = pos[0];
+		positions[i+1] = pos[1];
+		positions[i+2] = pos[2];
+	}
+}
+
+function get_height_from_vec(vec){
+	return 5 + noise.perlin3(vec[0] * 2, vec[1] * 2, vec[2] * 2) + noise.perlin3(vec[0] * 5, vec[1] * 5, vec[2] * 5) * 0.5;
 }
