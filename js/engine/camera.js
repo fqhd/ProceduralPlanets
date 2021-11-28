@@ -1,6 +1,6 @@
 const {mat4} = glMatrix;
 
-import * as Utils from './utils.js';
+import { deg_to_rad } from './utils.js';
 
 export function create_camera(position, pitch, yaw, ratio){
 	const cam = {
@@ -26,22 +26,22 @@ export function update_camera(camera){
 	camera.yaw += (target_yaw - yaw) * 0.1;
 
 	// Calculate camera position based on pitch and yaw
-	const y = Math.sin(Utils.deg_to_rad(pitch)) * distance;
-	const horiz_distance = Math.cos(Utils.deg_to_rad(pitch)) * distance;
-	const x = Math.sin(Utils.deg_to_rad(yaw)) * horiz_distance;
-	const z = Math.cos(Utils.deg_to_rad(yaw)) * horiz_distance;
+	const y = Math.sin(deg_to_rad(pitch)) * distance;
+	const horiz_distance = Math.cos(deg_to_rad(pitch)) * distance;
+	const x = Math.sin(deg_to_rad(yaw)) * horiz_distance;
+	const z = Math.cos(deg_to_rad(yaw)) * horiz_distance;
 
 	camera.position = [x, y, z];
 
 	// Calculate view matrix
 	mat4.identity(view);
-	mat4.rotate(view, view, Utils.deg_to_rad(pitch), [1, 0, 0]);
-	mat4.rotate(view, view, Utils.deg_to_rad(-yaw), [0, 1, 0]);
+	mat4.rotate(view, view, deg_to_rad(pitch), [1, 0, 0]);
+	mat4.rotate(view, view, deg_to_rad(-yaw), [0, 1, 0]);
 	mat4.translate(view, view, position.map(n => n * -1));
 }
 
 function calc_proj_matrix(ratio){
 	const proj = mat4.create();
-	mat4.perspective(proj, Utils.deg_to_rad(70), ratio, 0.1, 1000.0);
+	mat4.perspective(proj, deg_to_rad(70), ratio, 0.1, 1000.0);
 	return proj;
 }
