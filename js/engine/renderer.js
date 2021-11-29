@@ -138,5 +138,5 @@ function draw_model_arrays(gl, model){
 function draw_model_indices(gl, model){
 	gl.bindVertexArray(model.vao);
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, model.indices_buff);
-	gl.drawElements(gl.POINTS, model.num_indices, gl.UNSIGNED_SHORT, 0);
+	gl.drawElements(gl.TRIANGLES, model.num_indices, gl.UNSIGNED_SHORT, 0);
 }

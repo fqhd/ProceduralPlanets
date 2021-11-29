@@ -22,6 +22,9 @@ export function create_planet_model(gl){
 
 	const normals = calc_normals(positions, indices);
 
+	console.log(normals);
+	console.log(positions);
+
 	// const memoryUsage = 32 * positions.length + 16 * indices.length;
 	// console.log(`Using ${memoryUsage} bytes of memory`);
 	// console.log(`Num vertices: ${positions.length/3}`);
@@ -213,30 +216,42 @@ function calc_normals(positions, indices){
 		const pos_hash = hash_vector(pos);
 		const connected_triangles = triangle_map.get(pos_hash);
 
+		const i0 = connected_triangles[0];
+		const i1 = connected_triangles[1];
+		const i2 = connected_triangles[2];
+
+		const v0 = vec3.fromValues(positions[i0*3], positions[i0*3+1], positions[i0*3+2]);
+		const v1 = vec3.fromValues(positions[i1*3], positions[i1*3+1], positions[i1*3+2]);
+		const v2 = vec3.fromValues(positions[i2*3], positions[i2*3+1], positions[i2*3+2]);
+
+
+		normals.push(...calc_triangle_normal(v0, v1, v2));
+
 		// Calc normal for current position and push it to normals array
-		const local_normals = [];
-		for(let j = 0; j < connected_triangles.length; j+=3){
-			const i0 = indices[j];
-			const i1 = indices[j+1];
-			const i2 = indices[j+2];
+		// const local_normals = [];
+		// for(let j = 0; j < connected_triangles.length; j+=3){
+		// 	const i0 = indices[j];
+		// 	const i1 = indices[j+1];
+		// 	const i2 = indices[j+2];
 
-			const v0 = vec3.fromValues(positions[i0*3], positions[i0*3+1], positions[i0*3+2]);
-			const v1 = vec3.fromValues(positions[i1*3], positions[i1*3+1], positions[i1*3+2]);
-			const v2 = vec3.fromValues(positions[i2*3], positions[i2*3+1], positions[i2*3+2]);
+		// 	const v0 = vec3.fromValues(positions[i0*3], positions[i0*3+1], positions[i0*3+2]);
+		// 	const v1 = vec3.fromValues(positions[i1*3], positions[i1*3+1], positions[i1*3+2]);
+		// 	const v2 = vec3.fromValues(positions[i2*3], positions[i2*3+1], positions[i2*3+2]);
 
-			const tri_normal = calc_triangle_normal(v0, v1, v2);
+		// 	const tri_normal = calc_triangle_normal(v0, v1, v2);
 
-			local_normals.push(tri_normal);
-		}
+		// 	local_normals.push(tri_normal);
+		// }
 		
-		const local_normals_sum = vec3.create();
-		for(let i = 0; i < local_normals.length; i++){
-			vec3.add(local_normals_sum, local_normals_sum, local_normals[i]);
-		}
-		vec3.scale(local_normals_sum, 1/local_normals.length);
+		// const local_normals_sum = vec3.fromValues(0, 0, 0);
 
-		normals.push(local_normals_sum[0], local_normals_sum[1], local_normals_sum[2]);
+		// for(let i = 0; i < local_normals.length; i++){
+		// 	vec3.add(local_normals_sum, local_normals_sum, local_normals[i]);
+		// }
+
+		// normals.push(local_normals_sum[0], local_normals_sum[1], local_normals_sum[2]);
 	}
+
 	return normals;
 }
 
