@@ -30,7 +30,7 @@ export async function init_application(gl){
 				shine_damper: 50,
 				color: [0.5, 0.5, 0.5],
 				model: raw_models.bunny,
-				transform: init_transform([4, -1.75, -3], [0, -90, 0], [30, 30, 30]),
+				transform: init_transform([4, -4.75, -3], [0, -90, 0], [30, 30, 30]),
 			}
 		],
 		normal_mapped_entities: [
@@ -40,17 +40,17 @@ export async function init_application(gl){
 				model: textured_models.plane,
 				texture: textures.bricks_texture,
 				normal_map: textures.bricks_normal,
-				transform: init_transform([0, -2, -7], [0, 90, 0], [20, 20, 20]),
+				transform: init_transform([0, -6, -7], [0, 90, 0], [20, 20, 20]),
 			},
 		],
 		lights: [
 			{
-				position: [0, -1, -2],
+				position: [0, -4, -2],
 				color: [0.1, 0.6, 1],
 				attenuation: [0.4, 0.08, 0.08],
 			},
 			{
-				position: [-2, -1, -2],
+				position: [-2, -4, -2],
 				color: [0.9, 0.4, 0.2],
 				attenuation: [0.4, 0.08, 0.08],
 			},
