@@ -17,8 +17,7 @@ export function draw_scene(gl, scene){
 	update_camera(scene.camera);
 
 	draw_planet(gl, scene);
-	draw_raw_entities(gl, scene);
-	draw_normal_mapped_entities(gl, scene);
+	draw_entities(gl, scene);
 	draw_skybox(gl, scene);
 }
 
@@ -59,10 +58,10 @@ function draw_skybox(gl, scene){
 	gl.depthMask(true);
 }
 
-function draw_raw_entities(gl, scene){
-	const shader = scene.shaders.raw_entity_shader;
-	const entities = scene.raw_entities;
-	const {lights, camera} = scene;
+function draw_entities(gl, scene){
+	const shader = scene.shaders.entity_shader;
+	const entities = scene.entities;
+	const { lights, camera } = scene;
 
 	gl.useProgram(shader.program);
 
@@ -70,33 +69,7 @@ function draw_raw_entities(gl, scene){
 	load_camera_to_shader(gl, shader, camera);
 
 	entities.forEach(e => {
-		draw_raw_entity(gl, shader, e);
-	});
-}
-
-function draw_raw_entity(gl, shader, entity){
-	set_uniform_vec3(gl, shader, 'object_color', entity.color);
-	set_uniform_f(gl, shader, 'reflectivity', entity.reflectivity);
-	set_uniform_f(gl, shader, 'shine_damper', entity.shine_damper);
-
-	update_transform(entity.transform);
-
-	set_uniform_mat4(gl, shader, 'model', entity.transform.matrix);
-	draw_model_indices(gl, entity.model);
-}
-
-function draw_normal_mapped_entities(gl, scene){
-	const shader = scene.shaders.normal_mapped_entity_shader;
-	const entities = scene.normal_mapped_entities;
-	const {lights, camera} = scene;
-
-	gl.useProgram(shader.program);
-
-	load_lights_to_shader(gl, shader, lights);
-	load_camera_to_shader(gl, shader, camera);
-
-	entities.forEach(e => {
-		draw_normal_mapped_entity(gl, shader, e);
+		draw_entity(gl, shader, e);
 	});
 }
 
@@ -114,7 +87,7 @@ function load_camera_to_shader(gl, shader, camera){
 	set_uniform_vec3(gl, shader, 'camera_position', camera.position);
 }
 
-function draw_normal_mapped_entity(gl, shader, entity){
+function draw_entity(gl, shader, entity){
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, entity.texture);
 

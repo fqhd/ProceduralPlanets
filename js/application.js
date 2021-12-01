@@ -1,5 +1,5 @@
 import { load_shaders, bind_shader_tex_attribs } from './engine/shader.js';
-import { load_textured_models, load_raw_models } from './engine/model.js';
+import { load_textured_models } from './engine/model.js';
 import { load_textures } from './engine/texture.js';
 import { draw_scene, init_gl_state } from './engine/renderer.js';
 import { create_camera } from './engine/camera.js';
@@ -12,10 +12,9 @@ import { create_planet_model } from './engine/planet.js';
 export async function init_application(gl){
 	noise.seed(Math.random());
 	
-	const [shaders, textured_models, raw_models, textures, skybox] = await Promise.all([
+	const [shaders, textured_models, textures, skybox] = await Promise.all([
 		load_shaders(gl),
 		load_textured_models(gl),
-		load_raw_models(gl),
 		load_textures(gl),
 		load_skybox(gl),
 	]);
@@ -26,23 +25,14 @@ export async function init_application(gl){
 		planet: {
 			model: create_planet_model(gl),
 		},
-		raw_entities: [
-			{
-				reflectivity: 2,
-				shine_damper: 50,
-				color: [0.5, 0.5, 0.5],
-				model: raw_models.bunny,
-				transform: init_transform([4, -4.75, -3], [0, -90, 0], [30, 30, 30]),
-			}
-		],
-		normal_mapped_entities: [
+		entities: [
 			{
 				reflectivity: 1,
 				shine_damper: 10,
 				model: textured_models.plane,
 				texture: textures.bricks_texture,
 				normal_map: textures.bricks_normal,
-				transform: init_transform([0, -6, -7], [0, 90, 0], [20, 20, 20]),
+				transform: init_transform([0, -6, 0], [0, 90, 0], [30, 0, 30]),
 			},
 		],
 		lights: [

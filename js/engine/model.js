@@ -6,46 +6,6 @@ export async function load_textured_models(gl){
 	};
 }
 
-export async function load_raw_models(gl){
-	return {
-		bunny: await load_raw_model(gl, 'res/models/raw_models/bunny.obj'),
-	};
-}
-
-async function load_raw_model(gl, path){
-    const response = await fetch(path);
-    const text = await response.text();
-    const lines = text.split('\n');
-
-    const positions = [];
-    const normals = [];
-    const indices = [];
-
-    for(let i = 0; i < lines.length; i++){
-        const tokens = lines[i].split(' ');
-        switch(tokens[0]){
-            case 'v':
-                positions.push(tokens[1]);
-                positions.push(tokens[2]);
-                positions.push(tokens[3]);
-            break;
-            case 'vn':
-                normals.push(tokens[1]);
-                normals.push(tokens[2]);
-                normals.push(tokens[3]);
-            break;
-            case 'f':
-				// We subtract one from the indices because blender starts counting from 1 instead of 0(like opengl expects)
-                indices.push(tokens[1]-1);
-                indices.push(tokens[2]-1);
-                indices.push(tokens[3]-1);
-            break;
-        }
-    }
-
-	return create_raw_model(gl, positions, normals, indices);
-}
-
 async function load_textured_model(gl, path){
 	const response = await fetch(path);
 	const text = await response.text();
