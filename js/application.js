@@ -10,6 +10,8 @@ import { create_planet_model } from './engine/planet.js';
 
 
 export async function init_application(gl){
+	noise.seed(Math.random());
+	
 	const [shaders, textured_models, raw_models, textures, skybox] = await Promise.all([
 		load_shaders(gl),
 		load_textured_models(gl),
