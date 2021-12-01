@@ -32,7 +32,7 @@ export async function init_application(gl){
 				model: textured_models.plane,
 				texture: textures.bricks_texture,
 				normal_map: textures.bricks_normal,
-				transform: init_transform([0, -6, 0], [0, 90, 0], [30, 0, 30]),
+				transform: init_transform([0, -6, 0], [0, 90, 0], [30, 1, 30]),
 			},
 		],
 		lights: [
