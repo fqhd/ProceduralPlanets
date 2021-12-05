@@ -10,7 +10,6 @@ async function main(){
 	
 	gl = canvas.getContext('webgl2');
 
-
 	if(gl == null){
 		console.error('Failed to initialize webgl');
 		return;

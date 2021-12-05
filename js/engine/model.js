@@ -119,33 +119,6 @@ function calc_tangents(positions, uvs){
 	return tangents;
 }
 
-function create_raw_model(gl, positions, normals, indices){
-	const vao = gl.createVertexArray();
-	gl.bindVertexArray(vao);
-
-	const pos_buff = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, pos_buff);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-	gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
-	gl.enableVertexAttribArray(0);
-
-	const normal_buff = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, normal_buff);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
-	gl.vertexAttribPointer(1, 3, gl.FLOAT, false, 0, 0);
-	gl.enableVertexAttribArray(1);
-
-	const indices_buff = gl.createBuffer();
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indices_buff);
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
-
-	return {
-		vao,
-		indices_buff,
-		num_indices: indices.length,
-	};
-}
-
 function create_textured_model(gl, positions, normals, tangents, uvs){
 	const vao = gl.createVertexArray();
 	gl.bindVertexArray(vao);
