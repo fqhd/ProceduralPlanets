@@ -1,10 +1,10 @@
-const {mat4} = glMatrix;
+const { mat4, vec3 } = glMatrix;
 
 import { deg_to_rad } from './utils.js';
 
-export function create_camera(position, pitch, yaw, ratio){
+export function create_camera(pitch, yaw, ratio){
 	const cam = {
-		position,
+		position: vec3.create(),
 		pitch,
 		yaw,
 		distance: 18,
