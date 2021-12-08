@@ -46,7 +46,6 @@ function draw_skybox(gl, scene){
 	our_mat[12] = 0;
 	our_mat[13] = 0;
 	our_mat[14] = 0;
-	our_mat[15] = 1; // Might not need this
 
 	set_uniform_mat4(gl, shader, 'view', our_mat);
 
