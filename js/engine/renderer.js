@@ -59,8 +59,9 @@ function load_camera_to_shader(gl, shader, camera){
 	set_uniform_mat4(gl, shader, 'view', camera.view);
 }
 
+let once = true;
 function draw_model_indices(gl, model){
 	gl.bindVertexArray(model.vao);
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, model.indices_buff);
-	gl.drawElements(gl.TRIANGLES, model.num_indices, gl.UNSIGNED_SHORT, 0);
+	gl.drawElements(gl.TRIANGLES, model.num_indices, gl.UNSIGNED_INT, 0);
 }

@@ -7,7 +7,7 @@ export function create_planet_model(gl){
 	const indices = create_icosahedron_indices();
 
 	// Subdivide icosahedron triangles
-	for(let i = 0; i < 5; i++){
+	for(let i = 0; i < 7; i++){
 		const num_indices = indices.length;
 		for(let j = 0; j < num_indices; j+=3){
 			subdivide_triangle(positions, positions_map, indices, j+0, j+1, j+2);
@@ -42,7 +42,7 @@ export function create_planet_model(gl){
 
 	const indices_buff = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indices_buff);
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indices), gl.STATIC_DRAW);
 
 	return {
 		vao,

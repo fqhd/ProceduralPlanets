@@ -67,7 +67,7 @@ function init_cube_model(gl){
 		7, 6, 5, 7, 5, 4,
 		4, 0, 7, 7, 0, 3,
 	];
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indices), gl.STATIC_DRAW);
 
 	return {
 		vao,
