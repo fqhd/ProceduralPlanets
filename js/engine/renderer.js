@@ -27,7 +27,7 @@ function draw_planet(gl, scene){
 
 	load_camera_to_shader(gl, shader, camera);
 
-	draw_model_points(gl, planet.model);
+	draw_model_indices(gl, planet.model);
 }
 
 function draw_skybox(gl, scene){
@@ -57,11 +57,6 @@ function draw_skybox(gl, scene){
 function load_camera_to_shader(gl, shader, camera){
 	set_uniform_mat4(gl, shader, 'projection', camera.projection);
 	set_uniform_mat4(gl, shader, 'view', camera.view);
-}
-
-function draw_model_points(gl, model){
-	gl.bindVertexArray(model.vao);
-	gl.drawArrays(gl.POINTS, 0, model.num_vertices);
 }
 
 function draw_model_indices(gl, model){
