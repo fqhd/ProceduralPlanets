@@ -13,7 +13,7 @@ export function init_gl_state(gl){
 }
 
 export function draw_scene(gl, scene){
-	clear();
+	clear(gl);
 	
 	update_camera(scene.camera);
 
@@ -21,7 +21,7 @@ export function draw_scene(gl, scene){
 	draw_skybox(gl, scene);
 }
 
-function clear(){
+function clear(gl){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 }
 
