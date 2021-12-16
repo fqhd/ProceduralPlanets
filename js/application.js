@@ -1,4 +1,4 @@
-import { load_shaders, bind_shader_tex_attribs } from './engine/shader.js';
+import { load_shaders } from './engine/shader.js';
 import { draw_scene, init_gl_state } from './engine/renderer.js';
 import { create_camera } from './engine/camera.js';
 import { init_controls } from './controller.js';
@@ -24,7 +24,6 @@ export async function init_application(gl){
 	};
 
 	init_gl_state(gl);
-	bind_shader_tex_attribs(gl, shaders);
 	init_controls(scene);
 
 	return scene;

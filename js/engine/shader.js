@@ -1,23 +1,8 @@
 export async function load_shaders(gl){
 	return {
-		entity_shader: await load_shader_from_dir(gl, 'res/shaders/entity_shader/'),
 		skybox_shader: await load_shader_from_dir(gl, 'res/shaders/skybox_shader/'),
 		planet_shader: await load_shader_from_dir(gl, 'res/shaders/planet_shader/'),
 	};
-}
-
-export function bind_shader_tex_attribs(gl, shaders){
-	const {entity_shader, skybox_shader} = shaders;
-
-	// Normal Mapped Entity Shader
-	gl.useProgram(entity_shader.program);
-	set_uniform_i(gl, entity_shader, 'our_texture', 0);
-	set_uniform_i(gl, entity_shader, 'our_normal_map', 1);
-
-	// Skybox entity
-	gl.useProgram(skybox_shader.program);
-	set_uniform_i(gl, skybox_shader, 'cubemap', 0);
-	
 }
 
 export function set_uniform_f(gl, shader, name, value){
