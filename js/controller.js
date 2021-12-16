@@ -17,15 +17,14 @@ function on_mouse_move(event){
 	// Clamping
 	if(scene.camera.target_pitch > 89) scene.camera.target_pitch = 89;
 	if(scene.camera.target_pitch < -89) scene.camera.target_pitch = -89;
-
 }
 
 function on_mouse_wheel(event){
 	scene.camera.target_distance += event.deltaY * 0.02;
 
 	// Clamping
-	if(scene.camera.target_distance < 1) scene.camera.target_distance = 1;
-	if(scene.camera.target_distance > 300) scene.camera.target_distance = 300;
+	if(scene.camera.target_distance < 1.5) scene.camera.target_distance = 1.5;
+	if(scene.camera.target_distance > 30) scene.camera.target_distance = 30;
 
 }
 
