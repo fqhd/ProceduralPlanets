@@ -3,7 +3,7 @@ import { draw_scene, init_gl_state } from './engine/renderer.js';
 import { create_camera } from './engine/camera.js';
 import { init_controls } from './controller.js';
 import { load_skybox } from './engine/skybox.js';
-import { create_planet_model } from './engine/planet.js';
+import { create_moon_model } from './engine/moon.js';
 import { load_textures } from './engine/texture.js';
 
 
@@ -19,13 +19,14 @@ export async function init_application(gl){
 	const scene = {
 		shaders,
 		skybox,
-		planet: {
-			model: create_planet_model(gl),
-			texture: textures.bricks_texture,
-			normal_map: textures.bricks_normal,
+		moon: {
+			model: create_moon_model(gl),
+			normal_map_1: textures.normal_map_1,
+			normal_map_2: textures.normal_map_2,
 		},
 		camera: create_camera(40, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
+
 
 	init_gl_state(gl);
 	bind_shader_uniforms(gl, shaders);

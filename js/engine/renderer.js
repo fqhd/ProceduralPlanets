@@ -17,7 +17,7 @@ export function draw_scene(gl, scene){
 	
 	update_camera(scene.camera);
 
-	draw_planet(gl, scene);
+	draw_moon(gl, scene);
 	draw_skybox(gl, scene);
 }
 
@@ -25,18 +25,18 @@ function clear(gl){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 }
 
-function draw_planet(gl, scene){
-	const shader = scene.shaders.planet_shader;
-	const {camera, planet} = scene;
+function draw_moon(gl, scene){
+	const shader = scene.shaders.moon_shader;
+	const {camera, moon} = scene;
 
 	gl.useProgram(shader.program);
 
 	load_camera_to_shader(gl, shader, camera);
 
-	bind_texture(gl, planet.texture, gl.TEXTURE0);
-	bind_texture(gl, planet.normal_map, gl.TEXTURE1);
+	bind_texture(gl, moon.normal_map_1, gl.TEXTURE0);
+	bind_texture(gl, moon.normal_map_2, gl.TEXTURE1);
 
-	draw_model_indices(gl, planet.model);
+	draw_model_indices(gl, moon.model);
 }
 
 function bind_texture(gl, texture, attachment){
@@ -73,7 +73,6 @@ function load_camera_to_shader(gl, shader, camera){
 	set_uniform_mat4(gl, shader, 'view', camera.view);
 }
 
-let once = true;
 function draw_model_indices(gl, model){
 	gl.bindVertexArray(model.vao);
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, model.indices_buff);

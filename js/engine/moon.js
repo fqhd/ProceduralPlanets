@@ -1,7 +1,7 @@
 // Icosphere generation inspired by Andreas Kahler
 const {vec3} = glMatrix;
 
-export function create_planet_model(gl){
+export function create_moon_model(gl){
 	const positions_map = new Map();
 	const positions = create_icosahedron_vertices();
 	const indices = create_icosahedron_indices();

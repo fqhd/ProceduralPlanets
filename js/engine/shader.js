@@ -1,19 +1,19 @@
 export async function load_shaders(gl){
 	return {
 		skybox_shader: await load_shader_from_dir(gl, 'res/shaders/skybox_shader/'),
-		planet_shader: await load_shader_from_dir(gl, 'res/shaders/planet_shader/'),
+		moon_shader: await load_shader_from_dir(gl, 'res/shaders/moon_shader/'),
 	};
 }
 
 export function bind_shader_uniforms(gl, shaders){
-	const { planet_shader, skybox_shader } = shaders;
+	const { moon_shader, skybox_shader } = shaders;
 
 	gl.useProgram(skybox_shader.program);
 	set_uniform_i(gl, skybox_shader, 'cubemap', 0);
 
-	gl.useProgram(planet_shader.program);
-	set_uniform_i(gl, planet_shader, 'planet_texture', 0);
-	set_uniform_i(gl, planet_shader, 'normal_map', 1);
+	gl.useProgram(moon_shader.program);
+	set_uniform_i(gl, moon_shader, 'normal_map_1', 0);
+	set_uniform_i(gl, moon_shader, 'normal_map_2', 1);
 }
 
 export function set_uniform_f(gl, shader, name, value){
