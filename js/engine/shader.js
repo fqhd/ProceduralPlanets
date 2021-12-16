@@ -5,6 +5,17 @@ export async function load_shaders(gl){
 	};
 }
 
+export function bind_shader_uniforms(gl, shaders){
+	const { planet_shader, skybox_shader } = shaders;
+
+	gl.useProgram(skybox_shader.program);
+	set_uniform_i(gl, skybox_shader, 'cubemap', 0);
+
+	gl.useProgram(planet_shader.program);
+	set_uniform_i(gl, planet_shader, 'planet_texture', 0);
+	set_uniform_i(gl, planet_shader, 'normal_map', 1);
+}
+
 export function set_uniform_f(gl, shader, name, value){
 	if(!shader.uniform_locations[name]){
 		shader.uniform_locations[name] = gl.getUniformLocation(shader.program, name);

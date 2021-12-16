@@ -33,7 +33,15 @@ function draw_planet(gl, scene){
 
 	load_camera_to_shader(gl, shader, camera);
 
+	bind_texture(gl, planet.texture, gl.TEXTURE0);
+	bind_texture(gl, planet.normal_map, gl.TEXTURE1);
+
 	draw_model_indices(gl, planet.model);
+}
+
+function bind_texture(gl, texture, attachment){
+	gl.activeTexture(attachment);
+	gl.bindTexture(gl.TEXTURE_2D, texture);
 }
 
 function draw_skybox(gl, scene){
