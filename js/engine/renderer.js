@@ -13,10 +13,16 @@ export function init_gl_state(gl){
 }
 
 export function draw_scene(gl, scene){
+	clear();
+	
 	update_camera(scene.camera);
 
 	draw_planet(gl, scene);
 	draw_skybox(gl, scene);
+}
+
+function clear(){
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 }
 
 function draw_planet(gl, scene){

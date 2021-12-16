@@ -30,7 +30,5 @@ export async function init_application(gl){
 }
 
 export function draw(gl, scene){
-	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
 	draw_scene(gl, scene);
 }
