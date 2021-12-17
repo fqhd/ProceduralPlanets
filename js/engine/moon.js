@@ -16,7 +16,7 @@ export function create_moon_model(gl){
 
 	normalize_positions(positions);
 
-	// scale_positions(positions);
+	scale_positions(positions);
 
 	const normals = calc_normals(positions, indices);
 
@@ -152,7 +152,7 @@ function normalize_positions(positions){
 function scale_positions(positions){
 	for(let i = 0; i < positions.length; i+=3){
 		const pos = vec3.fromValues(positions[i], positions[i+1], positions[i+2]);
-		const height = get_height_from_vec(pos);
+		const height = get_height_from_pos(pos);
 		vec3.scale(pos, pos, height);
 		positions[i] = pos[0];
 		positions[i+1] = pos[1];
@@ -160,8 +160,9 @@ function scale_positions(positions){
 	}
 }
 
-function get_height_from_vec(vec){
-	return 5 + noise.perlin3(vec[0] * 2, vec[1] * 2, vec[2] * 2) + noise.perlin3(vec[0] * 5, vec[1] * 5, vec[2] * 5) * 0.5;
+function get_height_from_pos(pos){
+	// return 5 + noise.perlin3(vec[0] * 2, vec[1] * 2, vec[2] * 2) + noise.perlin3(vec[0] * 5, vec[1] * 5, vec[2] * 5) * 0.5;
+	return 1 + Math.sin(pos[1] * 20) * 0.05;
 }
 
 function calc_normals(positions, indices){
