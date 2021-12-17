@@ -44,9 +44,9 @@ vec3 calc_fragment_normal(sampler2D normal_map) {
 }
 
 void main(){
-	vec3 fragment_normal = calc_fragment_normal(normal_map_1);
+	// vec3 fragment_normal = calc_fragment_normal(normal_map_1);
 
-	float brightness = dot(-light_dir, normalize(fragment_normal));
+	float brightness = dot(-light_dir, normalize(pass_normal));
 	brightness = max(brightness, 0.2);
 
 	out_color = vec4(obj_color * brightness, 1.0);
