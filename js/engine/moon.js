@@ -160,9 +160,31 @@ function scale_positions(positions){
 	}
 }
 
+function cavity_shape(x){
+	return x;
+}
+
+function rim_shape(x){
+
+}
+
 function get_height_from_pos(pos){
+	const crater_pos = vec3.create();
+	crater_pos[0] = 0;
+	crater_pos[1] = 1;
+	crater_pos[2] = 0;
+
+	const distance_vec = vec3.create();
+
+	vec3.sub(distance_vec, pos, crater_pos);
+	const x = vec3.length(distance_vec);
+
+	const height = cavity_shape(x);
+
 	// return 5 + noise.perlin3(vec[0] * 2, vec[1] * 2, vec[2] * 2) + noise.perlin3(vec[0] * 5, vec[1] * 5, vec[2] * 5) * 0.5;
-	return 1 + Math.sin(pos[1] * 20) * 0.05;
+	// return 1 + Math.sin(pos[1] * 20) * 0.05;
+	return height;
+
 }
 
 function calc_normals(positions, indices){
