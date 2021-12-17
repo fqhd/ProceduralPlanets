@@ -5,6 +5,3 @@ Icosphere generation inspired by Andreas Kahler
 
 normal_map_1: https://textures.com/download/pbr0234/133290
 normal_map_2: https://textures.com/download/pbr0280/133957
-
-
-But yeah basically this thing is really cool you should subscribe to me :))
