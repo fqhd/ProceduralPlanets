@@ -3,9 +3,8 @@ import { draw_scene, init_gl_state } from './engine/renderer.js';
 import { create_camera } from './engine/camera.js';
 import { init_controls } from './controller.js';
 import { load_skybox } from './engine/skybox.js';
-import { create_moon_model } from './engine/moon.js';
+import { create_moon_model } from './engine/moon_generator.js';
 import { load_textures } from './engine/texture.js';
-
 
 export async function init_application(gl){
 	noise.seed(Math.random());
