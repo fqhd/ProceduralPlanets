@@ -7,7 +7,7 @@ export function create_moon_model(gl){
 	const indices = create_icosahedron_indices();
 
 	// Subdivide icosahedron triangles
-	for(let i = 0; i < 5; i++){
+	for(let i = 0; i < 6; i++){
 		const num_indices = indices.length;
 		for(let j = 0; j < num_indices; j+=3){
 			subdivide_triangle(positions, positions_map, indices, j+0, j+1, j+2);
@@ -160,30 +160,96 @@ function scale_positions(positions){
 	}
 }
 
-function cavity_shape(x){
-	return x;
+function red_func(x){
+	return 5 * Math.pow(x, 2) - 0.3;
 }
 
-function rim_shape(x){
+function purple_func(x){
+	return 4 * Math.pow(x - 0.4, 2);
+}
 
+function orange_func(x){
+	return 4 * Math.pow(x + 0.4, 2);
+}
+
+function green_func(){
+	return -0.15;
+}
+
+function clamp(v, a, b){
+	if(v < a){
+		return a;
+	}else if(v > b){
+		return b;
+	}
+	return v;
+}
+
+function lerp(a, b, k) {
+	return a + (b - a) * k;
+}
+
+// Based on: https://www.iquilezles.org/www/articles/smin/smin.htm
+function smin(a, b, k){
+    const h = clamp(0.5 + 0.5 * (b - a) / k, 0, 1);
+    return lerp(b, a, h) - k * h * (1 - h);
+}
+
+// Based on: https://en.wikipedia.org/wiki/Smooth_maximum
+function smax(a, b, k){
+	return ((a + b) + Math.sqrt(Math.pow(a - b, 2) + k)) / 2;
+}
+
+function crater_shape(x){
+	const r = red_func(x);
+	const p = purple_func(x);
+	const o = orange_func(x);
+	const g = green_func(x);
+
+	let height = r;
+	height = smax(r, g, 0.008);
+	height = smin(height, p, 0.2);
+	height = smin(height, o, 0.2);
+	return height;
+}
+
+function calc_theta_between_two_points(A, B){
+	const C = vec3.create();
+
+	const CA = vec3.create();
+	vec3.sub(CA, A, C);
+
+	const CB = vec3.create();
+	vec3.sub(CB, B, C);
+
+	const dot_product = vec3.dot(CA, CB);
+
+	return Math.acos(dot_product);
+}
+
+function calc_length_between_two_points_on_sphere(A, B){
+	const theta = calc_theta_between_two_points(A, B);
+	return theta;
 }
 
 function get_height_from_pos(pos){
 	const crater_pos = vec3.create();
 	crater_pos[0] = 0;
-	crater_pos[1] = 1;
-	crater_pos[2] = 0;
+	crater_pos[1] = 0;
+	crater_pos[2] = 1;
 
-	const distance_vec = vec3.create();
+	const x = calc_length_between_two_points_on_sphere(crater_pos, pos);
 
-	vec3.sub(distance_vec, pos, crater_pos);
-	const x = vec3.length(distance_vec);
+	const base_height = 1;
+	let height = 0;
 
-	const height = cavity_shape(x);
+	if(x < 0.4){ // If point is inside the crater
+		height = crater_shape(x);
+	}
 
 	// return 5 + noise.perlin3(vec[0] * 2, vec[1] * 2, vec[2] * 2) + noise.perlin3(vec[0] * 5, vec[1] * 5, vec[2] * 5) * 0.5;
 	// return 1 + Math.sin(pos[1] * 20) * 0.05;
-	return height;
+	return base_height + height;
 
 }
 
