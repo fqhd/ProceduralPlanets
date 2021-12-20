@@ -1,20 +1,20 @@
 const {vec3} = glMatrix;
-let rim_height;
-let rim_width;
-let floor_height;
-let rim_a;
-let crater_a;
+let craters;
 
-export function init_crater_generator(config){
-	rim_height = config.rim_height;
-	rim_width = config.rim_width;
-	floor_height = config.floor_height;
-	const edge = rim_width * 0.2;
-	crater_a = calc_a(rim_height, -0.3, rim_width - edge);
-	rim_a = calc_a(rim_height, 0, rim_width - edge);
+export function init_crater_generator(c){
+	craters = c;
+	setup_craters();
 }
 
-export function scale_positions(positions){
+function setup_craters(){
+	for(const i of craters){
+		const edge = i.rim_width * 0.2;
+		i.crater_a = calc_a(i.rim_height, -0.3, i.rim_width - edge);
+		i.rim_a = calc_a(i.rim_height, 0, i.rim_width - edge);
+	}
+}
+
+export function generate_craters(positions){
 	for(let i = 0; i < positions.length; i+=3){
 		const pos = vec3.fromValues(positions[i], positions[i+1], positions[i+2]);
 		const height = get_height_from_pos(pos);
@@ -29,20 +29,16 @@ function calc_a(y, c, x){
 	return (y - c) / Math.pow(x, 2);
 }
 
-function red_func(x){
+function red_func(crater_a, x){
 	return crater_a * Math.pow(x, 2) - 0.3;
 }
 
-function purple_func(x){
+function purple_func(rim_a, rim_width, x){
 	return rim_a * Math.pow(x - rim_width, 2);
 }
 
-function orange_func(x){
+function orange_func(rim_a, rim_width, x){
 	return rim_a * Math.pow(x + rim_width, 2);
-}
-
-function green_func(){
-	return floor_height;
 }
 
 function clamp(v, a, b){
@@ -69,11 +65,11 @@ function smax(a, b, k){
 	return ((a + b) + Math.sqrt(Math.pow(a - b, 2) + k)) / 2;
 }
 
-function crater_shape(x){
-	const r = red_func(x);
-	const p = purple_func(x);
-	const o = orange_func(x);
-	const g = green_func(x);
+function crater_shape(crater, x){
+	const r = red_func(crater.crater_a, x);
+	const p = purple_func(crater.rim_a, crater.rim_width, x);
+	const o = orange_func(crater.rim_a, crater.rim_width, x);
+	const g = crater.floor_height;
 
 	let height = r;
 	height = smax(r, g, 0.008);
@@ -102,21 +98,18 @@ function calc_length_between_two_points_on_sphere(A, B){
 }
 
 function get_height_from_pos(pos){
-	const crater_pos = vec3.create();
-	crater_pos[0] = 0;
-	crater_pos[1] = 0;
-	crater_pos[2] = 1;
-
-	const x = calc_length_between_two_points_on_sphere(crater_pos, pos);
-
 	const base_height = 1;
-	let height = 0;
+	let total_height = 0;
 
-	if(x < rim_width){ // If point is inside the crater
-		height = crater_shape(x);
+	for(const i of craters){
+		const base_height = 1;
+		const x = calc_length_between_two_points_on_sphere(i.position, pos);
+
+		if(x < i.rim_width){ // If point is inside the crater
+			const height = crater_shape(i, x);
+			total_height += height;
+		}
 	}
 
-	// return 5 + noise.perlin3(vec[0] * 2, vec[1] * 2, vec[2] * 2) + noise.perlin3(vec[0] * 5, vec[1] * 5, vec[2] * 5) * 0.5;
-	// return 1 + Math.sin(pos[1] * 20) * 0.05;
-	return base_height + height;
+	return base_height + total_height;
 }

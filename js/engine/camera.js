@@ -1,6 +1,6 @@
 const { mat4, vec3 } = glMatrix;
 
-import { deg_to_rad } from './utils.js';
+import { deg_to_rad, get_point_from_pitch_and_yaw } from './utils.js';
 
 export function create_camera(pitch, yaw, ratio){
 	const cam = {
@@ -26,12 +26,10 @@ export function update_camera(camera){
 	camera.yaw += (target_yaw - yaw) * 0.1;
 
 	// Calculate camera position based on pitch and yaw
-	const y = Math.sin(deg_to_rad(pitch)) * distance;
-	const horiz_distance = Math.cos(deg_to_rad(pitch)) * distance;
-	const x = Math.sin(deg_to_rad(yaw)) * horiz_distance;
-	const z = Math.cos(deg_to_rad(yaw)) * horiz_distance;
+	const point = get_point_from_pitch_and_yaw(camera.pitch, camera.yaw);
+	vec3.scale(point, point, camera.distance);
 
-	camera.position = [x, y, z];
+	camera.position = point;
 
 	// Calculate view matrix
 	mat4.identity(view);

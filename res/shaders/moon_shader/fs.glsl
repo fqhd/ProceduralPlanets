@@ -47,7 +47,7 @@ void main(){
 	// vec3 fragment_normal = calc_fragment_normal(normal_map_1);
 
 	float brightness = dot(-light_dir, normalize(pass_normal));
-	brightness = max(brightness, 0.2);
+	brightness = max(brightness, 0.1);
 
 	out_color = vec4(obj_color * brightness, 1.0);
 }
