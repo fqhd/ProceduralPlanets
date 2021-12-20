@@ -6,7 +6,7 @@ import { get_random_point_on_sphere } from './utils.js';
 const {vec3} = glMatrix;
 
 export function create_moon_model(gl){
-	const {positions, indices} = generate_sphere(7);
+	const {positions, indices} = generate_sphere(6);
 
 	const craters = get_crater_generation_config();
 	init_crater_generator(craters);
@@ -22,10 +22,13 @@ function exponentialize(x){
 
 function get_crater_generation_config(){
 	const craters = [];
-	for(let i = 0; i < 20; i++){
+	for(let i = 0; i < 10; i++){
+		const crater_width = 0.2 + exponentialize(Math.random()) * 0.2;
+		const rim_height = crater_width * 0.2;
 		craters.push({
 			position: get_random_point_on_sphere(),
-			crater_width: 0.15 + exponentialize(Math.random()) * 0.3,
+			crater_width,
+			rim_height,
 		});
 	}
 	return craters;

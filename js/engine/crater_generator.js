@@ -1,32 +1,14 @@
 const {vec3} = glMatrix;
 let craters;
+const floor_height = -0.1;
 
 export function init_crater_generator(c){
 	craters = c;
 	setup_craters();
 }
 
-
-function get_crater_proportions(){
-	// standard crater properties
-	const s = {
-		crater_width: 0.4,
-		rim_height: 0.1,
-		floor_height: -0.1,
-	};
-
-	return {
-		rim: s.rim_height / s.crater_width,
-		floor: s.floor_height / s.crater_width,
-	};
-}
-
 function setup_craters() {
-	const { rim, floor } = get_crater_proportions();
 	for(const i of craters) {
-		i.rim_height = rim * i.crater_width
-		i.floor_height = floor * i.crater_width
-
 		const edge = i.crater_width * 0.3;
 		i.crater_a = calc_crater_a(i.rim_height, -0.3, i.crater_width - edge);
 		i.rim_a = calc_rim_a(i.rim_height, i.crater_width, i.crater_width - edge);
@@ -92,7 +74,7 @@ function crater_shape(crater, x){
 	const r = red_func(crater.crater_a, x);
 	const p = purple_func(crater.rim_a, crater.crater_width, x);
 	const o = orange_func(crater.rim_a, crater.crater_width, x);
-	const g = crater.floor_height;
+	const g = floor_height;
 
 	let height = r;
 	height = smax(r, g, 0.008);
