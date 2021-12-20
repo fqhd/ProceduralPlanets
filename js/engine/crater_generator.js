@@ -6,11 +6,30 @@ export function init_crater_generator(c){
 	setup_craters();
 }
 
-function setup_craters(){
-	for(const i of craters){
-		const edge = i.rim_width * 0.2;
-		i.crater_a = calc_a(i.rim_height, -0.3, i.rim_width - edge);
-		i.rim_a = calc_a(i.rim_height, 0, i.rim_width - edge);
+
+function get_crater_proportions(){
+	// standard crater properties
+	const s = {
+		crater_width: 0.4,
+		rim_height: 0.1,
+		floor_height: -0.1,
+	};
+
+	return {
+		rim: s.rim_height / s.crater_width,
+		floor: s.floor_height / s.crater_width,
+	};
+}
+
+function setup_craters() {
+	const { rim, floor } = get_crater_proportions();
+	for(const i of craters) {
+		i.rim_height = rim * i.crater_width
+		i.floor_height = floor * i.crater_width
+
+		const edge = i.crater_width * 0.3;
+		i.crater_a = calc_crater_a(i.rim_height, -0.3, i.crater_width - edge);
+		i.rim_a = calc_rim_a(i.rim_height, i.crater_width, i.crater_width - edge);
 	}
 }
 
@@ -25,20 +44,24 @@ export function generate_craters(positions){
 	}
 }
 
-function calc_a(y, c, x){
+function calc_crater_a(y, c, x){
 	return (y - c) / Math.pow(x, 2);
+}
+
+function calc_rim_a(y, crater_width, x){
+	return y / Math.pow(x - crater_width, 2);
 }
 
 function red_func(crater_a, x){
 	return crater_a * Math.pow(x, 2) - 0.3;
 }
 
-function purple_func(rim_a, rim_width, x){
-	return rim_a * Math.pow(x - rim_width, 2);
+function purple_func(rim_a, crater_width, x){
+	return rim_a * Math.pow(x - crater_width, 2);
 }
 
-function orange_func(rim_a, rim_width, x){
-	return rim_a * Math.pow(x + rim_width, 2);
+function orange_func(rim_a, crater_width, x){
+	return rim_a * Math.pow(x + crater_width, 2);
 }
 
 function clamp(v, a, b){
@@ -67,8 +90,8 @@ function smax(a, b, k){
 
 function crater_shape(crater, x){
 	const r = red_func(crater.crater_a, x);
-	const p = purple_func(crater.rim_a, crater.rim_width, x);
-	const o = orange_func(crater.rim_a, crater.rim_width, x);
+	const p = purple_func(crater.rim_a, crater.crater_width, x);
+	const o = orange_func(crater.rim_a, crater.crater_width, x);
 	const g = crater.floor_height;
 
 	let height = r;
@@ -102,10 +125,9 @@ function get_height_from_pos(pos){
 	let total_height = 0;
 
 	for(const i of craters){
-		const base_height = 1;
 		const x = calc_length_between_two_points_on_sphere(i.position, pos);
 
-		if(x < i.rim_width){ // If point is inside the crater
+		if(x < i.crater_width){ // If point is inside the crater
 			const height = crater_shape(i, x);
 			total_height += height;
 		}

@@ -16,22 +16,16 @@ export function create_moon_model(gl){
 	return create_mesh(gl, positions, normals, indices);
 }
 
+function exponentialize(x){
+	return Math.pow(x, 4);
+}
+
 function get_crater_generation_config(){
-	// return [
-	// 	{
-	// 		position: vec3.fromValues(0, 0, 1),
-	// 		floor_height: -0.1,
-	// 		rim_height: 0.2,
-	// 		rim_width: 0.5,
-	// 	}
-	// ];
 	const craters = [];
-	for(let i = 0; i < 10; i++){
+	for(let i = 0; i < 20; i++){
 		craters.push({
 			position: get_random_point_on_sphere(),
-			floor_height: -0.1,
-			rim_height: 0.2,
-			rim_width: 0.15 + Math.random() * 0.3,
+			crater_width: 0.15 + exponentialize(Math.random()) * 0.3,
 		});
 	}
 	return craters;
