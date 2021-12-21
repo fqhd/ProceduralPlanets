@@ -37,8 +37,8 @@ function create_mix_factors(positions, freq){
 
 function create_crater_array(){
 	const craters = [];
-	for(let i = 0; i < 20; i++){
-		const crater_width = 0.1 + exponentialize(Math.random()) * 0.4;
+	for(let i = 0; i < 35; i++){
+		const crater_width = 0.15 + exponentialize(Math.random()) * 0.4;
 		const rim_height = clamp(crater_width * 0.2, 0.02, 0.2);
 		craters.push({
 			position: get_random_point_on_sphere(),
