@@ -10,6 +10,9 @@ import { get_random_color } from './engine/utils.js';
 const MAX_NM_STRENGTH = 1.0;
 const MAX_TEXTURE_SCALE = 10.0;
 const MAX_SHARPNESS = 10.0;
+const strength_slider = document.getElementById("strength-slider");
+const texture_slider = document.getElementById("texture-slider");
+const sharpness_slider = document.getElementById("sharpness-slider");
 
 export async function init_application(gl){
 	noise.seed(Math.random());
@@ -36,19 +39,25 @@ export async function init_application(gl){
 	init_gl_state(gl);
 	bind_shader_uniforms(gl, shaders);
 	init_controls(scene);
-
+	init_sliders(scene);
 	return scene;
 }
 
-export function update(gl, scene){
-	const strength_slider = document.getElementById("strength-slider");
-	const texture_slider = document.getElementById("texture-slider");
-	const sharpness_slider = document.getElementById("sharpness-slider");
+function init_sliders(scene) {
 	const moon_params = scene.moon.params;
 
 	strength_slider.value = (moon_params.nmap_strength / MAX_NM_STRENGTH) * 100;
 	texture_slider.value = (moon_params.texture_scale / MAX_TEXTURE_SCALE) * 100;
 	sharpness_slider.value = (moon_params.blend_sharpness / MAX_SHARPNESS) * 100;
+}
+
+export function update(gl, scene){
+	const moon_params = scene.moon.params;
+
+	// update value if slider changed
+	moon_params.nmap_strength = (MAX_NM_STRENGTH / strength_slider.value) * 100;
+	moon_params.texture_scale = (MAX_TEXTURE_SCALE / texture_slider.value) * 100;
+	moon_params.blend_sharpness = (MAX_SHARPNESS / sharpness_slider.value) * 100;
 	
 }
 
