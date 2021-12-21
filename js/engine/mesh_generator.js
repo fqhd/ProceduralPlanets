@@ -43,7 +43,7 @@ export function create_moon_mesh(gl, positions, normals, nmap_mix_factors, color
 
 function calc_memory_usage(){
 	let total = 0;
-	for(const i in arguments){
+	for(const i of arguments){
 		total += 4 * i.length;
 	}
 	return total;
