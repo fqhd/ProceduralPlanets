@@ -1,4 +1,6 @@
-const {vec3} = glMatrix;
+import { clamp } from './utils.js';
+
+const { vec3 } = glMatrix;
 let craters;
 const floor_height = -0.1;
 
@@ -44,15 +46,6 @@ function purple_func(rim_a, crater_width, x){
 
 function orange_func(rim_a, crater_width, x){
 	return rim_a * Math.pow(x + crater_width, 2);
-}
-
-function clamp(v, a, b){
-	if(v < a){
-		return a;
-	}else if(v > b){
-		return b;
-	}
-	return v;
 }
 
 function lerp(a, b, k) {

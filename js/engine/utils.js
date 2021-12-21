@@ -30,3 +30,12 @@ export function load_image(url){
 		img.src = url;
 	});
 }
+
+export function clamp(v, a, b){
+	if(v < a){
+		return a;
+	}else if(v > b){
+		return b;
+	}
+	return v;
+}
