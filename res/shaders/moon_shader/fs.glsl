@@ -17,12 +17,11 @@ uniform sampler2D normal_map_1;
 uniform sampler2D normal_map_2;
 uniform vec3 obj_color_1;
 uniform vec3 obj_color_2;
+uniform float nmap_strength;
+uniform float texture_scale;
+uniform float blend_sharpness;
 
 const vec3 light_dir = vec3(0.0, 0.0, -1.0);
-
-const float nmap_strength = 0.5f;
-const float texture_scale = 3.5f;
-const float blend_sharpness = 5.0f;
 
 // Thanks to Sebastian Lague and Ben Golus for implementing the logic of this triplinar normal map calculation function
 vec3 calc_fragment_normal(sampler2D normal_map) {

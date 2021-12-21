@@ -10,7 +10,7 @@ const { vec3 } = glMatrix;
 export function create_moon_model(gl){
 	const {positions, indices} = generate_sphere(6);
 
-	const craters = creat_crater_array();
+	const craters = create_crater_array();
 	prepare_craters(craters);
 	generate_craters(positions);
 	scale_positions_with_noise(positions);
@@ -35,10 +35,10 @@ function create_mix_factors(positions, freq){
 	return arr;
 }
 
-function creat_crater_array(){
+function create_crater_array(){
 	const craters = [];
-	for(let i = 0; i < 10; i++){
-		const crater_width = 0.2 + exponentialize(Math.random()) * 0.2;
+	for(let i = 0; i < 15; i++){
+		const crater_width = 0.2 + exponentialize(Math.random()) * 0.4;
 		const rim_height = crater_width * 0.2;
 		craters.push({
 			position: get_random_point_on_sphere(),
