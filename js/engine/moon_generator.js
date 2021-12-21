@@ -28,7 +28,7 @@ function create_mix_factors(positions){
 	const arr = [];
 	for(let i = 0; i < positions.length; i+=3){
 		const pos = vec3.fromValues(positions[i], positions[i+1], positions[i+2]);
-		const mix_factor = get_noise(pos, noise.perlin3, 5);
+		const mix_factor = (get_noise(pos, noise.perlin3, 5) + 1) / 2;
 		arr.push(mix_factor);
 	}
 	return arr;
