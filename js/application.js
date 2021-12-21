@@ -16,16 +16,14 @@ export async function init_application(gl){
 		load_textures(gl),
 	]);
 
-	const moon_params = get_moon_params();
-
 	const scene = {
 		shaders,
 		skybox,
 		moon: {
-			model: create_moon_model(gl, moon_params),
+			model: create_moon_model(gl),
 			normal_map_1: textures.normal_map_1,
 			normal_map_2: textures.normal_map_2,
-			params: moon_params,
+			params: get_moon_params(),
 		},
 		camera: create_camera(40, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
@@ -36,6 +34,10 @@ export async function init_application(gl){
 	init_controls(scene);
 
 	return scene;
+}
+
+export function update(gl, scene){
+	
 }
 
 export function draw(gl, scene){
