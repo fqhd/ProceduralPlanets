@@ -8,7 +8,7 @@ import { get_random_point_on_sphere, clamp } from './utils.js';
 const { vec3 } = glMatrix;
 
 export function create_moon_model(gl){
-	const {positions, indices} = generate_sphere(7);
+	const {positions, indices} = generate_sphere(6);
 
 	const craters = create_crater_array();
 	prepare_craters(craters);
@@ -16,7 +16,7 @@ export function create_moon_model(gl){
 	scale_positions_with_noise(positions);
 	const normals = calc_normals(positions, indices);
 	const nmap_mix_factors = create_mix_factors(positions, 5);
-	const color_mix_factors = create_mix_factors(positions, 1);
+	const color_mix_factors = create_mix_factors(positions, 2);
 	
 	return create_moon_mesh(gl, positions, normals, nmap_mix_factors, color_mix_factors, indices);
 }
