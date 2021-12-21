@@ -4,7 +4,7 @@ const { vec3 } = glMatrix;
 let craters;
 const floor_height = -0.1;
 
-export function init_crater_generator(c){
+export function prepare_craters(c){
 	craters = c;
 	setup_craters();
 }

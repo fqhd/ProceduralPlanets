@@ -1,5 +1,3 @@
-import { clamp } from './utils.js';
-
 const { vec3 } = glMatrix;
 
 export function scale_positions_with_noise(positions){
