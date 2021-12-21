@@ -15,10 +15,10 @@ out vec4 out_color;
 
 uniform sampler2D normal_map_1;
 uniform sampler2D normal_map_2;
+uniform vec3 obj_color_1;
+uniform vec3 obj_color_2;
 
 const vec3 light_dir = vec3(0.0, 0.0, -1.0);
-const vec3 obj_color_1 = vec3(0.9, 0.2, 0.3);
-const vec3 obj_color_2 = vec3(0.2, 0.4, 0.9);
 
 const float nmap_strength = 0.5f;
 const float texture_scale = 3.5f;

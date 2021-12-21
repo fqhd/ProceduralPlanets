@@ -1,4 +1,4 @@
-import { set_uniform_mat4 } from './shader.js';
+import { set_uniform_mat4, set_uniform_vec3 } from './shader.js';
 import { update_camera } from './camera.js';
 
 const {mat4} = glMatrix;
@@ -33,6 +33,8 @@ function draw_moon(gl, scene){
 
 	load_camera_to_shader(gl, shader, camera);
 
+	set_uniform_vec3(gl, shader, 'obj_color_1', moon.obj_color_1);
+	set_uniform_vec3(gl, shader, 'obj_color_2', moon.obj_color_2);
 	bind_texture(gl, moon.normal_map_1, gl.TEXTURE0);
 	bind_texture(gl, moon.normal_map_2, gl.TEXTURE1);
 

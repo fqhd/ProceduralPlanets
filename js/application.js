@@ -5,6 +5,7 @@ import { init_controls } from './controller.js';
 import { load_skybox } from './engine/skybox.js';
 import { create_moon_model } from './engine/moon_generator.js';
 import { load_textures } from './engine/texture.js';
+import { get_random_color } from './engine/utils.js';
 
 export async function init_application(gl){
 	noise.seed(Math.random());
@@ -22,6 +23,8 @@ export async function init_application(gl){
 			model: create_moon_model(gl),
 			normal_map_1: textures.normal_map_1,
 			normal_map_2: textures.normal_map_2,
+			obj_color_1: get_random_color(),
+			obj_color_2: get_random_color(),
 		},
 		camera: create_camera(40, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};

@@ -8,6 +8,13 @@ export function rad_to_deg(rad) {
 	return rad / (Math.PI / 180);
 };
 
+export function get_random_color(){
+	const r = Math.random();
+	const g = Math.random();
+	const b = Math.random();
+	return [r, g, b];
+}
+
 export function get_random_point_on_sphere() {
 	const random_pitch = (Math.random() * 2 - 1) * 89;
 	const random_yaw = Math.random() * 360;
