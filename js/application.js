@@ -7,6 +7,10 @@ import { create_moon_model } from './engine/moon_generator.js';
 import { load_textures } from './engine/texture.js';
 import { get_random_color } from './engine/utils.js';
 
+const MAX_NM_STRENGTH = 1.0;
+const MAX_TEXTURE_SCALE = 10.0;
+const MAX_SHARPNESS = 10.0;
+
 export async function init_application(gl){
 	noise.seed(Math.random());
 	
@@ -37,6 +41,14 @@ export async function init_application(gl){
 }
 
 export function update(gl, scene){
+	const strength_slider = document.getElementById("strength-slider");
+	const texture_slider = document.getElementById("texture-slider");
+	const sharpness_slider = document.getElementById("sharpness-slider");
+	const moon_params = scene.moon.params;
+
+	strength_slider.value = (moon_params.nmap_strength / MAX_NM_STRENGTH) * 100;
+	texture_slider.value = (moon_params.texture_scale / MAX_TEXTURE_SCALE) * 100;
+	sharpness_slider.value = (moon_params.blend_sharpness / MAX_SHARPNESS) * 100;
 	
 }
 
