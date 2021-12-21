@@ -3,12 +3,12 @@ import {calc_normals} from './normal_generator.js';
 import {prepare_craters, generate_craters} from './crater_generator.js';
 import { create_moon_mesh } from './mesh_generator.js';
 import { scale_positions_with_noise, get_noise } from './terrain_shaper.js';
-import { get_random_point_on_sphere } from './utils.js';
+import { get_random_point_on_sphere, clamp } from './utils.js';
 
 const { vec3 } = glMatrix;
 
 export function create_moon_model(gl){
-	const {positions, indices} = generate_sphere(6);
+	const {positions, indices} = generate_sphere(7);
 
 	const craters = create_crater_array();
 	prepare_craters(craters);
@@ -37,9 +37,9 @@ function create_mix_factors(positions, freq){
 
 function create_crater_array(){
 	const craters = [];
-	for(let i = 0; i < 15; i++){
-		const crater_width = 0.2 + exponentialize(Math.random()) * 0.4;
-		const rim_height = crater_width * 0.2;
+	for(let i = 0; i < 20; i++){
+		const crater_width = 0.1 + exponentialize(Math.random()) * 0.4;
+		const rim_height = clamp(crater_width * 0.2, 0.02, 0.2);
 		craters.push({
 			position: get_random_point_on_sphere(),
 			crater_width,
