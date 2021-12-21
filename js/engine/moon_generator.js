@@ -15,20 +15,21 @@ export function create_moon_model(gl){
 	generate_craters(positions);
 	scale_positions_with_noise(positions);
 	const normals = calc_normals(positions, indices);
-	const mix_factors = create_mix_factors(positions);
+	const nmap_mix_factors = create_mix_factors(positions, 5);
+	const color_mix_factors = create_mix_factors(positions, 1);
 	
-	return create_moon_mesh(gl, positions, normals, mix_factors, indices);
+	return create_moon_mesh(gl, positions, normals, nmap_mix_factors, color_mix_factors, indices);
 }
 
 function exponentialize(x){
 	return Math.pow(x, 4);
 }
 
-function create_mix_factors(positions){
+function create_mix_factors(positions, freq){
 	const arr = [];
 	for(let i = 0; i < positions.length; i+=3){
 		const pos = vec3.fromValues(positions[i], positions[i+1], positions[i+2]);
-		const mix_factor = (get_noise(pos, noise.perlin3, 5) + 1) / 2;
+		const mix_factor = (get_noise(pos, noise.perlin3, freq) + 1) / 2;
 		arr.push(mix_factor);
 	}
 	return arr;
