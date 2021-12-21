@@ -27,7 +27,7 @@ function get_shape_noise(pos, frequency, scale){
 	return get_noise(pos, noise.simplex3, frequency) * scale;
 }
 
-function get_noise(pos, func, freq){
+export function get_noise(pos, func, freq){
 	return func(pos[0] * freq,
 		pos[1] * freq,
 		pos[2] * freq);

@@ -1,7 +1,8 @@
-export function create_mesh(gl, positions, normals, indices){
-	// const memoryUsage = 32 * positions.length + 16 * indices.length;
-	// console.log(`Using ${memoryUsage} bytes of memory`);
-	// console.log(`Num vertices: ${positions.length/3}`);
+export function create_moon_mesh(gl, positions, normals, mix_factors, indices){
+	
+	const memoryUsage = 4 * mix_factors.length + 4 * normals.length + 4 * positions.length + 4 * indices.length;
+	console.log(`Using ${memoryUsage} bytes of memory`);
+	console.log(`Num vertices: ${positions.length/3}`);
 
 	const vao = gl.createVertexArray();
 	gl.bindVertexArray(vao);
@@ -17,6 +18,12 @@ export function create_mesh(gl, positions, normals, indices){
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
 	gl.enableVertexAttribArray(1);
 	gl.vertexAttribPointer(1, 3, gl.FLOAT, false, 0, 0);
+
+	const mix_factor_buff = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, mix_factor_buff);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mix_factors), gl.STATIC_DRAW);
+	gl.enableVertexAttribArray(2);
+	gl.vertexAttribPointer(2, 1, gl.FLOAT, false, 0, 0);
 
 	const indices_buff = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indices_buff);
