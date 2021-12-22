@@ -34,7 +34,6 @@ export async function init_application(gl){
 	init_gl_state(gl);
 	bind_shader_uniforms(gl, shaders);
 	init_controls(scene);
-	init_sliders(scene);
 	return scene;
 }
 
