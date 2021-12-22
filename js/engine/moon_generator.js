@@ -3,7 +3,7 @@ import {calc_normals} from './normal_generator.js';
 import { generate_craters } from './crater_generator.js';
 import { create_moon_mesh } from './mesh_generator.js';
 import { scale_positions_with_noise, get_noise } from './terrain_shaper.js';
-import { get_random_point_on_sphere, sigmoid, exponentialize, clamp } from './maths.js';
+import { get_random_point_on_sphere, sigmoid, clamp } from './maths.js';
 
 const { vec3 } = glMatrix;
 
@@ -26,7 +26,7 @@ function add_craters_to_sphere(positions){
 
 function create_color_mix_factors(positions){
 	let mix_factors = create_noise_array(positions, 2);
-	mix_factors = mix_factors.map(e => exponentialize(e, 3));
+	mix_factors = mix_factors.map(e => Math.pow(e, 1));
 	mix_factors = mix_factors.map(e => sigmoid(e, 30));
 	return mix_factors;
 }
@@ -44,7 +44,7 @@ function create_noise_array(positions, freq){
 function create_crater_array(){
 	const craters = [];
 	for(let i = 0; i < 100; i++){
-		const crater_width = 0.05 + exponentialize(Math.random(), 6) * 0.3;
+		const crater_width = 0.05 + Math.pow(Math.random(), 6) * 0.3;
 		const rim_height = clamp(crater_width * 0.2, 0.025, 0.2);
 		const position = get_random_point_on_sphere();
 		craters.push({

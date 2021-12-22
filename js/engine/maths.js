@@ -27,10 +27,6 @@ export function get_point_from_pitch_and_yaw(pitch, yaw){
 	return vec3.fromValues(x, y, z);
 }
 
-export function exponentialize(x, pow){
-	return Math.pow(x, pow);
-}
-
 export function lerp(a, b, k) {
 	return a + (b - a) * k;
 }
