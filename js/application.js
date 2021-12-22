@@ -37,6 +37,10 @@ export async function init_application(gl){
 	return scene;
 }
 
+export function update(gl, scene){
+	
+}
+
 export function draw(gl, scene){
 	draw_scene(gl, scene);
 }
