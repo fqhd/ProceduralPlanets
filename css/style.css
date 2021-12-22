@@ -21,12 +21,22 @@ canvas {
 	height: 100%;
 }
 
-.canvas-workspace {
-	width: 100%;
+.parameter-element {
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: space-evenly;
+	min-height: 50px;
 }
 
 .sidebar {
 	background-color: midnightblue;
-	width: 200px;
+	width: 20%;
 }
+
+.canvas-workspace {
+	width: 80%;
+}
+
+
 

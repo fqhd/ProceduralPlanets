@@ -7,7 +7,18 @@
 	</head>
 	<body>
 		<div class="sidebar">
-			<input type="range" min="1$" max="100" value="50" class="slider" id="myRange">
+			<div class="parameter-element">
+				<p class="parameter-title">Texture Scale</p>
+				<input type="range" min="1$" max="100" value="50" class="slider" id="nmap-scale">
+			</div>
+			<div class="parameter-element">
+				<p class="parameter-title">Texture Sharpness</p>
+				<input type="range" min="1$" max="100" value="50" class="slider" id="nmap-sharpness">
+			</div>
+			<div class="parameter-element">
+				<p class="parameter-title">Texture Strength</p>
+				<input type="range" min="1$" max="100" value="50" class="slider" id="nmap-strength">
+			</div>
 		</div>
 		<div class="canvas-workspace">
 			<canvas id="canvas"></canvas>
