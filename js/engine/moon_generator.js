@@ -17,13 +17,14 @@ export function create_moon_model(gl){
 	const normals = calc_normals(positions, indices);
 	const nmap_mix_factors = create_mix_factors(positions, 5);
 	const color_mix_factors = create_mix_factors(positions, 2);
+	exponentialize_mix_factors(color_mix_factors, 3);
 	sigmoid_mix_factors(color_mix_factors, 30);
 	
 	return create_moon_mesh(gl, positions, normals, nmap_mix_factors, color_mix_factors, indices);
 }
 
-function exponentialize(x){
-	return Math.pow(x, 6);
+function exponentialize(x, pow){
+	return Math.pow(x, pow);
 }
 
 function create_mix_factors(positions, freq){
@@ -42,10 +43,16 @@ function sigmoid_mix_factors(factors, scale){
 	}
 }
 
+function exponentialize_mix_factors(factors, pow){
+	for(let i = 0; i < factors.length; i++){
+		factors[i] = exponentialize(factors[i], pow);
+	}
+}
+
 function create_crater_array(){
 	const craters = [];
 	for(let i = 0; i < 100; i++){
-		const crater_width = 0.05 + exponentialize(Math.random()) * 0.3;
+		const crater_width = 0.05 + exponentialize(Math.random(), 6) * 0.3;
 		const rim_height = clamp(crater_width * 0.2, 0.025, 0.2);
 		const position = get_random_point_on_sphere();
 		craters.push({
