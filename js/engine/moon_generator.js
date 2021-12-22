@@ -1,33 +1,37 @@
 import {generate_sphere} from './sphere_generator.js';
 import {calc_normals} from './normal_generator.js';
-import {prepare_craters, generate_craters} from './crater_generator.js';
+import { generate_craters } from './crater_generator.js';
 import { create_moon_mesh } from './mesh_generator.js';
 import { scale_positions_with_noise, get_noise } from './terrain_shaper.js';
-import { get_random_point_on_sphere, clamp, sigmoid } from './utils.js';
+import { get_random_point_on_sphere, sigmoid, exponentialize, clamp } from './maths.js';
 
 const { vec3 } = glMatrix;
 
 export function create_moon_model(gl){
 	const {positions, indices} = generate_sphere(6);
 
-	const craters = create_crater_array();
-	prepare_craters(craters);
-	generate_craters(positions);
+	add_craters_to_sphere(positions);
 	scale_positions_with_noise(positions);
 	const normals = calc_normals(positions, indices);
-	const nmap_mix_factors = create_mix_factors(positions, 5);
-	const color_mix_factors = create_mix_factors(positions, 2);
-	exponentialize_mix_factors(color_mix_factors, 3);
-	sigmoid_mix_factors(color_mix_factors, 30);
+	const nmap_mix_factors = create_noise_array(positions, 2);
+	const color_mix_factors = create_color_mix_factors(positions);
 	
 	return create_moon_mesh(gl, positions, normals, nmap_mix_factors, color_mix_factors, indices);
 }
 
-function exponentialize(x, pow){
-	return Math.pow(x, pow);
+function add_craters_to_sphere(positions){
+	const craters = create_crater_array();
+	generate_craters(positions, craters);
 }
 
-function create_mix_factors(positions, freq){
+function create_color_mix_factors(positions){
+	let mix_factors = create_noise_array(positions, 2);
+	mix_factors = mix_factors.map(e => exponentialize(e, 3));
+	mix_factors = mix_factors.map(e => sigmoid(e, 30));
+	return mix_factors;
+}
+
+function create_noise_array(positions, freq){
 	const arr = [];
 	for(let i = 0; i < positions.length; i+=3){
 		const pos = vec3.fromValues(positions[i], positions[i+1], positions[i+2]);
@@ -35,18 +39,6 @@ function create_mix_factors(positions, freq){
 		arr.push(mix_factor);
 	}
 	return arr;
-}
-
-function sigmoid_mix_factors(factors, scale){
-	for(let i = 0; i < factors.length; i++){
-		factors[i] = sigmoid(factors[i], scale);
-	}
-}
-
-function exponentialize_mix_factors(factors, pow){
-	for(let i = 0; i < factors.length; i++){
-		factors[i] = exponentialize(factors[i], pow);
-	}
 }
 
 function create_crater_array(){

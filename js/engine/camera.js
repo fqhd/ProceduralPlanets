@@ -1,6 +1,6 @@
 const { mat4, vec3 } = glMatrix;
 
-import { deg_to_rad, get_point_from_pitch_and_yaw } from './utils.js';
+import { deg_to_rad, get_point_from_pitch_and_yaw } from './maths.js';
 
 export function create_camera(pitch, yaw, ratio){
 	const cam = {

@@ -1,30 +1,25 @@
-import { clamp } from './utils.js';
+import { smax, smin } from './maths.js';
 
 const { vec3 } = glMatrix;
-let craters;
 const floor_height = -0.05;
 
-export function prepare_craters(c){
-	craters = c;
-	setup_craters();
-}
-
-function setup_craters() {
-	for(const i of craters) {
-		const edge = i.crater_width * 0.6;
-		i.crater_a = calc_crater_a(i.rim_height, -0.3, i.crater_width - edge);
-		i.rim_a = calc_rim_a(i.rim_height, i.crater_width, i.crater_width - edge);
-	}
-}
-
-export function generate_craters(positions){
+export function generate_craters(positions, craters){
+	setup_craters(craters);
 	for(let i = 0; i < positions.length; i+=3){
 		const pos = vec3.fromValues(positions[i], positions[i+1], positions[i+2]);
-		const height = get_height_from_pos(pos);
+		const height = get_height_from_pos(pos, craters);
 		vec3.scale(pos, pos, height);
 		positions[i] = pos[0];
 		positions[i+1] = pos[1];
 		positions[i+2] = pos[2];
+	}
+}
+
+function setup_craters(craters) {
+	for(const i of craters) {
+		const edge = i.crater_width * 0.6;
+		i.crater_a = calc_crater_a(i.rim_height, -0.3, i.crater_width - edge);
+		i.rim_a = calc_rim_a(i.rim_height, i.crater_width, i.crater_width - edge);
 	}
 }
 
@@ -46,21 +41,6 @@ function purple_func(rim_a, crater_width, x){
 
 function orange_func(rim_a, crater_width, x){
 	return rim_a * Math.pow(x + crater_width, 2);
-}
-
-function lerp(a, b, k) {
-	return a + (b - a) * k;
-}
-
-// Based on: https://www.iquilezles.org/www/articles/smin/smin.htm
-function smin(a, b, k){
-    const h = clamp(0.5 + 0.5 * (b - a) / k, 0, 1);
-    return lerp(b, a, h) - k * h * (1 - h);
-}
-
-// Based on: https://en.wikipedia.org/wiki/Smooth_maximum
-function smax(a, b, k){
-	return ((a + b) + Math.sqrt(Math.pow(a - b, 2) + k)) / 2;
 }
 
 function crater_shape(crater, x){
@@ -95,7 +75,7 @@ function calc_length_between_two_points_on_sphere(A, B){
 	return theta;
 }
 
-function get_height_from_pos(pos){
+function get_height_from_pos(pos, craters){
 	const base_height = 1;
 	let total_height = 0;
 
