@@ -3,7 +3,7 @@ import {calc_normals} from './normal_generator.js';
 import {prepare_craters, generate_craters} from './crater_generator.js';
 import { create_moon_mesh } from './mesh_generator.js';
 import { scale_positions_with_noise, get_noise } from './terrain_shaper.js';
-import { get_random_point_on_sphere, clamp } from './utils.js';
+import { get_random_point_on_sphere, clamp, sigmoid } from './utils.js';
 
 const { vec3 } = glMatrix;
 
@@ -17,6 +17,7 @@ export function create_moon_model(gl){
 	const normals = calc_normals(positions, indices);
 	const nmap_mix_factors = create_mix_factors(positions, 5);
 	const color_mix_factors = create_mix_factors(positions, 2);
+	sigmoid_mix_factors(color_mix_factors, 30);
 	
 	return create_moon_mesh(gl, positions, normals, nmap_mix_factors, color_mix_factors, indices);
 }
@@ -33,6 +34,12 @@ function create_mix_factors(positions, freq){
 		arr.push(mix_factor);
 	}
 	return arr;
+}
+
+function sigmoid_mix_factors(factors, scale){
+	for(let i = 0; i < factors.length; i++){
+		factors[i] = sigmoid(factors[i], scale);
+	}
 }
 
 function create_crater_array(){

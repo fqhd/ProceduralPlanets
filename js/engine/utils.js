@@ -8,6 +8,10 @@ export function rad_to_deg(rad) {
 	return rad / (Math.PI / 180);
 };
 
+export function sigmoid(x, pow){
+	return 1 / (1 + Math.pow(Math.E, -((x - 0.5) * pow)));
+}
+
 export function get_random_color(){
 	const r = Math.random();
 	const g = Math.random();
