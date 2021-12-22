@@ -3,10 +3,11 @@ let is_mouse_down = false;
 
 export function init_controls(s){
 	scene = s;
-	window.addEventListener('mousemove', on_mouse_move);
-	window.addEventListener('wheel', on_mouse_wheel);
-	window.addEventListener('mousedown', () => is_mouse_down = true);
-	window.addEventListener('mouseup', () => is_mouse_down = false);
+	const canvas = document.getElementById('canvas');
+	canvas.addEventListener('mousemove', on_mouse_move);
+	canvas.addEventListener('wheel', on_mouse_wheel);
+	canvas.addEventListener('mousedown', () => is_mouse_down = true);
+	canvas.addEventListener('mouseup', () => is_mouse_down = false);
 }
 
 function on_mouse_move(event){
