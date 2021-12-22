@@ -2,7 +2,7 @@ import { clamp } from './utils.js';
 
 const { vec3 } = glMatrix;
 let craters;
-const floor_height = -0.1;
+const floor_height = -0.05;
 
 export function prepare_craters(c){
 	craters = c;
@@ -11,7 +11,7 @@ export function prepare_craters(c){
 
 function setup_craters() {
 	for(const i of craters) {
-		const edge = i.crater_width * 0.3;
+		const edge = i.crater_width * 0.5;
 		i.crater_a = calc_crater_a(i.rim_height, -0.3, i.crater_width - edge);
 		i.rim_a = calc_rim_a(i.rim_height, i.crater_width, i.crater_width - edge);
 	}
