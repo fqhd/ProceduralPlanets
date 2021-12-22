@@ -22,7 +22,7 @@ export function create_moon_model(gl){
 }
 
 function exponentialize(x){
-	return Math.pow(x, 4);
+	return Math.pow(x, 6);
 }
 
 function create_mix_factors(positions, freq){
@@ -37,11 +37,12 @@ function create_mix_factors(positions, freq){
 
 function create_crater_array(){
 	const craters = [];
-	for(let i = 0; i < 35; i++){
-		const crater_width = 0.15 + exponentialize(Math.random()) * 0.4;
-		const rim_height = clamp(crater_width * 0.2, 0.02, 0.2);
+	for(let i = 0; i < 100; i++){
+		const crater_width = 0.05 + exponentialize(Math.random()) * 0.3;
+		const rim_height = clamp(crater_width * 0.2, 0.025, 0.2);
+		const position = get_random_point_on_sphere();
 		craters.push({
-			position: get_random_point_on_sphere(),
+			position,
 			crater_width,
 			rim_height,
 		});
