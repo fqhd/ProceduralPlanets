@@ -1,4 +1,4 @@
-import { init_application, draw, update } from './application.js'
+import {init_application, draw} from './application.js'
 
 let gl;
 let scene;
@@ -23,7 +23,6 @@ async function main(){
 }
 
 function draw_game(){
-	update(gl, scene);
 	draw(gl, scene);
 	requestAnimationFrame(draw_game);
 }
