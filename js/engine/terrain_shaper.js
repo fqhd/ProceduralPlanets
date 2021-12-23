@@ -1,3 +1,5 @@
+import { get_noise } from './utils.js';
+
 const { vec3 } = glMatrix;
 
 export function scale_positions_with_noise(positions){
@@ -20,15 +22,9 @@ function get_scale_factor_from_pos(pos){
 }
 
 function get_detail_noise(pos, frequency, scale){
-	return get_noise(pos, noise.perlin3, frequency) * scale;
+	return get_noise(pos, frequency) * scale;
 }
 
 function get_shape_noise(pos, frequency, scale){
-	return get_noise(pos, noise.simplex3, frequency) * scale;
-}
-
-export function get_noise(pos, func, freq){
-	return func(pos[0] * freq,
-		pos[1] * freq,
-		pos[2] * freq);
+	return get_noise(pos, frequency) * scale;
 }
