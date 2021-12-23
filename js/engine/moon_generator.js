@@ -41,18 +41,18 @@ function create_noise_array(positions, freq){
 	return arr;
 }
 
-const MIN_CRATER_WIDTH = 0.3;
+const MIN_CRATER_WIDTH = 0.2;
 const MAX_CRATER_WIDTH = 0.4;
 
 function create_crater_array(){
 	const craters = [];
-	for(let i = 0; i < 15; i++){
-		const crater_width = MIN_CRATER_WIDTH + Math.pow(Math.random(), 4) * (MAX_CRATER_WIDTH - MIN_CRATER_WIDTH);
+	for(let i = 0; i < 30; i++){
+		const crater_width = MIN_CRATER_WIDTH + Math.pow(Math.random(), 6) * (MAX_CRATER_WIDTH - MIN_CRATER_WIDTH);
 		craters.push({
 			crater_width,
 			position: get_random_point_on_sphere(),
 			rim_height: clamp(crater_width * 0.2, 0.025, 0.2),
-			floor_height: -0.01 + (crater_width / MAX_CRATER_WIDTH) * -0.03,
+			floor_height: -0.05 + ((crater_width * Math.random()) / MAX_CRATER_WIDTH) * -0.2,
 		});
 	}
 	return craters;
