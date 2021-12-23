@@ -1,4 +1,4 @@
-import { smax, smin } from './maths.js';
+import { smin, smax } from './maths.js';
 
 const { vec3 } = glMatrix;
 
@@ -16,7 +16,7 @@ export function generate_craters(positions, craters){
 
 function setup_craters(craters) {
 	for(const i of craters) {
-		const edge = i.crater_width * 0.6;
+		const edge = i.crater_width * 0.4;
 		i.crater_a = calc_crater_a(i.rim_height, -0.3, i.crater_width - edge);
 		i.rim_a = calc_rim_a(i.rim_height, i.crater_width, i.crater_width - edge);
 	}
@@ -49,9 +49,9 @@ function crater_shape(crater, x){
 	const g = crater.floor_height;
 
 	let height = r;
+	height = smax(height, g, 0.03);
 	height = smin(height, p, 0.2);
 	height = smin(height, o, 0.2);
-	height = Math.max(height, g);
 	return height;
 }
 

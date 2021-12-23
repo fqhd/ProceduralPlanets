@@ -13,7 +13,7 @@ export function scale_positions_with_noise(positions){
 
 function get_scale_factor_from_pos(pos){
 	const detail_noise = get_detail_noise(pos, 50, 0.003);
-	const shape_noise = get_shape_noise(pos, 2, 0.03);
+	const shape_noise = get_shape_noise(pos, 4, 0.01);
 	const base = 1;
 
 	return base + shape_noise + detail_noise;

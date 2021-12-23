@@ -8,7 +8,7 @@ import { get_random_point_on_sphere, sigmoid, clamp } from './maths.js';
 const { vec3 } = glMatrix;
 
 export function create_moon_model(gl){
-	const {positions, indices} = generate_sphere(7);
+	const {positions, indices} = generate_sphere(6);
 
 	add_craters_to_sphere(positions);
 	scale_positions_with_noise(positions);
@@ -41,18 +41,18 @@ function create_noise_array(positions, freq){
 	return arr;
 }
 
-const MIN_CRATER_WIDTH = 0.05;
-const MAX_CRATER_WIDTH = 0.35;
+const MIN_CRATER_WIDTH = 0.3;
+const MAX_CRATER_WIDTH = 0.4;
 
 function create_crater_array(){
 	const craters = [];
-	for(let i = 0; i < 100; i++){
-		const crater_width = MIN_CRATER_WIDTH + Math.pow(Math.random(), 6) * (MAX_CRATER_WIDTH - MIN_CRATER_WIDTH);
+	for(let i = 0; i < 15; i++){
+		const crater_width = MIN_CRATER_WIDTH + Math.pow(Math.random(), 4) * (MAX_CRATER_WIDTH - MIN_CRATER_WIDTH);
 		craters.push({
 			crater_width,
 			position: get_random_point_on_sphere(),
 			rim_height: clamp(crater_width * 0.2, 0.025, 0.2),
-			floor_height: -0.005 + (crater_width / MAX_CRATER_WIDTH) * -0.03,
+			floor_height: -0.01 + (crater_width / MAX_CRATER_WIDTH) * -0.03,
 		});
 	}
 	return craters;
