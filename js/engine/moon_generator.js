@@ -26,9 +26,9 @@ function add_craters_to_sphere(positions){
 }
 
 function create_color_mix_factors(positions){
-	let mix_factors = create_warped_mix_values(positions, 0.5);
+	let mix_factors = create_warped_mix_values(positions, 0.2);
 	mix_factors = mix_factors.map(e => Math.pow(e, 1));
-	mix_factors = mix_factors.map(e => sigmoid(e, 30));
+	mix_factors = mix_factors.map(e => sigmoid(e, 100));
 	return mix_factors;
 }
 
