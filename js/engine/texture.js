@@ -2,8 +2,7 @@ import { load_image } from './utils.js';
 
 export async function load_textures(gl){
 	return {
-		normal_map_1: await load_texture_from_file(gl, 'res/textures/normal_map_1.jpg'),
-		normal_map_2: await load_texture_from_file(gl, 'res/textures/normal_map_2.jpg'),
+		normal_map: await load_texture_from_file(gl, 'res/textures/normal_map.jpg'),
 	};
 }
 

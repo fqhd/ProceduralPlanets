@@ -77,7 +77,6 @@ function calc_length_between_two_points_on_sphere(A, B){
 function get_height_from_pos(pos, craters){
 	const base_height = 1;
 	let total_height = 0;
-	let num_craters = 0;
 
 	for(const i of craters){
 		const x = calc_length_between_two_points_on_sphere(i.position, pos);
@@ -85,12 +84,7 @@ function get_height_from_pos(pos, craters){
 		if(x < i.crater_width){ // If point is inside the crater
 			const height = crater_shape(i, x);
 			total_height += height;
-			num_craters++;
 		}
-	}
-
-	if(num_craters){
-		total_height /= num_craters;
 	}
 
 	return base_height + total_height;

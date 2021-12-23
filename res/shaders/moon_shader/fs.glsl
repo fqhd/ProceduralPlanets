@@ -8,13 +8,11 @@
 
 in vec3 pass_normal;
 in vec3 pass_position;
-in float pass_nmap_mix_factor;
 in float pass_color_mix_factor;
 
 out vec4 out_color;
 
-uniform sampler2D normal_map_1;
-uniform sampler2D normal_map_2;
+uniform sampler2D normal_map;
 uniform vec3 obj_color_1;
 uniform vec3 obj_color_2;
 uniform float nmap_strength;
@@ -24,7 +22,7 @@ uniform float blend_sharpness;
 const vec3 light_dir = vec3(0.0, -1.0, -1.0);
 
 // Thanks to Sebastian Lague and Ben Golus for implementing the logic of this triplinar normal map calculation function
-vec3 calc_fragment_normal(sampler2D normal_map) {
+vec3 calc_fragment_normal() {
 	// Sample normal maps(tangent space)
 	vec3 tnormalX = texture(normal_map, vec2(0, 1) - pass_position.zy * texture_scale).rgb * 2.0f - vec3(1.0f);
 	vec3 tnormalY = texture(normal_map, vec2(0, 1) - pass_position.xz * texture_scale).rgb * 2.0f - vec3(1.0f);
@@ -46,15 +44,9 @@ vec3 calc_fragment_normal(sampler2D normal_map) {
 	return normalize(tnormalX.zyx * weight.x + tnormalY.xzy * weight.y + tnormalZ.xyz * weight.z);
 }
 
-vec3 get_nmap_normal(){
-	vec3 normal_1 = calc_fragment_normal(normal_map_1);
-	vec3 normal_2 = calc_fragment_normal(normal_map_2);
-	return mix(normal_1, normal_2, pass_nmap_mix_factor);
-}
-
 vec3 get_strengthened_nmap_normal(){
-	vec3 nmap_normal = get_nmap_normal();
-	return mix(pass_normal, nmap_normal, nmap_strength);
+	vec3 normal = calc_fragment_normal();
+	return mix(pass_normal, normal, nmap_strength);
 }
 
 vec3 get_obj_color(){

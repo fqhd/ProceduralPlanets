@@ -17,7 +17,7 @@ export function scale_positions_with_noise(positions){
 }
 
 function get_scale_factor_from_pos(pos, shape_scale, shape_freq){
-	const detail_noise = get_noise(pos, 50) * 0.003;
+	const detail_noise = get_noise(pos, 10 + Math.random() * 50) * (0.002 + Math.random() * 0.005);
 	const shape_noise = get_noise(pos, shape_freq) * shape_scale;
 	const warp_noise = get_warped_noise(pos, 0.4) * shape_scale;
 

@@ -21,8 +21,7 @@ export async function init_application(gl){
 		skybox,
 		moon: {
 			model: create_moon_model(gl),
-			normal_map_1: textures.normal_map_1,
-			normal_map_2: textures.normal_map_2,
+			normal_map: textures.normal_map,
 			params: get_moon_params(),
 		},
 		camera: create_camera(40, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
@@ -49,6 +48,6 @@ function get_moon_params(){
 		obj_color_2: get_random_color(),
 		nmap_strength: 0.5,
 		texture_scale: 3.5,
-		blend_sharpness: 5.0,		
+		blend_sharpness: 5.0,
 	}
 }

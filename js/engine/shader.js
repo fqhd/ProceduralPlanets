@@ -12,8 +12,7 @@ export function bind_shader_uniforms(gl, shaders){
 	set_uniform_i(gl, skybox_shader, 'cubemap', 0);
 
 	gl.useProgram(moon_shader.program);
-	set_uniform_i(gl, moon_shader, 'normal_map_1', 0);
-	set_uniform_i(gl, moon_shader, 'normal_map_2', 1);
+	set_uniform_i(gl, moon_shader, 'normal_map', 0);
 }
 
 export function set_uniform_f(gl, shader, name, value){

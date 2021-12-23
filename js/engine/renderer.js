@@ -35,8 +35,7 @@ function draw_moon(gl, scene){
 	
 	load_moon_params(gl, shader, moon.params);
 
-	bind_texture(gl, moon.normal_map_1, gl.TEXTURE0);
-	bind_texture(gl, moon.normal_map_2, gl.TEXTURE1);
+	bind_texture(gl, moon.normal_map, gl.TEXTURE0);
 
 	draw_model_indices(gl, moon.model);
 }
