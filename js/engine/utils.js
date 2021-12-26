@@ -58,3 +58,38 @@ export function get_warped_noise(pos, freq) {
 
     return get_noise(qr, 1);
 }
+
+export function get_prime_factors(n) {
+	const factors = [];
+	let divisor = 2;
+
+	while (n >= 2) {
+		if (n % divisor == 0) {
+			factors.push(divisor);
+			n = n / divisor;
+		} else {
+			divisor++;
+		}
+	}
+
+	return factors;
+}
+
+export function get_resolution_from_num(n){
+	const factors = get_prime_factors(n);
+
+	factors.sort();
+
+	let width = 1;
+	let height = 1;
+
+	for(let i = factors.length - 1; i >= 0; i--){
+		if(width < height){
+			width *= factors[i];
+		}else{
+			height *= factors[i];
+		}
+	}
+
+	return {width, height};
+}

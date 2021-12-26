@@ -1,4 +1,4 @@
-import { set_uniform_mat4, set_uniform_vec3, set_uniform_f } from './shader.js';
+import { set_uniform_mat4, set_uniform_i } from './shader.js';
 import { update_camera } from './camera.js';
 
 const {mat4} = glMatrix;
@@ -32,29 +32,17 @@ function draw_moon(gl, scene){
 	gl.useProgram(shader.program);
 
 	load_camera_to_shader(gl, shader, camera);
+
+	bind_sphere_texture(gl, moon.sphere_texture, shader);
 	
-	load_moon_params(gl, shader, moon.params);
-
-	bind_texture(gl, moon.normal_map, gl.TEXTURE0);
-
 	draw_model_indices(gl, moon.model);
 }
 
-function load_moon_params(gl, shader, moon_params){
-	const { obj_color_1, obj_color_2, nmap_strength,
-		blend_sharpness, texture_scale } = moon_params;
-
-	set_uniform_vec3(gl, shader, 'obj_color_1', obj_color_1);
-	set_uniform_vec3(gl, shader, 'obj_color_2', obj_color_2);
-
-	set_uniform_f(gl, shader, 'nmap_strength', nmap_strength);
-	set_uniform_f(gl, shader, 'blend_sharpness', blend_sharpness);
-	set_uniform_f(gl, shader, 'texture_scale', texture_scale);
-}
-
-function bind_texture(gl, texture, attachment){
-	gl.activeTexture(attachment);
-	gl.bindTexture(gl.TEXTURE_2D, texture);
+function bind_sphere_texture(gl, texture, shader){
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_2D, texture.id);
+	set_uniform_i(gl, shader, 'sphere_texture_width', texture.width);
+	set_uniform_i(gl, shader, 'sphere_texture_height', texture.height);
 }
 
 function draw_skybox(gl, scene){

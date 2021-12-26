@@ -1,20 +1,27 @@
 #version 300 es
 
 layout (location = 0) in vec3 aPosition;
-layout (location = 1) in vec3 aNormal;
-layout (location = 2) in float color_mix_factor;
 
-out vec3 pass_normal;
-out vec3 pass_position;
-out float pass_color_mix_factor;
+out vec3 vPos;
 
 uniform mat4 projection;
 uniform mat4 view;
+uniform sampler2D sphere_texture;
+uniform int sphere_texture_width;
+uniform int sphere_texture_height;
 
-void main(){
-	gl_PointSize = 3.0;
-	gl_Position = projection * view * vec4(aPosition, 1.0);
-	pass_normal = aNormal;
-	pass_position = aPosition;
-	pass_color_mix_factor = color_mix_factor;
+vec3 get_vertex(int index) {
+	int u = index % sphere_texture_width;
+	int v = index / sphere_texture_width;
+
+	ivec2 uv = ivec2(u, v);
+
+	return texelFetch(sphere_texture, uv, 0).xyz;
+}
+
+void main() {
+	vec3 pos = get_vertex(gl_VertexID);
+	gl_Position = projection * view * vec4(pos, 1.0);
+
+	vPos = pos;
 }

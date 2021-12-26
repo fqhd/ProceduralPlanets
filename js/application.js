@@ -3,9 +3,8 @@ import { draw_scene, init_gl_state } from './engine/renderer.js';
 import { create_camera } from './engine/camera.js';
 import { init_controls, update_controller } from './controller.js';
 import { load_skybox } from './engine/skybox.js';
-import { create_moon_model } from './engine/moon_generator.js';
+import { create_moon } from './engine/moon_generator.js';
 import { load_textures } from './engine/texture.js';
-import { get_random_color } from './engine/utils.js';
 
 export async function init_application(gl){
 	noise.seed(Math.random());
@@ -19,11 +18,7 @@ export async function init_application(gl){
 	const scene = {
 		shaders,
 		skybox,
-		moon: {
-			model: create_moon_model(gl),
-			normal_map: textures.normal_map,
-			params: get_moon_params(),
-		},
+		moon: create_moon(gl),
 		camera: create_camera(40, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
 
@@ -40,14 +35,4 @@ export function update(){
 
 export function draw(gl, scene){
 	draw_scene(gl, scene);
-}
-
-function get_moon_params(){
-	return {
-		obj_color_1: get_random_color(),
-		obj_color_2: get_random_color(),
-		nmap_strength: 0.5,
-		texture_scale: 3.5,
-		blend_sharpness: 5.0,
-	}
 }

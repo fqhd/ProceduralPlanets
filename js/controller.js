@@ -15,10 +15,6 @@ export function init_controls(s){
 }
 
 export function update_controller(){
-	const moon_params = scene.moon.params;
-	moon_params.texture_scale = (nmap_scale_slider.value / 100) * 100;
-	moon_params.blend_sharpness = (nmap_sharpness_slider.value / 100) * 50;
-	moon_params.nmap_strength = nmap_strength_slider.value / 100;
 }
 
 function on_mouse_move(event){
