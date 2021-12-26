@@ -1,12 +1,6 @@
 import { load_image, get_resolution_from_num } from './utils.js';
 
-export async function load_textures(gl){
-	return {
-		normal_map: await load_texture_from_file(gl, 'res/textures/normal_map.jpg'),
-	};
-}
-
-export function create_sphere_texture(gl, data){
+export function load_texture_from_data(gl, data){
 	const {width, height} = get_resolution_from_num(data.length/3);
 
 	const max_texture_size = gl.getParameter(gl.MAX_TEXTURE_SIZE);
@@ -31,7 +25,7 @@ export function create_sphere_texture(gl, data){
 	}
 }
 
-async function load_texture_from_file(gl, path_to_file){
+export async function load_texture_from_file(gl, path_to_file){
 	const texture = gl.createTexture();
 	gl.bindTexture(gl.TEXTURE_2D, texture);
 

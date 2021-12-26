@@ -1,9 +1,13 @@
 #version 300 es
 
-out vec3 vPos;
+#if (GL_FRAGMENT_PRECISION_HIGH)
+	precision highp float;
+#else
+	precision mediump float;
+#endif
 
-uniform mat4 projection;
-uniform mat4 view;
+out float scale;
+
 uniform sampler2D sphere_texture;
 uniform int sphere_texture_width;
 uniform int sphere_texture_height;
@@ -17,8 +21,8 @@ vec3 get_vertex(int index) {
 	return texelFetch(sphere_texture, uv, 0).xyz;
 }
 
+
 void main() {
-	vec3 pos = get_vertex(gl_VertexID);
-	gl_Position = projection * view * vec4(pos, 1.0);
-	vPos = pos;
+	// vec3 pos = get_vertex(gl_VertexID);
+	scale = 1.0;
 }

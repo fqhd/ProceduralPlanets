@@ -1,20 +1,3 @@
-export async function load_shaders(gl){
-	return {
-		skybox_shader: await load_shader_from_dir(gl, 'res/shaders/skybox_shader/'),
-		moon_shader: await load_shader_from_dir(gl, 'res/shaders/moon_shader/'),
-	};
-}
-
-export function bind_shader_uniforms(gl, shaders){
-	const { moon_shader, skybox_shader } = shaders;
-
-	gl.useProgram(skybox_shader.program);
-	set_uniform_i(gl, skybox_shader, 'cubemap', 0);
-
-	gl.useProgram(moon_shader.program);
-	set_uniform_i(gl, moon_shader, 'normal_map', 0);
-}
-
 export function set_uniform_f(gl, shader, name, value){
 	if(!shader.uniform_locations[name]){
 		shader.uniform_locations[name] = gl.getUniformLocation(shader.program, name);
@@ -43,7 +26,7 @@ export function set_uniform_mat4(gl, shader, name, value){
 	gl.uniformMatrix4fv(shader.uniform_locations[name], false, value);
 }
 
-async function load_shader_from_dir(gl, shader_path){
+export async function load_shader_from_dir(gl, shader_path){
     // Fetching shader files from path(directory)
     let responses = await Promise.all([
         fetch(shader_path+'vs.glsl'),
