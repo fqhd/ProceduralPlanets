@@ -1,8 +1,5 @@
 export function create_framebuffer(gl, width, height){
 	const texture = create_framebuffer_texture(gl, width, height);
-	if(!gl.getExtension('EXT_color_buffer_float')){
-		console.error('Does not support color buffer rendering extension :(');
-	}
 	const id = gl.createFramebuffer();
 	gl.bindFramebuffer(gl.FRAMEBUFFER, id);
 	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture.id, 0);
@@ -26,6 +23,9 @@ export function bind_default_framebuffer(gl){
 function create_framebuffer_texture(gl, width, height){
 	const id = gl.createTexture();
 	gl.bindTexture(gl.TEXTURE_2D, id);
+	if(!gl.getExtension('EXT_color_buffer_float')){
+		console.error('Does not support color buffer rendering extension :(');
+	}
 	gl.texStorage2D(gl.TEXTURE_2D, 1, gl.R32F, width, height);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);

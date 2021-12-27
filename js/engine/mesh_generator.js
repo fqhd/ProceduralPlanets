@@ -4,15 +4,17 @@ export function create_quad(gl){
 	const buffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 	const positions = [
-		0, 0,
-		0, 1,
+		-1, -1,
+		-1, 1,
 		1, 1,
-		1, 0,
+		1, -1,
 	];
+	gl.enableVertexAttribArray(0);
+	gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 8, 0);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
 	const indices = [
-		0, 1, 2, 0, 2, 3
+		0, 2, 1, 0, 3, 2
 	];
 	const indices_buffer = create_indices_buffer(gl, indices);
 	return {

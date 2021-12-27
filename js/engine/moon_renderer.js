@@ -29,7 +29,7 @@ function first_pass(gl){
 	bind_framebuffer(gl, framebuffer);
 	gl.clear(gl.COLOR_BUFFER_BIT);
 	gl.useProgram(first_pass_shader.program);
-	load_sphere_texture(gl, first_pass_shader);
+	bind_texture(gl, gl.TEXTURE0, sphere_texture.id);
 	draw_model_indices(gl, quad);
 	bind_default_framebuffer(gl);
 }
@@ -37,15 +37,9 @@ function first_pass(gl){
 function second_pass(gl, scene){
 	gl.useProgram(second_pass_shader.program);
 	load_camera_to_shader(gl, second_pass_shader, scene.camera);
-	load_sphere_texture(gl, second_pass_shader);
-	// bind_scale_factor_texture(gl, moon.scale_factor_texture, shader);
-	draw_indices(gl, sphere_indices_buffer);
-}
-
-function load_sphere_texture(gl, shader){
 	bind_texture(gl, gl.TEXTURE0, sphere_texture.id);
-	set_uniform_i(gl, shader, 'sphere_texture_width', sphere_texture.width);
-	set_uniform_i(gl, shader, 'sphere_texture_height', sphere_texture.height);
+	bind_texture(gl, gl.TEXTURE1, framebuffer.texture.id);
+	draw_indices(gl, sphere_indices_buffer);
 }
 
 function init_sphere(gl){
@@ -65,4 +59,8 @@ async function init_first_pass_shader(gl){
 
 async function init_second_pass_shader(gl){
 	second_pass_shader = await load_shader_from_dir(gl, 'res/shaders/second_pass_shader/');
+	gl.useProgram(second_pass_shader.program);
+	set_uniform_i(gl, second_pass_shader, 'sphere_texture', 0);
+	set_uniform_i(gl, second_pass_shader, 'scale_texture', 1);
+	set_uniform_i(gl, second_pass_shader, 'texture_width', sphere_texture.width);
 }
