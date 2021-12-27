@@ -26,7 +26,6 @@ export async function init_moon_renderer(gl){
 function init_scale_factor_texture(gl){
 	scale_factor_texture = gl.createTexture();
 	gl.bindTexture(gl.TEXTURE_2D, scale_factor_texture);
-	// gl.texImage2D(gl.TEXTURE_2D, 0, gl.R8, sphere_texture.width, sphere_texture.height, 0, gl.RED, gl.UNSIGNED_BYTE, null);
 	gl.texStorage2D(gl.TEXTURE_2D, 1, gl.R32F, sphere_texture.width, sphere_texture.height);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
@@ -35,6 +34,9 @@ function init_scale_factor_texture(gl){
 }
 
 function init_framebuffer(gl){
+	if(!gl.getExtension('EXT_color_buffer_float')){
+		console.error('Does not support color buffer rendering extension :(');
+	}
 	framebuffer = gl.createFramebuffer();
 	gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, scale_factor_texture, 0);
@@ -74,7 +76,7 @@ export function draw_moon(gl, scene){
 function first_pass(gl){
 	gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 	gl.clear(gl.COLOR_BUFFER_BIT);
-	gl.viewport(0, 0, scale_factor_texture.width, scale_factor_texture.height);
+	gl.viewport(0, 0, sphere_texture.width, sphere_texture.height);
 
 	gl.useProgram(scale_factor_shader.program);
 
