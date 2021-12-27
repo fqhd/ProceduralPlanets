@@ -1,6 +1,7 @@
 import { load_image } from './utils.js';
 import { load_shader_from_dir, set_uniform_mat4 } from './shader.js';
 import { draw_model_indices } from './base_renderer.js';
+import { create_indices_buffer } from './mesh_generator.js';
 
 const {mat4} = glMatrix;
 
@@ -59,9 +60,6 @@ function init_cube_model(gl){
 	];
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-	// Creating the indices buffer
-	const indices_buff = gl.createBuffer();
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indices_buff);
 	const indices = [
 		0, 1, 2, 0, 2, 3,
 		4, 5, 1, 4, 1, 0,
@@ -70,12 +68,11 @@ function init_cube_model(gl){
 		7, 6, 5, 7, 5, 4,
 		4, 0, 7, 7, 0, 3,
 	];
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indices), gl.STATIC_DRAW);
+	const indices_buffer = create_indices_buffer(gl, indices);
 
 	return {
 		vao,
-		indices_buff,
-		num_indices: indices.length,
+		indices_buffer,
 	};
 }
 
