@@ -75,21 +75,23 @@ export function get_prime_factors(n) {
 	return factors;
 }
 
-export function get_resolution_from_num(n){
-	const factors = get_prime_factors(n);
-
-	factors.sort();
-
-	let width = 1;
-	let height = 1;
-
-	for(let i = factors.length - 1; i >= 0; i--){
-		if(width < height){
-			width *= factors[i];
-		}else{
-			height *= factors[i];
+export function fill_arr_to_length(arr, len){
+	const diff = len - arr.length;
+	if(len > 0){
+		for(let i = 0; i < diff; i++){
+			arr.push(0);
 		}
 	}
+}
 
-	return {width, height};
+export function get_resolution_from_num(n){
+	for(let i = 0; i < n; i++){
+		// const num_pow_2 = Math.pow(2, i);
+		if(Math.pow(i, 2) >= n){
+			return {
+				width: i,
+				height: i,
+			}
+		}
+	}
 }

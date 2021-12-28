@@ -1,18 +1,15 @@
-import { load_image, get_resolution_from_num } from './utils.js';
+import { load_image, get_resolution_from_num, fill_arr_to_length } from './utils.js';
 
 export function load_texture_from_data(gl, data){
-	const {width, height} = get_resolution_from_num(data.length/3);
-
-	const max_texture_size = gl.getParameter(gl.MAX_TEXTURE_SIZE);
-	console.log('MAX TEXTURE SIZE: ' + max_texture_size);
+	const our_arr = [...data];
+	const {width, height} = get_resolution_from_num(our_arr.length/3);
+	fill_arr_to_length(our_arr, width*height*3);
 
 	console.log(`positions texture: ${width}x${height}`);
 
 	const id = gl.createTexture();
 	gl.bindTexture(gl.TEXTURE_2D, id);
-
-	gl.bindTexture(gl.TEXTURE_2D, id);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB32F, width, height, 0, gl.RGB, gl.FLOAT, new Float32Array(data));
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB32F, width, height, 0, gl.RGB, gl.FLOAT, new Float32Array(our_arr));
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
@@ -26,12 +23,15 @@ export function load_texture_from_data(gl, data){
 }
 
 export function create_indices_texture(gl, indices){
-	const {width, height} = get_resolution_from_num(indices.length);
+	const our_arr = [...indices];
+	const {width, height} = get_resolution_from_num(our_arr.length);
+	fill_arr_to_length(our_arr, width*height*3);
+
 	console.log(`indices texture: ${width}x${height}`);
 
 	const id = gl.createTexture();
 	gl.bindTexture(gl.TEXTURE_2D, id);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.R32I, width, height, 0, gl.RED_INTEGER, gl.INT, new Int32Array(indices));
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.R32I, width, height, 0, gl.RED_INTEGER, gl.INT, new Int32Array(our_arr));
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
