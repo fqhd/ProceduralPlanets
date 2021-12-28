@@ -14,5 +14,5 @@ uniform sampler2D sphere_texture;
 
 void main() {
 	vec3 pos = texture(sphere_texture, uv).rgb;
-	scale = 1.0;
+	scale = 1.0 + sin(pos.y * 20.0) * 0.05;
 }
