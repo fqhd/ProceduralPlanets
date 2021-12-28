@@ -115,3 +115,34 @@ function get_icosahedron_indices(){
 
 	return indices;
 }
+
+export function get_neighbouring_indices_array(indices, num_positions){
+	const indices_map = new Map();
+	for(let i = 0; i < indices.length; i+=3){
+		const a = indices[i];
+		const b = indices[i+1];
+		const c = indices[i+2];
+
+		add_neighbouring_indices(indices_map, a, b, c);
+		add_neighbouring_indices(indices_map, b, c, a);
+		add_neighbouring_indices(indices_map, c, a, b);
+	}
+
+	const arr = [];
+	for(let i = 0; i < num_positions; i++){
+		arr.push(...indices_map.get(i));
+	}
+
+	return arr;
+}
+
+function add_neighbouring_indices(indices_map, a, b, c){
+	const index = indices_map.get(a);
+	if(index){
+		if(index.length < 10){
+			index.push(b, c);
+		}
+	}else{
+		indices_map.set(a, [b, c]);
+	}
+}

@@ -6,13 +6,32 @@ export function load_texture_from_data(gl, data){
 	const max_texture_size = gl.getParameter(gl.MAX_TEXTURE_SIZE);
 	console.log('MAX TEXTURE SIZE: ' + max_texture_size);
 
-	console.log({width, height});
+	console.log(`positions texture: ${width}x${height}`);
 
 	const id = gl.createTexture();
 	gl.bindTexture(gl.TEXTURE_2D, id);
 
 	gl.bindTexture(gl.TEXTURE_2D, id);
 	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB32F, width, height, 0, gl.RGB, gl.FLOAT, new Float32Array(data));
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+
+	return {
+		width,
+		height,
+		id,
+	}
+}
+
+export function create_indices_texture(gl, indices){
+	const {width, height} = get_resolution_from_num(indices.length);
+	console.log(`indices texture: ${width}x${height}`);
+
+	const id = gl.createTexture();
+	gl.bindTexture(gl.TEXTURE_2D, id);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.R32I, width, height, 0, gl.RED_INTEGER, gl.INT, new Int32Array(indices));
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
