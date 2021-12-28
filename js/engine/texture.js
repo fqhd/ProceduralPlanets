@@ -25,7 +25,7 @@ export function load_texture_from_data(gl, data){
 export function create_indices_texture(gl, indices){
 	const our_arr = [...indices];
 	const {width, height} = get_resolution_from_num(our_arr.length);
-	fill_arr_to_length(our_arr, width*height*3);
+	fill_arr_to_length(our_arr, width*height);
 
 	console.log(`indices texture: ${width}x${height}`);
 

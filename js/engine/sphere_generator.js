@@ -14,7 +14,7 @@ export function generate_sphere(subdivision_level){
 		}
 	}
 
-	console.log('num positions: ' + positions.length);
+	console.log('num positions: ' + positions.length/3);
 
 	normalize_positions(positions);
 	return { positions, indices };
