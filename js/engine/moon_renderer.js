@@ -1,8 +1,7 @@
-import { set_uniform_i } from './shader.js';
+import { load_shader_from_dir, set_uniform_f, set_uniform_i } from './shader.js';
 import { generate_sphere, get_neighbouring_indices_array } from './sphere_generator.js';
 import { load_texture_from_data, create_indices_texture } from './texture.js';
 import { draw_model_indices, load_camera_to_shader, bind_texture, draw_indices } from './base_renderer.js';
-import { load_shader_from_dir } from './shader.js';
 import { create_quad, create_indices_buffer } from './mesh_generator.js';
 import { create_framebuffer, bind_default_framebuffer, bind_framebuffer } from './framebuffer.js';
 
@@ -22,15 +21,16 @@ export async function init_moon_renderer(gl){
 }
 
 export function draw_moon(gl, scene){
-	first_pass(gl);
+	first_pass(gl, scene);
 	second_pass(gl, scene);
 }
 
-function first_pass(gl){
+function first_pass(gl, scene){
 	bind_framebuffer(gl, framebuffer);
 	gl.clear(gl.COLOR_BUFFER_BIT);
 	gl.useProgram(first_pass_shader.program);
 	bind_texture(gl, gl.TEXTURE0, sphere_texture.id);
+	load_moon_params(gl, scene.moon);
 	draw_model_indices(gl, quad);
 	bind_default_framebuffer(gl);
 }
@@ -44,8 +44,12 @@ function second_pass(gl, scene){
 	draw_indices(gl, sphere_indices_buffer);
 }
 
+function load_moon_params(gl, moon){
+	set_uniform_f(gl, first_pass_shader, 'test_value', moon.test_value);
+}
+
 function init_sphere(gl){
-	const { positions, indices } = generate_sphere(6);
+	const { positions, indices } = generate_sphere(8);
 	sphere_indices_buffer = create_indices_buffer(gl, indices);
 	sphere_texture = load_texture_from_data(gl, positions);
 	const neighbouring_indices = get_neighbouring_indices_array(indices, positions.length/3);

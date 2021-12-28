@@ -11,8 +11,9 @@ in vec2 uv;
 out float scale;
 
 uniform sampler2D sphere_texture;
+uniform float test_value;
 
 void main() {
 	vec3 pos = texture(sphere_texture, uv).rgb;
-	scale = 1.0 + sin(pos.y * 20.0) * 0.05;
+	scale = 1.0 + sin(pos.y * test_value) * 0.05;
 }

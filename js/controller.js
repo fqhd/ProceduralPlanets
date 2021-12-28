@@ -1,9 +1,9 @@
 let scene;
 let is_mouse_down = false;
 
-const nmap_strength_slider = document.getElementById('nmap-strength');
-const nmap_scale_slider = document.getElementById('nmap-scale');
-const nmap_sharpness_slider = document.getElementById('nmap-sharpness');
+const sliders = {
+	test_value: document.getElementById('test-value'),
+};
 
 export function init_controls(s){
 	scene = s;
@@ -14,7 +14,10 @@ export function init_controls(s){
 	canvas.addEventListener('mouseup', () => is_mouse_down = false);
 }
 
-export function update_controller(){
+export function update_moon(){
+	const moon = scene.moon;
+	
+	moon.test_value = sliders.test_value.value * 0.2;
 }
 
 function on_mouse_move(event){
