@@ -14,10 +14,10 @@ export function init_controls(s){
 	canvas.addEventListener('mouseup', () => is_mouse_down = false);
 }
 
-export function update_moon(){
-	const moon = scene.moon;
+export function update_planet_params(){
+	const planet_params = scene.planet_params;
 	
-	moon.test_value = sliders.test_value.value * 0.2;
+	planet_params.test_value = sliders.test_value.value * 0.2;
 }
 
 function on_mouse_move(event){

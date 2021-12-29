@@ -13,14 +13,14 @@ let second_pass_shader;
 let framebuffer;
 let quad;
 
-export async function init_moon_renderer(gl){
+export async function init_planet_renderer(gl){
 	init_sphere(gl);
 	await init_shaders(gl);
 	framebuffer = create_framebuffer(gl, sphere_texture.width, sphere_texture.height);
 	quad = create_quad(gl);
 }
 
-export function draw_moon(gl, scene){
+export function draw_planet(gl, scene){
 	first_pass(gl, scene);
 	second_pass(gl, scene);
 }
@@ -30,7 +30,7 @@ function first_pass(gl, scene){
 	gl.clear(gl.COLOR_BUFFER_BIT);
 	gl.useProgram(first_pass_shader.program);
 	bind_texture(gl, gl.TEXTURE0, sphere_texture.id);
-	load_moon_params(gl, scene.moon);
+	load_planet_params(gl, scene.planet_params);
 	draw_model_indices(gl, quad);
 	bind_default_framebuffer(gl);
 }
@@ -44,8 +44,8 @@ function second_pass(gl, scene){
 	draw_indices(gl, sphere_indices_buffer);
 }
 
-function load_moon_params(gl, moon){
-	set_uniform_f(gl, first_pass_shader, 'test_value', moon.test_value);
+function load_planet_params(gl, planet_params){
+	set_uniform_f(gl, first_pass_shader, 'test_value', planet_params.test_value);
 }
 
 function init_sphere(gl){
