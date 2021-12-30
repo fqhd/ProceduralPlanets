@@ -11,12 +11,7 @@ in vec2 uv;
 out float scale;
 
 uniform sampler2D sphere_texture;
-uniform sampler2D noise_texture;
 uniform float test_value;
-
-const float texture_scale = 1.0;
-const float blend_sharpness = 5.5;
-
 
 // Thanks to Patricio Gonzalez Vivo for making this noise function
 // Source code can be found here: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
@@ -46,9 +41,10 @@ float noise(vec3 p){
     return o4.y * d.y + o4.x * (1.0 - d.y);
 }
 
+
+
 void main() {
 	vec3 pos = texture(sphere_texture, uv).rgb;
-	float n = noise(vec3(test_value) + pos * 10.0);
-	// scale = 1.0 + sin(pos.y * test_value) * 0.05;
-	scale = 1.0 + n;
+
+	scale = 1.0;
 }

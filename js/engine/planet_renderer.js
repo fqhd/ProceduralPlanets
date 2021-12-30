@@ -1,13 +1,12 @@
 import { load_shader_from_dir, set_uniform_f, set_uniform_i } from './shader.js';
 import { generate_sphere, get_neighbouring_indices_array } from './sphere_generator.js';
-import { load_texture_from_data, create_indices_texture, create_noise_texture } from './texture.js';
+import { load_texture_from_data, create_indices_texture } from './texture.js';
 import { draw_model_indices, load_camera_to_shader, bind_texture, draw_indices } from './base_renderer.js';
 import { create_quad, create_indices_buffer } from './mesh_generator.js';
 import { create_framebuffer, bind_default_framebuffer, bind_framebuffer } from './framebuffer.js';
 
 let sphere_texture;
 let indices_texture;
-let noise_texture;
 let sphere_indices_buffer;
 let first_pass_shader;
 let second_pass_shader;
@@ -31,7 +30,6 @@ function first_pass(gl, scene){
 	gl.clear(gl.COLOR_BUFFER_BIT);
 	gl.useProgram(first_pass_shader.program);
 	bind_texture(gl, gl.TEXTURE0, sphere_texture.id);
-	bind_texture(gl, gl.TEXTURE1, noise_texture.id);
 	load_planet_params(gl, scene.planet_params);
 	draw_model_indices(gl, quad);
 	bind_default_framebuffer(gl);
@@ -65,10 +63,6 @@ async function init_shaders(gl){
 
 async function init_first_pass_shader(gl){
 	first_pass_shader = await load_shader_from_dir(gl, 'res/shaders/first_pass_shader/');
-	noise_texture = await create_noise_texture(gl, 256);
-	gl.useProgram(first_pass_shader.program);
-	set_uniform_i(gl, first_pass_shader, 'sphere_texture', 0);
-	set_uniform_i(gl, first_pass_shader, 'noise_texture', 1);
 }
 
 async function init_second_pass_shader(gl){
