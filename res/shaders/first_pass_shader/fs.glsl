@@ -43,18 +43,27 @@ float noise(vec3 p){
 
 float fractal_noise(vec3 pos){
 	float total = 0.0;
+	float amplitude = 1.0;
+	float frequency = 1.0;
+
 	for(int i = 1; i <= 5; i++){
-		total += noise(pos * float(i)) * float(i)/5.0;
+		total += noise(pos * frequency) * amplitude;
+		amplitude *= 0.5;
+		frequency *= 2.0;
 	}
-	return total/2.0;
+	return total;
 }
 
-float warped_noise(vec3 pos, float factor){
-	return fractal_noise(pos + vec3(fractal_noise(pos)) * factor);
-}
+// float warped_noise(vec3 pos, float factor){
+// 	return fractal_noise(pos + vec3(fractal_noise(pos)) * factor);
+// }
+
+// float rigid_noise(vec3 pos, float factor){
+// 	return 1.0 - abs(warped_noise(pos, factor));
+// }
 
 void main() {
 	vec3 pos = texture(sphere_texture, uv).rgb;
 
-	scale = 1.0 + warped_noise(pos, 1.0) * 0.1;
+	scale = 1.0 + fractal_noise(pos + vec3(test_value) * 0.2) * 0.1;
 }
