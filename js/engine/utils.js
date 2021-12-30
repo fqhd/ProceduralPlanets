@@ -1,5 +1,3 @@
-const {vec3} = glMatrix;
-
 export function get_random_color(){
 	const r = Math.random();
 	const g = Math.random();

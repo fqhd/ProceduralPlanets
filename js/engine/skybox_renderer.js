@@ -3,7 +3,7 @@ import { load_shader_from_dir, set_uniform_mat4 } from './shader.js';
 import { draw_model_indices } from './base_renderer.js';
 import { create_indices_buffer } from './mesh_generator.js';
 
-const {mat4} = glMatrix;
+const { mat4 } = glMatrix;
 
 let model;
 let texture;

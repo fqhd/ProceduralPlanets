@@ -1,5 +1,5 @@
 // Icosphere generation inspired by Andreas Kahler
-const {vec3} = glMatrix;
+const { vec3 } = glMatrix;
 
 export function generate_sphere(subdivision_level){
 	const positions = get_icosahedron_vertices();

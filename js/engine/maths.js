@@ -1,4 +1,4 @@
-const {vec3} = glMatrix;
+const { vec3 } = glMatrix;
 
 export function deg_to_rad(degrees) {
 	return degrees * (Math.PI / 180);
