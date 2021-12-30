@@ -11,6 +11,7 @@ in vec2 uv;
 out float scale;
 
 uniform sampler2D sphere_texture;
+uniform float test_value;
 
 // Thanks to Patricio Gonzalez Vivo for making this noise function
 // Source code can be found here: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
@@ -48,8 +49,12 @@ float fractal_noise(vec3 pos){
 	return total/2.0;
 }
 
+float warped_noise(vec3 pos, float factor){
+	return fractal_noise(pos + vec3(fractal_noise(pos)) * factor);
+}
+
 void main() {
 	vec3 pos = texture(sphere_texture, uv).rgb;
 
-	scale = 1.0 + fractal_noise(pos * 2.0) * 0.1;
+	scale = 1.0 + warped_noise(pos, 1.0) * 0.1;
 }
