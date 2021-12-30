@@ -62,3 +62,33 @@ export async function load_texture_from_file(gl, path_to_file){
 		height: image.height
 	};
 }
+
+export async function create_noise_texture(gl, width){
+	console.log(`noise texture: ${width}x${width}`);
+	
+	const noise_arr = [];
+
+	for(let y = 0; y < width; y++){
+		for(let x = 0; x < width; x++){
+			const noise_factor = noise.perlin2(x/width, y/width);
+			noise_arr.push(noise_factor);
+		}
+	}
+
+	if(!gl.getExtension('EXT_color_buffer_float')){
+		console.error('Does not support color buffer rendering extension :(');
+	}
+	const id = gl.createTexture();
+	gl.bindTexture(gl.TEXTURE_2D, id);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.R32F, width, width, 0, gl.RED, gl.FLOAT, new Float32Array(noise_arr));
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+
+	return {
+		id,
+		width,
+		height: width,
+	};
+}
