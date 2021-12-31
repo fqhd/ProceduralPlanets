@@ -49,10 +49,12 @@ function load_planet_params(gl, planet_params){
 	set_uniform_f(gl, first_pass_shader, 'ocean_depth', planet_params.ocean_depth);
 	set_uniform_f(gl, first_pass_shader, 'ocean_floor', planet_params.ocean_floor);
 	set_uniform_f(gl, first_pass_shader, 'mountain_height', planet_params.mountain_height);
+	set_uniform_f(gl, first_pass_shader, 'mountain_frequency', planet_params.mountain_frequency);
+	set_uniform_f(gl, first_pass_shader, 'mountain_scale', planet_params.mountain_scale);
 }
 
 function init_sphere(gl){
-	const { positions, indices } = generate_sphere(6);
+	const { positions, indices } = generate_sphere(7);
 	sphere_indices_buffer = create_indices_buffer(gl, indices);
 	sphere_texture = load_texture_from_data(gl, positions);
 	const neighbouring_indices = get_neighbouring_indices_array(indices, positions.length/3);

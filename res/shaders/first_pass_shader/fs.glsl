@@ -15,9 +15,13 @@ uniform float ocean_size;
 uniform float ocean_depth;
 uniform float ocean_floor;
 uniform float mountain_height;
+uniform float mountain_frequency;
+uniform float mountain_scale;
 
 const float MIN_OCEAN_FLOOR = -0.8;
 const float MAX_OCEAN_DEPTH = 5.0;
+const float MAX_MOUNTAIN_FREQUENCY = 2.0;
+const float MAX_MOUNTAIN_HEIGHT = 1.0;
 
 // Thanks to Patricio Gonzalez Vivo for making this noise function
 // Source code can be found here: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
@@ -47,14 +51,9 @@ float noise(vec3 p){
     return o4.y * d.y + o4.x * (1.0 - d.y);
 }
 
-float sigmoid(float x){
-	const float e = 0.577215665;
-	return 1.0 / (1.0 + pow(e, -((x - 0.5) * 20.0)));
-}
-
 float fractal_noise(vec3 pos){
 	float total = 0.0;
-	float amplitude = 1.0;
+	float amplitude = 0.5;
 	float frequency = 1.0;
 
 	for(int i = 1; i <= 5; i++){
@@ -65,12 +64,11 @@ float fractal_noise(vec3 pos){
 	return total;
 }
 
-float warped_noise(vec3 pos, float factor){
-	return fractal_noise(pos + vec3(fractal_noise(pos + vec3(factor))));
-}
-
 float ridge_noise(vec3 pos){
-	return sigmoid(abs(fractal_noise(pos)));
+	float func1 = noise(pos);
+	float func2 = 1.0 - noise(pos);
+	float r = min(func1, func2) * 2.0;
+	return r - fractal_noise(pos) * 0.3;
 }
 
 /*
@@ -97,18 +95,26 @@ float smoothMax(float a, float b, float k) {
 
 float planet_shape(vec3 pos){
 	// Planet shape
-	float height = fractal_noise(pos * 2.0) * 0.05;
+	float height = fractal_noise(pos * 4.0) * 0.2;
+
+	// Mountains
+	float mountain_noise = ridge_noise(pos * mountain_frequency * 10.0);
+	mountain_noise -= 1.0 - mountain_height;
+	mountain_noise *= mountain_scale * MAX_MOUNTAIN_HEIGHT;
+	mountain_noise = max(mountain_noise, 0.0);
+	height += mountain_noise;
 
 	// Ocean
-	float ocean_noise = fractal_noise(pos * 2.0) * -0.5;
-	ocean_noise += ocean_size;
+	float ocean_noise = fractal_noise(pos * 2.0);
+	ocean_noise -= ocean_size;
 	if(ocean_noise > 0.0){
 		ocean_noise = 0.0;
 	}
 	ocean_noise *= ocean_depth * MAX_OCEAN_DEPTH;
-	ocean_noise = max(ocean_noise, MIN_OCEAN_FLOOR * ocean_floor);
+	height += ocean_noise;
+	height = max(height, MIN_OCEAN_FLOOR * (1.0 - ocean_floor));
 
-	return height + ocean_noise;
+	return height;
 }
 
 void main() {

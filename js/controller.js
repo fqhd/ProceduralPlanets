@@ -6,6 +6,8 @@ const sliders = {
 	ocean_depth: document.getElementById('ocean-depth'),
 	ocean_floor: document.getElementById('ocean-floor'),
 	mountain_height: document.getElementById('mountain-height'),
+	mountain_frequency: document.getElementById('mountain-frequency'),
+	mountain_scale: document.getElementById('mountain-scale'),
 };
 
 export function init_controls(s){
@@ -25,6 +27,8 @@ export function update_planet_params(){
 	planet_params.ocean_depth = sliders.ocean_depth.value * 0.01;
 	planet_params.ocean_floor = sliders.ocean_floor.value * 0.01;
 	planet_params.mountain_height = sliders.mountain_height.value * 0.01;
+	planet_params.mountain_frequency = sliders.mountain_frequency.value * 0.01;
+	planet_params.mountain_scale = sliders.mountain_scale.value * 0.01;
 }
 
 function on_mouse_move(event){
