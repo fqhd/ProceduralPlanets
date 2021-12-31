@@ -16,6 +16,9 @@ uniform float ocean_depth;
 uniform float ocean_floor;
 uniform float mountain_height;
 
+const float MIN_OCEAN_FLOOR = -0.8;
+const float MAX_OCEAN_DEPTH = 5.0;
+
 // Thanks to Patricio Gonzalez Vivo for making this noise function
 // Source code can be found here: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
 // Github of author: https://github.com/patriciogonzalezvivo?tab=repositories
@@ -98,13 +101,12 @@ float planet_shape(vec3 pos){
 
 	// Ocean
 	float ocean_noise = fractal_noise(pos * 2.0) * -0.5;
-	ocean_noise += ocean_size * 0.01;
+	ocean_noise += ocean_size;
 	if(ocean_noise > 0.0){
 		ocean_noise = 0.0;
 	}
-	ocean_noise *= ocean_depth * 0.05;
-
-	ocean_noise = max(ocean_noise, ocean_floor * -0.01);
+	ocean_noise *= ocean_depth * MAX_OCEAN_DEPTH;
+	ocean_noise = max(ocean_noise, MIN_OCEAN_FLOOR * ocean_floor);
 
 	return height + ocean_noise;
 }

@@ -20,10 +20,11 @@ export function init_controls(s){
 export function update_planet_params(){
 	const planet_params = scene.planet_params;
 	
-	planet_params.ocean_size = sliders.ocean_size.value;
-	planet_params.ocean_depth = sliders.ocean_depth.value;
-	planet_params.ocean_floor = sliders.ocean_floor.value;
-	planet_params.mountain_height = sliders.mountain_height.value;
+	// Multiply every slider value by 0.01 to get a number between 0 and 1
+	planet_params.ocean_size = sliders.ocean_size.value * 0.01;
+	planet_params.ocean_depth = sliders.ocean_depth.value * 0.01;
+	planet_params.ocean_floor = sliders.ocean_floor.value * 0.01;
+	planet_params.mountain_height = sliders.mountain_height.value * 0.01;
 }
 
 function on_mouse_move(event){
