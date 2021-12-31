@@ -86,13 +86,18 @@ float smoothMax(float a, float b, float k) {
 }
 
 float planet_shape(vec3 pos){
-	float height = fractal_noise(pos * 2.0);
+	// Planet shape
+	float height = fractal_noise(pos * 2.0) * 0.05;
 
-	float ocean_floor = -0.125 + height * 0.15;
-	height = smoothMax(height, ocean_floor, 0.0);
-	height *= (height < 0.0) ? test_value * 0.2 : 0.5;
+	// Ocean noise
+	float ocean_noise = fractal_noise(pos * 2.0) * -0.5;
+	ocean_noise += test_value * 0.05;
+	if(ocean_noise > 0.0){
+		ocean_noise = 0.0;
+	}
 
-	return height;
+	
+	return height + ocean_noise;
 }
 
 void main() {
