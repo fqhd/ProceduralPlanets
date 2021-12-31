@@ -45,14 +45,10 @@ function second_pass(gl, scene){
 }
 
 function load_planet_params(gl, planet_params){
-	set_uniform_f(gl, first_pass_shader, 'ocean_size', planet_params.ocean_size);
-	set_uniform_f(gl, first_pass_shader, 'ocean_depth', planet_params.ocean_depth);
-	set_uniform_f(gl, first_pass_shader, 'ocean_floor', planet_params.ocean_floor);
-	set_uniform_f(gl, first_pass_shader, 'mountain_height', planet_params.mountain_height);
-	set_uniform_f(gl, first_pass_shader, 'mountain_frequency', planet_params.mountain_frequency);
-	set_uniform_f(gl, first_pass_shader, 'mountain_scale', planet_params.mountain_scale);
-	set_uniform_f(gl, first_pass_shader, 'detail_frequency', planet_params.detail_frequency);
-	set_uniform_f(gl, first_pass_shader, 'detail_scale', planet_params.detail_scale);
+	const uniforms = ['ocean_size', 'ocean_depth', 'ocean_floor', 'mountain_height', 'mountain_frequency', 'mountain_scale', 'detail_frequency', 'detail_scale',];
+	for(const i of uniforms){
+		set_uniform_f(gl, first_pass_shader, i, planet_params[i]);
+	}
 }
 
 function init_sphere(gl){
