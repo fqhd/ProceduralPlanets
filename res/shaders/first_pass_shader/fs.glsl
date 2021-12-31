@@ -25,6 +25,7 @@ const float MAX_OCEAN_DEPTH = 5.0;
 const float MAX_MOUNTAIN_FREQUENCY = 2.0;
 const float MAX_MOUNTAIN_HEIGHT = 1.0;
 const float MAX_DETAIL_FREQUENCY = 12.0;
+const float MAX_DETAIL_SCALE = 0.1;
 
 // Thanks to Patricio Gonzalez Vivo for making this noise function
 // Source code can be found here: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
@@ -98,7 +99,7 @@ float smoothMax(float a, float b, float k) {
 
 float planet_shape(vec3 pos){
 	// Planet shape
-	float height = fractal_noise(pos * detail_frequency * MAX_DETAIL_FREQUENCY) * detail_scale;
+	float height = fractal_noise(pos * detail_frequency * MAX_DETAIL_FREQUENCY) * detail_scale * MAX_DETAIL_SCALE;
 
 	// Mountains
 	float mountain_noise = ridge_noise(pos * mountain_frequency * 10.0);
