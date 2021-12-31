@@ -8,7 +8,7 @@
 
 in vec2 uv;
 
-out float scale;
+out vec2 data;
 
 uniform sampler2D sphere_texture;
 uniform float ocean_size;
@@ -126,5 +126,6 @@ void main() {
 
 	float height = planet_shape(pos);
 
-	scale = 1.0 + height;
+	data.r = 1.0 + height;
+	data.g = noise(pos * 1.0);
 }

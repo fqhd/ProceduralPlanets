@@ -12,7 +12,7 @@ in float pass_nmap_mix;
 
 out vec4 out_color;
 
-const vec3 light_dir = vec3(0.0, 0.0, -1.0);
+const vec3 light_dir = vec3(0.0, -1.0, -1.0);
 
 uniform sampler2D normal_map_1;
 uniform sampler2D normal_map_2;
@@ -55,9 +55,9 @@ void main(){
 	vec3 normal = get_mixed_normal();
 
 	float brightness = dot(-normalize(light_dir), normalize(normal));
-	brightness = max(brightness, 0.2);
+	brightness = max(brightness, 0.1);
 
-	vec3 obj_color = vec3(1.0, 1.0, 1.0);
+	vec3 obj_color = vec3(1.0, 0.9, 0.8);
 
 	out_color = vec4(obj_color * brightness, 1.0);
 }

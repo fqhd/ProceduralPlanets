@@ -85,7 +85,7 @@ async function init_second_pass_shader(gl){
 	second_pass_shader = await load_shader_from_dir(gl, 'res/shaders/second_pass_shader/');
 	gl.useProgram(second_pass_shader.program);
 	set_uniform_i(gl, second_pass_shader, 'sphere_texture', 0);
-	set_uniform_i(gl, second_pass_shader, 'scale_texture', 1);
+	set_uniform_i(gl, second_pass_shader, 'vertex_data_texture', 1);
 	set_uniform_i(gl, second_pass_shader, 'indices_texture', 2);
 	set_uniform_i(gl, second_pass_shader, 'normal_map_1', 3);
 	set_uniform_i(gl, second_pass_shader, 'normal_map_2', 4);

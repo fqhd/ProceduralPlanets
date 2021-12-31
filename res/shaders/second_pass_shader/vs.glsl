@@ -7,7 +7,7 @@ out float pass_nmap_mix;
 uniform mat4 projection;
 uniform mat4 view;
 uniform sampler2D sphere_texture;
-uniform sampler2D scale_texture;
+uniform sampler2D vertex_data_texture;
 uniform highp isampler2D indices_texture;
 
 uniform int sphere_texture_width;
@@ -29,7 +29,13 @@ vec3 get_sphere_pos(int index) {
 float get_scale(int index) {
 	ivec2 uv = index_to_uv(index, sphere_texture_width);
 
-	return texelFetch(scale_texture, uv, 0).r;
+	return texelFetch(vertex_data_texture, uv, 0).r;
+}
+
+float get_nmap_mix_factor(int index) {
+	ivec2 uv = index_to_uv(index, sphere_texture_width);
+
+	return texelFetch(vertex_data_texture, uv, 0).g;
 }
 
 int get_index(int index){
@@ -80,7 +86,7 @@ void main() {
 
 	pass_normal = calc_average_normal(pos);
 	pass_position = pos;
-	pass_nmap_mix = 1.0;
+	pass_nmap_mix = get_nmap_mix_factor(get_index(gl_VertexID));
 
 	gl_Position = projection * view * vec4(pos, 1.0);
 }
