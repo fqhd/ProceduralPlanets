@@ -51,6 +51,8 @@ function load_planet_params(gl, planet_params){
 	set_uniform_f(gl, first_pass_shader, 'mountain_height', planet_params.mountain_height);
 	set_uniform_f(gl, first_pass_shader, 'mountain_frequency', planet_params.mountain_frequency);
 	set_uniform_f(gl, first_pass_shader, 'mountain_scale', planet_params.mountain_scale);
+	set_uniform_f(gl, first_pass_shader, 'detail_frequency', planet_params.detail_frequency);
+	set_uniform_f(gl, first_pass_shader, 'detail_scale', planet_params.detail_scale);
 }
 
 function init_sphere(gl){
