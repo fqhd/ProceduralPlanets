@@ -4,6 +4,7 @@ let is_mouse_down = false;
 const sliders = {
 	ocean_size: document.getElementById('ocean-size'),
 	ocean_depth: document.getElementById('ocean-depth'),
+	mountain_height: document.getElementById('mountain-height'),
 };
 
 export function init_controls(s){
@@ -20,6 +21,7 @@ export function update_planet_params(){
 	
 	planet_params.ocean_size = sliders.ocean_size.value;
 	planet_params.ocean_depth = sliders.ocean_depth.value;
+	planet_params.mountain_height = sliders.mountain_height.value;
 }
 
 function on_mouse_move(event){

@@ -13,6 +13,7 @@ out float scale;
 uniform sampler2D sphere_texture;
 uniform float ocean_size;
 uniform float ocean_depth;
+uniform float mountain_height;
 
 // Thanks to Patricio Gonzalez Vivo for making this noise function
 // Source code can be found here: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
@@ -42,6 +43,11 @@ float noise(vec3 p){
     return o4.y * d.y + o4.x * (1.0 - d.y);
 }
 
+float sigmoid(float x){
+	const float e = 0.577215665;
+	return 1.0 / (1.0 + pow(e, -((x - 0.5) * 20.0)));
+}
+
 float fractal_noise(vec3 pos){
 	float total = 0.0;
 	float amplitude = 1.0;
@@ -56,13 +62,12 @@ float fractal_noise(vec3 pos){
 }
 
 float warped_noise(vec3 pos, float factor){
-	return fractal_noise(pos + vec3(fractal_noise(pos * factor)));
+	return fractal_noise(pos + vec3(fractal_noise(pos + vec3(factor))));
 }
 
-float rigid_noise(vec3 pos, float factor){
-	return 1.0 - abs(warped_noise(pos, factor));
+float ridge_noise(vec3 pos){
+	return sigmoid(abs(fractal_noise(pos)));
 }
-
 
 /*
 	Sebastian Lague is the original author of the following smoothMin() and smoothMax() functions.
@@ -86,25 +91,31 @@ float smoothMax(float a, float b, float k) {
 	return a * h + b * (1.0 - h) - k * h * (1.0 - h);
 }
 
-float planet_shape(vec3 pos){
-	// Planet shape
-	float height = fractal_noise(pos * 2.0) * 0.05;
+// float planet_shape(vec3 pos){
+// 	// Planet shape
+// 	float height = fractal_noise(pos * 2.0) * 0.05;
 
-	// Ocean noise
-	float ocean_noise = fractal_noise(pos * 2.0) * -0.5;
-	ocean_noise += ocean_size * 0.01;
-	if(ocean_noise > 0.0){
-		ocean_noise = 0.0;
-	}
-	ocean_noise *= ocean_depth * 0.05;
+// 	// Mountains
+// 	float mountains = rigid_noise(pos * 2.0, 5.0) * mountain_height * 0.01;
 
-	return height + ocean_noise;
-}
+// 	// Ocean
+// 	float ocean_noise = fractal_noise(pos * 2.0) * -0.5;
+// 	ocean_noise += ocean_size * 0.01;
+// 	if(ocean_noise > 0.0){
+// 		ocean_noise = 0.0;
+// 	}
+// 	ocean_noise *= ocean_depth * 0.05;
+
+
+// 	return height + ocean_noise + mountains;
+// }
 
 void main() {
 	vec3 pos = texture(sphere_texture, uv).rgb;
 
-	float height = planet_shape(pos);
+	// float height = planet_shape(pos);
+	float height = 0.0;
+	height = ridge_noise(pos * ocean_size * 0.1);
 
 	scale = 1.0 + height;
 }
