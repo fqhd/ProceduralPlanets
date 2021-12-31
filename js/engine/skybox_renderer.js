@@ -1,7 +1,7 @@
-import { load_image } from './utils.js';
 import { load_shader_from_dir, set_uniform_mat4 } from './shader.js';
 import { draw_model_indices } from './base_renderer.js';
 import { create_indices_buffer } from './mesh_generator.js';
+import { load_texture_from_file } from './texture.js';
 
 const { mat4 } = glMatrix;
 
@@ -10,7 +10,7 @@ let texture;
 let shader;
 
 export async function init_skybox_renderer(gl){
-	texture = await load_cubemap_from_file(gl, 'res/textures/skybox/');
+	texture = await load_texture_from_file(gl, 'res/textures/skybox/stars.jpg');
 	shader = await load_shader_from_dir(gl, 'res/shaders/skybox_shader/');
 	model = init_cube_model(gl);
 }
@@ -21,7 +21,7 @@ export function draw_skybox(gl, scene){
 	gl.useProgram(shader.program);
 
 	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+	gl.bindTexture(gl.TEXTURE_2D, texture.id);
 
 	set_uniform_mat4(gl, shader, 'projection', camera.projection);
 	const our_mat = mat4.clone(camera.view);
@@ -76,28 +76,3 @@ function init_cube_model(gl){
 	};
 }
 
-async function load_cubemap_from_file(gl, path_to_file){
-	const texture = gl.createTexture();
-	gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
-	gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-	gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-	gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
-	gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-	gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-	const image_order = [
-		'bottom',
-		'front',
-		'top',
-		'back',
-		'right',
-		'left',
-	];
-
-	for(let i = 0; i < 6; i++){
-		const image = await load_image(path_to_file + image_order[i] + '.jpg');
-		gl.texImage2D(gl.TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
-	}
-
-	return texture;
-}
