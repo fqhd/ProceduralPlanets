@@ -2,7 +2,7 @@ let scene;
 let is_mouse_down = false;
 
 const sliders = {
-	test_value: document.getElementById('test-value'),
+	ocean_size: document.getElementById('ocean-size'),
 };
 
 export function init_controls(s){
@@ -17,7 +17,7 @@ export function init_controls(s){
 export function update_planet_params(){
 	const planet_params = scene.planet_params;
 	
-	planet_params.test_value = sliders.test_value.value * 0.2;
+	planet_params.ocean_size = sliders.ocean_size.value;
 }
 
 function on_mouse_move(event){

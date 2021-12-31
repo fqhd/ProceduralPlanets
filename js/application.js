@@ -5,7 +5,6 @@ import { init_controls, update_planet_params } from './controller.js';
 export async function init_application(gl){
 	const scene = {
 		planet_params: {
-			test_value: 0,
 		},
 		camera: create_camera(40, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};

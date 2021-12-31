@@ -11,7 +11,7 @@ in vec2 uv;
 out float scale;
 
 uniform sampler2D sphere_texture;
-uniform float test_value;
+uniform float ocean_size;
 
 // Thanks to Patricio Gonzalez Vivo for making this noise function
 // Source code can be found here: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
@@ -91,12 +91,11 @@ float planet_shape(vec3 pos){
 
 	// Ocean noise
 	float ocean_noise = fractal_noise(pos * 2.0) * -0.5;
-	ocean_noise += test_value * 0.05;
+	ocean_noise += ocean_size * 0.01;
 	if(ocean_noise > 0.0){
 		ocean_noise = 0.0;
 	}
 
-	
 	return height + ocean_noise;
 }
 
