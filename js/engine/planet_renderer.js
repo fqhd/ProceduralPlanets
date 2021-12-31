@@ -46,6 +46,7 @@ function second_pass(gl, scene){
 
 function load_planet_params(gl, planet_params){
 	set_uniform_f(gl, first_pass_shader, 'ocean_size', planet_params.ocean_size);
+	set_uniform_f(gl, first_pass_shader, 'ocean_depth', planet_params.ocean_depth);
 }
 
 function init_sphere(gl){

@@ -12,6 +12,7 @@ out float scale;
 
 uniform sampler2D sphere_texture;
 uniform float ocean_size;
+uniform float ocean_depth;
 
 // Thanks to Patricio Gonzalez Vivo for making this noise function
 // Source code can be found here: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
@@ -95,6 +96,7 @@ float planet_shape(vec3 pos){
 	if(ocean_noise > 0.0){
 		ocean_noise = 0.0;
 	}
+	ocean_noise *= ocean_depth * 0.05;
 
 	return height + ocean_noise;
 }
