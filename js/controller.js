@@ -10,6 +10,7 @@ const sliders = {
 	mountain_scale: document.getElementById('mountain-scale'),
 	detail_frequency: document.getElementById('detail-frequency'),
 	detail_scale: document.getElementById('detail-scale'),
+	texture_scale: document.getElementById('texture-scale'),
 };
 
 export function init_controls(s){
@@ -33,6 +34,7 @@ export function update_planet_params(){
 	planet_params.mountain_scale = sliders.mountain_scale.value * 0.01;
 	planet_params.detail_frequency = sliders.detail_frequency.value * 0.01;
 	planet_params.detail_scale = sliders.detail_scale.value * 0.01;
+	planet_params.texture_scale = sliders.texture_scale.value * 0.01;
 }
 
 function on_mouse_move(event){

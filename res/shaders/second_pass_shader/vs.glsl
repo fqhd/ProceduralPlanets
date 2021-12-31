@@ -1,6 +1,8 @@
 #version 300 es
 
-out vec3 normal;
+out vec3 pass_normal;
+out vec3 pass_position;
+out float pass_nmap_mix;
 
 uniform mat4 projection;
 uniform mat4 view;
@@ -70,13 +72,15 @@ vec3 calc_average_normal(vec3 curr_pos){
 	for(int i = 0; i < 5; i++){
 		n += calc_tri_normal(curr_pos, i);
 	}
-	return n;
+	return normalize(n);
 }
 
 void main() {
 	vec3 pos = get_current_pos();
 
-	normal = calc_average_normal(pos);
+	pass_normal = calc_average_normal(pos);
+	pass_position = pos;
+	pass_nmap_mix = 1.0;
 
 	gl_Position = projection * view * vec4(pos, 1.0);
 }
