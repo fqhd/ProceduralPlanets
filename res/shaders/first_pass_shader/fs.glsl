@@ -62,8 +62,43 @@ float rigid_noise(vec3 pos, float factor){
 	return 1.0 - abs(warped_noise(pos, factor));
 }
 
+
+/*
+	Sebastian Lague is the original author of the following smoothMin() and smoothMax() functions.
+	Credit goes to him, the original source file containing these functions
+	can be found here: https://github.com/SebLague/Solar-System/blob/Development/Assets/Scripts/Celestial/Shaders/Includes/Math.cginc
+*/
+// Smooth minimum of two values, controlled by smoothing factor k
+// When k = 0, this behaves identically to min(a, b)
+float smoothMin(float a, float b, float k) {
+	k = max(0.0, k);
+	// https://www.iquilezles.org/www/articles/smin/smin.htm
+	float h = max(0.0, min(1.0, (b - a + k) / (2.0 * k)));
+	return a * h + b * (1.0 - h) - k * h * (1.0 - h);
+}
+
+// Smooth maximum of two values, controlled by smoothing factor k
+// When k = 0, this behaves identically to max(a, b)
+float smoothMax(float a, float b, float k) {
+	k = min(0.0, -k);
+	float h = max(0.0, min(1.0, (b - a + k) / (2.0 * k)));
+	return a * h + b * (1.0 - h) - k * h * (1.0 - h);
+}
+
+float planet_shape(vec3 pos){
+	float height = fractal_noise(pos * 2.0);
+
+	float ocean_floor = -0.125 + height * 0.15;
+	height = smoothMax(height, ocean_floor, 0.0);
+	height *= (height < 0.0) ? test_value * 0.2 : 0.5;
+
+	return height;
+}
+
 void main() {
 	vec3 pos = texture(sphere_texture, uv).rgb;
 
-	scale = 1.0 + rigid_noise(pos, test_value * 0.05) * 0.1;
+	float height = planet_shape(pos);
+
+	scale = 1.0 + height;
 }
