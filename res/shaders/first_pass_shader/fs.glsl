@@ -13,6 +13,7 @@ out float scale;
 uniform sampler2D sphere_texture;
 uniform float ocean_size;
 uniform float ocean_depth;
+uniform float ocean_floor;
 uniform float mountain_height;
 
 // Thanks to Patricio Gonzalez Vivo for making this noise function
@@ -91,31 +92,27 @@ float smoothMax(float a, float b, float k) {
 	return a * h + b * (1.0 - h) - k * h * (1.0 - h);
 }
 
-// float planet_shape(vec3 pos){
-// 	// Planet shape
-// 	float height = fractal_noise(pos * 2.0) * 0.05;
+float planet_shape(vec3 pos){
+	// Planet shape
+	float height = fractal_noise(pos * 2.0) * 0.05;
 
-// 	// Mountains
-// 	float mountains = rigid_noise(pos * 2.0, 5.0) * mountain_height * 0.01;
+	// Ocean
+	float ocean_noise = fractal_noise(pos * 2.0) * -0.5;
+	ocean_noise += ocean_size * 0.01;
+	if(ocean_noise > 0.0){
+		ocean_noise = 0.0;
+	}
+	ocean_noise *= ocean_depth * 0.05;
 
-// 	// Ocean
-// 	float ocean_noise = fractal_noise(pos * 2.0) * -0.5;
-// 	ocean_noise += ocean_size * 0.01;
-// 	if(ocean_noise > 0.0){
-// 		ocean_noise = 0.0;
-// 	}
-// 	ocean_noise *= ocean_depth * 0.05;
+	ocean_noise = max(ocean_noise, ocean_floor * -0.01);
 
-
-// 	return height + ocean_noise + mountains;
-// }
+	return height + ocean_noise;
+}
 
 void main() {
 	vec3 pos = texture(sphere_texture, uv).rgb;
 
-	// float height = planet_shape(pos);
-	float height = 0.0;
-	height = ridge_noise(pos * ocean_size * 0.1);
+	float height = planet_shape(pos);
 
 	scale = 1.0 + height;
 }

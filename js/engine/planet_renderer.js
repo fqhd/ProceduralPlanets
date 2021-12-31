@@ -47,6 +47,7 @@ function second_pass(gl, scene){
 function load_planet_params(gl, planet_params){
 	set_uniform_f(gl, first_pass_shader, 'ocean_size', planet_params.ocean_size);
 	set_uniform_f(gl, first_pass_shader, 'ocean_depth', planet_params.ocean_depth);
+	set_uniform_f(gl, first_pass_shader, 'ocean_floor', planet_params.ocean_floor);
 	set_uniform_f(gl, first_pass_shader, 'mountain_height', planet_params.mountain_height);
 }
 
