@@ -58,7 +58,7 @@ function load_planet_shape_params(gl, planet_params){
 }
 
 function load_planet_color_params(gl, planet_params){
-	const uniforms = ['texture_scale', 'texture_strength', 'depth_multiplier', 'alpha_multiplier', 'ocean_height'];
+	const uniforms = ['texture_scale', 'texture_strength' ];
 	for(const i of uniforms){
 		set_uniform_f(gl, second_pass_shader, i, planet_params[i]);
 	}
