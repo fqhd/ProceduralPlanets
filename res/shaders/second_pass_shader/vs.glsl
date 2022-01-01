@@ -3,6 +3,7 @@
 out vec3 pass_normal;
 out vec3 pass_position;
 out float pass_nmap_mix;
+out vec3 cam_pos;
 
 uniform mat4 projection;
 uniform mat4 view;
@@ -89,4 +90,6 @@ void main() {
 	pass_nmap_mix = get_nmap_mix_factor(get_index(gl_VertexID));
 
 	gl_Position = projection * view * vec4(pos, 1.0);
+
+	cam_pos = (inverse(view) * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
 }

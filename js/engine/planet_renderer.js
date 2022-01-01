@@ -1,4 +1,4 @@
-import { load_shader_from_dir, set_uniform_f, set_uniform_i } from './shader.js';
+import { load_shader_from_dir, set_uniform_f, set_uniform_i, set_uniform_vec3 } from './shader.js';
 import { generate_sphere, get_neighbouring_indices_array } from './sphere_generator.js';
 import { load_texture_from_data, create_indices_texture, load_texture_from_file } from './texture.js';
 import { draw_model_indices, load_camera_to_shader, bind_texture, draw_indices } from './base_renderer.js';
@@ -58,7 +58,7 @@ function load_planet_shape_params(gl, planet_params){
 }
 
 function load_planet_color_params(gl, planet_params){
-	const uniforms = ['texture_scale', 'texture_strength'];
+	const uniforms = ['texture_scale', 'texture_strength', 'depth_multiplier', 'alpha_multiplier', 'ocean_height'];
 	for(const i of uniforms){
 		set_uniform_f(gl, second_pass_shader, i, planet_params[i]);
 	}

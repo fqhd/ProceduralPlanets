@@ -29,17 +29,20 @@ export function update_camera(camera){
 	const point = get_point_from_pitch_and_yaw(camera.pitch, camera.yaw);
 	vec3.scale(point, point, camera.distance);
 
-	camera.position = point;
-
 	// Calculate view matrix
 	mat4.identity(view);
 	mat4.rotate(view, view, deg_to_rad(pitch), [1, 0, 0]);
 	mat4.rotate(view, view, deg_to_rad(-yaw), [0, 1, 0]);
 	mat4.translate(view, view, position.map(n => n * -1));
+
+	// Update camera position
+	camera.position[0] = point[0];
+	camera.position[1] = point[1];
+	camera.position[2] = point[2];
 }
 
 function calc_proj_matrix(ratio){
 	const proj = mat4.create();
-	mat4.perspective(proj, deg_to_rad(70), ratio, 0.01, 100);
+	mat4.perspective(proj, deg_to_rad(70), ratio, 0.1, 1000.0);
 	return proj;
 }
