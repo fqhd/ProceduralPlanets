@@ -51,7 +51,7 @@ function second_pass(gl, scene){
 }
 
 function load_planet_shape_params(gl, planet_params){
-	const uniforms = ['ocean_size', 'ocean_depth', 'ocean_floor', 'mountain_height', 'mountain_frequency', 'mountain_scale', 'detail_frequency', 'detail_scale'];
+	const uniforms = ['ocean_size', 'ocean_depth', 'ocean_floor', 'mountain_height', 'mountain_frequency', 'mountain_scale', 'detail_frequency', 'detail_scale', 'ocean_floor_smoothing', 'land_edge_smoothing'];
 	for(const i of uniforms){
 		set_uniform_f(gl, first_pass_shader, i, planet_params[i]);
 	}
