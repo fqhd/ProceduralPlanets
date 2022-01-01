@@ -126,7 +126,8 @@ float planet_shape(vec3 pos){
 	ocean_noise = smoothMin(ocean_noise, 0.0, land_edge_smoothing * MAX_EDGE_SMOOTHING);
 	ocean_noise *= ocean_depth * MAX_OCEAN_DEPTH;
 	height += ocean_noise;
-	height = smoothMax(height, MIN_OCEAN_FLOOR * (1.0 - ocean_floor), ocean_floor_smoothing * MAX_OCEAN_FLOOR_SMOOTHING);
+	float floor_noise = fractal_noise(pos * 7.0) * 0.1;
+	height = smoothMax(height, MIN_OCEAN_FLOOR * (1.0 - ocean_floor) + floor_noise, ocean_floor_smoothing * MAX_OCEAN_FLOOR_SMOOTHING);
 
 	// if(pos.x > 0.0){
 	// 	height = 0.0;
