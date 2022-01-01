@@ -26,7 +26,7 @@ uniform float ocean_height;
 const float blend_sharpness = 5.5;
 const float MAX_TEXTURE_SCALE = 20.0;
 const float MAX_DEPTH = 10.0;
-const float MAX_ALPHA = 35.0;
+const float MAX_ALPHA = 50.0;
 const float MAX_OCEAN_HEIGHT = 0.5;
 
 // Thanks to Sebastian Lague and Ben Golus for implementing the logic of this triplinar normal map calculation function

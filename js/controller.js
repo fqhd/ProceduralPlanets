@@ -3,15 +3,12 @@ let is_mouse_down = false;
 
 const sliders = {
 	ocean_size: document.getElementById('ocean-size'),
-	ocean_depth: document.getElementById('ocean-depth'),
 	ocean_floor: document.getElementById('ocean-floor'),
 	mountain_height: document.getElementById('mountain-height'),
 	mountain_frequency: document.getElementById('mountain-frequency'),
-	mountain_scale: document.getElementById('mountain-scale'),
 	detail_frequency: document.getElementById('detail-frequency'),
 	detail_scale: document.getElementById('detail-scale'),
 	texture_scale: document.getElementById('texture-scale'),
-	ocean_floor_smoothing: document.getElementById('ocean-floor-smoothing'),
 	land_edge_smoothing: document.getElementById('land-edge-smoothing'),
 	texture_strength: document.getElementById('texture-strength'),
 	mountain_mask: document.getElementById('mountain-mask'),
@@ -34,15 +31,12 @@ export function update_planet_params(){
 	
 	// Multiply every slider value by 0.01 to get a number between 0 and 1
 	planet_params.ocean_size = sliders.ocean_size.value * 0.01;
-	planet_params.ocean_depth = sliders.ocean_depth.value * 0.01;
 	planet_params.ocean_floor = sliders.ocean_floor.value * 0.01;
 	planet_params.mountain_height = sliders.mountain_height.value * 0.01;
 	planet_params.mountain_frequency = sliders.mountain_frequency.value * 0.01;
-	planet_params.mountain_scale = sliders.mountain_scale.value * 0.01;
 	planet_params.detail_frequency = sliders.detail_frequency.value * 0.01;
 	planet_params.detail_scale = sliders.detail_scale.value * 0.01;
 	planet_params.texture_scale = sliders.texture_scale.value * 0.01;
-	planet_params.ocean_floor_smoothing = sliders.ocean_floor_smoothing.value * 0.01;
 	planet_params.land_edge_smoothing = sliders.land_edge_smoothing.value * 0.01;
 	planet_params.texture_strength = sliders.texture_strength.value * 0.01;
 	planet_params.mountain_mask = sliders.mountain_mask.value * 0.01;
