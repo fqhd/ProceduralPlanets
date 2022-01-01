@@ -13,7 +13,7 @@ in vec3 cam_pos;
 
 out vec4 out_color;
 
-const vec3 light_dir = vec3(0.0, -1.0, -1.0);
+const vec3 light_pos = vec3(0.0, 100.0, 100.0);
 
 uniform sampler2D normal_map_1;
 uniform sampler2D normal_map_2;
@@ -87,7 +87,7 @@ void main(){
 	vec3 normal = get_nmap_normal();
 	normal = mix(normal, pass_normal, 1.0 - texture_strength);
 
-	float brightness = dot(-normalize(light_dir), normalize(normal));
+	float brightness = dot(-normalize(-light_pos), normalize(normal));
 	brightness = max(brightness, 0.1);
 
 	vec3 ray_pos = cam_pos;
@@ -95,10 +95,6 @@ void main(){
 	vec2 hit_info = ray_sphere(vec3(0.0), 0.5 + ocean_height * MAX_OCEAN_HEIGHT, ray_pos, ray_dir);
 	float dist_to_ocean = hit_info.x;
 	float dist_through_ocean = hit_info.y;
-
-// 	float ndcDepth = ndcPos.z = (2.0 * gl_FragCoord.z - gl_DepthRange.near - gl_DepthRange.far) / (gl_DepthRange.far - gl_DepthRange.near);
-// float clipDepth = ndcDepth / gl_FragCoord.w;
-// gl_FragColor = vec4((clipDepth * 0.5) + 0.5); 
 
 	float ocean_view_depth = min(dist_through_ocean, 1.0/gl_FragCoord.w - dist_to_ocean);
 
@@ -108,11 +104,21 @@ void main(){
 
 	out_color = vec4(obj_color * brightness, 1.0);
 
+	vec3 dirToSun = normalize(light_pos - cam_pos);
+
 	if(ocean_view_depth > 0.0){
 		float optical_depth = 1.0 - exp(-ocean_view_depth * depth_multiplier * MAX_DEPTH);
 		float alpha = 1.0 - exp(-ocean_view_depth * alpha_multiplier * MAX_ALPHA);
-		vec3 ocean_color = mix(color_a, color_b, optical_depth);
-		out_color = vec4(mix(out_color.rgb, ocean_color, alpha), 1.0);
+
+		vec3 oceanNormal = normalize(ray_pos + ray_dir * dist_to_ocean);
+		float specularAngle = acos(dot(normalize(dirToSun - ray_dir), oceanNormal));
+		float specularExponent = specularAngle / 0.1;
+		float specularHighlight = exp(-specularExponent * specularExponent) * 2.0;
+		float diffuseLighting = clamp(dot(oceanNormal, dirToSun), 0.0, 1.0);
+
+		vec3 ocean_color = mix(color_a, color_b, optical_depth) * diffuseLighting + specularHighlight;
+
+		out_color = vec4(mix(out_color.rgb, ocean_color * diffuseLighting, alpha), 1.0);
 	}
 
 }
