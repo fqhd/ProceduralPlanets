@@ -17,6 +17,7 @@ const vec3 light_dir = vec3(0.0, -1.0, -1.0);
 uniform sampler2D normal_map_1;
 uniform sampler2D normal_map_2;
 uniform float texture_scale;
+uniform float texture_strength;
 
 const float blend_sharpness = 5.5;
 const float MAX_TEXTURE_SCALE = 20.0;
@@ -45,14 +46,15 @@ vec3 calc_fragment_normal(sampler2D normal_map) {
 	return normalize(tnormalX.zyx * weight.x + tnormalY.xzy * weight.y + tnormalZ.xyz * weight.z);
 }
 
-vec3 get_mixed_normal(){
+vec3 get_nmap_normal(){
 	vec3 normal1 = calc_fragment_normal(normal_map_1);
 	vec3 normal2 = calc_fragment_normal(normal_map_2);
 	return mix(normal1, normal2, pass_nmap_mix);
 }
 
 void main(){
-	vec3 normal = get_mixed_normal();
+	vec3 normal = get_nmap_normal();
+	normal = mix(normal, pass_normal, 1.0 - texture_strength);
 
 	float brightness = dot(-normalize(light_dir), normalize(normal));
 	brightness = max(brightness, 0.1);
