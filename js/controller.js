@@ -14,6 +14,7 @@ const sliders = {
 	ocean_floor_smoothing: document.getElementById('ocean-floor-smoothing'),
 	land_edge_smoothing: document.getElementById('land-edge-smoothing'),
 	texture_strength: document.getElementById('texture-strength'),
+	mountain_mask: document.getElementById('mountain-mask'),
 };
 
 export function init_controls(s){
@@ -41,6 +42,7 @@ export function update_planet_params(){
 	planet_params.ocean_floor_smoothing = sliders.ocean_floor_smoothing.value * 0.01;
 	planet_params.land_edge_smoothing = sliders.land_edge_smoothing.value * 0.01;
 	planet_params.texture_strength = sliders.texture_strength.value * 0.01;
+	planet_params.mountain_mask = sliders.mountain_mask.value * 0.01;
 }
 
 function on_mouse_move(event){

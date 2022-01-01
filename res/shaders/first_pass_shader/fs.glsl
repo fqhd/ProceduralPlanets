@@ -21,6 +21,7 @@ uniform float detail_frequency;
 uniform float detail_scale;
 uniform float ocean_floor_smoothing;
 uniform float land_edge_smoothing;
+uniform float mountain_mask;
 
 const float MIN_OCEAN_FLOOR = -0.8;
 const float MAX_OCEAN_DEPTH = 5.0;
@@ -71,12 +72,6 @@ float fractal_noise(vec3 pos){
 	return total;
 }
 
-float ridge_noise(vec3 pos){
-	float func1 = noise(pos);
-	float func2 = 1.0 - noise(pos);
-	float r = min(func1, func2) * 2.0;
-	return r - fractal_noise(pos) * 0.3;
-}
 
 /*
 	Sebastian Lague is the original author of the following smoothMin() and smoothMax() functions.
@@ -100,6 +95,17 @@ float smoothMax(float a, float b, float k) {
 	return a * h + b * (1.0 - h) - k * h * (1.0 - h);
 }
 
+float ridge_noise(vec3 pos){
+	float func1 = noise(pos);
+	float func2 = 1.0 - noise(pos);
+	float r = smoothMin(func1, func2, 0.1) * 2.0;
+	return r - fractal_noise(pos) * 0.5;
+}
+
+float blend_mask(vec3 pos){
+	return max(min(1.0, 10.0 - noise(pos * 2.0) * (mountain_mask * 40.0)), 0.0);
+}
+
 float planet_shape(vec3 pos){
 	// Planet shape
 	float height = fractal_noise(pos * detail_frequency * MAX_DETAIL_FREQUENCY) * detail_scale * MAX_DETAIL_SCALE;
@@ -109,7 +115,9 @@ float planet_shape(vec3 pos){
 	mountain_noise -= 1.0 - mountain_height;
 	mountain_noise *= mountain_scale * MAX_MOUNTAIN_HEIGHT;
 	mountain_noise = max(mountain_noise, 0.0);
-	height += mountain_noise;
+	float mask = blend_mask(pos);
+
+	height += mountain_noise * mask;
 
 	// Ocean
 	float ocean_noise = fractal_noise(pos * 2.0);
@@ -118,6 +126,12 @@ float planet_shape(vec3 pos){
 	ocean_noise *= ocean_depth * MAX_OCEAN_DEPTH;
 	height += ocean_noise;
 	height = smoothMax(height, MIN_OCEAN_FLOOR * (1.0 - ocean_floor), ocean_floor_smoothing);
+
+	// if(pos.x > 0.0){
+	// 	height = 0.0;
+	// }else{
+	// 	height = blend_mask(pos);
+	// }
 
 	return height;
 }
