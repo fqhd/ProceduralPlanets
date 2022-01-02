@@ -10,8 +10,8 @@ in vec3 pass_normal;
 in vec3 pass_position;
 in float pass_nmap_mix;
 
-out vec4 out_color;
-
+layout (location = 0) out vec4 out_color;
+layout (location = 1) out float out_depth;
 
 uniform sampler2D normal_map_1;
 uniform sampler2D normal_map_2;
@@ -61,4 +61,5 @@ void main(){
 	brightness = max(brightness, 0.1);
 
 	out_color = vec4(obj_color * brightness, 1.0);
+	out_depth = 1.0/gl_FragCoord.w;
 }

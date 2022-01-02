@@ -4,6 +4,7 @@ import { load_texture_from_data, create_indices_texture, load_texture_from_file 
 import { draw_model_indices, load_camera_to_shader, bind_texture, draw_indices } from './base_renderer.js';
 import { create_quad, create_indices_buffer } from './mesh_generator.js';
 import { create_framebuffer, bind_default_framebuffer, bind_framebuffer } from './framebuffer.js';
+import { create_ocean_framebuffer, bind_ocean_framebuffer } from './ocean_framebuffer.js';
 
 let sphere_texture;
 let indices_texture;
@@ -12,7 +13,9 @@ let normal_map_texture_2;
 let sphere_indices_buffer;
 let first_pass_shader;
 let second_pass_shader;
+let third_pass_shader;
 let framebuffer;
+let ocean_framebuffer;
 let quad;
 
 export async function init_planet_renderer(gl){
@@ -20,12 +23,14 @@ export async function init_planet_renderer(gl){
 	await init_shaders(gl);
 	await init_textures(gl);
 	framebuffer = create_framebuffer(gl, sphere_texture.width, sphere_texture.height);
+	ocean_framebuffer = create_ocean_framebuffer(gl, gl.canvas.clientWidth, gl.canvas.clientHeight);
 	quad = create_quad(gl);
 }
 
 export function draw_planet(gl, scene){
 	first_pass(gl, scene);
 	second_pass(gl, scene);
+	third_pass(gl, scene);
 }
 
 function first_pass(gl, scene){
@@ -39,6 +44,8 @@ function first_pass(gl, scene){
 }
 
 function second_pass(gl, scene){
+	bind_ocean_framebuffer(gl, ocean_framebuffer);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	gl.useProgram(second_pass_shader.program);
 	load_camera_to_shader(gl, second_pass_shader, scene.camera);
 	load_planet_color_params(gl, scene.planet_params);
@@ -48,6 +55,13 @@ function second_pass(gl, scene){
 	bind_texture(gl, gl.TEXTURE3, normal_map_texture_1.id);
 	bind_texture(gl, gl.TEXTURE4, normal_map_texture_2.id);
 	draw_indices(gl, sphere_indices_buffer);
+	bind_default_framebuffer(gl);
+}
+
+function third_pass(gl, scene){
+	gl.useProgram(third_pass_shader.program);
+	bind_texture(gl, gl.TEXTURE0, ocean_framebuffer.depth_texture.id);
+	draw_model_indices(gl, quad);
 }
 
 function load_planet_shape_params(gl, planet_params){
@@ -75,6 +89,7 @@ function init_sphere(gl){
 async function init_shaders(gl){
 	await init_first_pass_shader(gl);
 	await init_second_pass_shader(gl);
+	await init_third_pass_shader(gl);
 }
 
 async function init_first_pass_shader(gl){
@@ -91,6 +106,10 @@ async function init_second_pass_shader(gl){
 	set_uniform_i(gl, second_pass_shader, 'normal_map_2', 4);
 	set_uniform_i(gl, second_pass_shader, 'sphere_texture_width', sphere_texture.width);
 	set_uniform_i(gl, second_pass_shader, 'indices_texture_width', indices_texture.width);
+}
+
+async function init_third_pass_shader(gl){
+	third_pass_shader = await load_shader_from_dir(gl, 'res/shaders/third_pass_shader/');
 }
 
 async function init_textures(gl){
