@@ -14,6 +14,11 @@ uniform sampler2D albedo_texture;
 uniform sampler2D depth_texture;
 uniform mat4 view;
 uniform mat4 projection;
+uniform float water_transparency;
+uniform float water_depth;
+
+const vec3 color_a = vec3(1.0, 1.0, 1.0);
+const vec3 color_b = vec3(1.0, 1.0, 1.0);
 
 vec2 ray_sphere(vec3 center, float radius, vec3 ray_origin, vec3 ray_dir) {
 	vec3 offset = ray_origin - center;
@@ -63,7 +68,7 @@ vec3 get_cam_pos(){
 
 void main(){
 	vec2 uv = (pass_ndc_coords + vec2(1.0)) / 2.0;
-	vec3 color = texture(albedo_texture, uv).rgb;
+	vec3 original_color = texture(albedo_texture, uv).rgb;
 	float depth = texture(depth_texture, uv).r;
 
 	vec3 ray_pos = get_cam_pos();
@@ -73,8 +78,11 @@ void main(){
 	float dist_through_ocean = hit_info.y;
 	float ocean_view_depth = min(dist_through_ocean, depth - dist_to_ocean);
 
-	out_color = vec4(color, 1.0);
+	out_color = vec4(original_color, 1.0);
 	if(ocean_view_depth > 0.0){
-		out_color = vec4(1.0);
+		float optical_depth = 1.0 - exp(-ocean_view_depth * water_depth);
+		float alpha = 1.0 - exp(-ocean_view_depth * water_transparency);
+		vec3 ocean_color = mix(color_a, color_b, optical_depth);
+		out_color = vec4(mix(ocean_color, original_color, alpha), 1.0);
 	}
 }

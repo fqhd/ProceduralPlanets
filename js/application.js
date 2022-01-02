@@ -19,6 +19,10 @@ export async function init_application(gl){
 				texture_scale: undefined,
 				texture_strength: undefined,
 			},
+			water_params: {
+				water_transparency: undefined,
+				water_depth: undefined,
+			}
 		},
 		camera: create_camera(40, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};

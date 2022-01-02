@@ -42,7 +42,7 @@ function first_pass(gl, scene){
 	gl.clear(gl.COLOR_BUFFER_BIT);
 	gl.useProgram(first_pass_shader.program);
 	bind_texture(gl, gl.TEXTURE0, sphere_texture.id);
-	load_planet_shape_params(gl, scene.planet_params);
+	load_planet_params(gl, first_pass_shader, scene.planet_params.generation_params);
 	draw_model_indices(gl, quad);
 	bind_default_framebuffer(gl);
 }
@@ -52,7 +52,7 @@ function second_pass(gl, scene){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	gl.useProgram(second_pass_shader.program);
 	load_camera_to_shader(gl, second_pass_shader, scene.camera);
-	load_planet_color_params(gl, scene.planet_params);
+	load_planet_params(gl, second_pass_shader, scene.planet_params.color_params);
 	bind_texture(gl, gl.TEXTURE0, sphere_texture.id);
 	bind_texture(gl, gl.TEXTURE1, planet_framebuffer.textures[0].id);
 	bind_texture(gl, gl.TEXTURE2, indices_texture.id);
@@ -66,19 +66,14 @@ function third_pass(gl, scene){
 	gl.useProgram(third_pass_shader.program);
 	bind_texture(gl, gl.TEXTURE0, ocean_framebuffer.textures[0].id);
 	bind_texture(gl, gl.TEXTURE1, ocean_framebuffer.textures[1].id);
+	load_planet_params(gl, third_pass_shader, scene.planet_params.water_params);
 	load_camera_to_shader(gl, third_pass_shader, scene.camera);
 	draw_model_indices(gl, quad);
 }
 
-function load_planet_shape_params(gl, planet_params){
-	for(const param_name in planet_params.generation_params){
-		set_uniform_f(gl, first_pass_shader, param_name, planet_params.generation_params[param_name]);
-	}
-}
-
-function load_planet_color_params(gl, planet_params){
-	for(const param_name in planet_params.color_params){
-		set_uniform_f(gl, second_pass_shader, param_name, planet_params.color_params[param_name]);
+function load_planet_params(gl, shader, params){
+	for(const param_name in params){
+		set_uniform_f(gl, shader, param_name, params[param_name]);
 	}
 }
 

@@ -9,6 +9,9 @@ function init_sliders(planet_params){
 	for(const param_name in planet_params.color_params){
 		sliders[param_name] = document.getElementById(param_name);
 	}
+	for(const param_name in planet_params.water_params){
+		sliders[param_name] = document.getElementById(param_name);
+	}
 }
 
 export function init_controls(s){
@@ -30,6 +33,9 @@ export function update_planet_params(){
 	}
 	for(const param_name in planet_params.color_params){
 		planet_params.color_params[param_name] = sliders[param_name].value * 0.01;
+	}
+	for(const param_name in planet_params.water_params){
+		planet_params.water_params[param_name] = sliders[param_name].value * 0.01;
 	}
 }
 
