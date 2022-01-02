@@ -1,21 +1,19 @@
 let scene;
 let is_mouse_down = false;
+const sliders = {};
 
-const sliders = {
-	ocean_size: document.getElementById('ocean-size'),
-	ocean_floor: document.getElementById('ocean-floor'),
-	mountain_height: document.getElementById('mountain-height'),
-	mountain_frequency: document.getElementById('mountain-frequency'),
-	detail_frequency: document.getElementById('detail-frequency'),
-	detail_scale: document.getElementById('detail-scale'),
-	texture_scale: document.getElementById('texture-scale'),
-	land_edge_smoothing: document.getElementById('land-edge-smoothing'),
-	texture_strength: document.getElementById('texture-strength'),
-	mountain_mask: document.getElementById('mountain-mask'),
-};
+function init_sliders(planet_params){
+	for(const param_name in planet_params.generation_params){
+		sliders[param_name] = document.getElementById(param_name);
+	}
+	for(const param_name in planet_params.color_params){
+		sliders[param_name] = document.getElementById(param_name);
+	}
+}
 
 export function init_controls(s){
 	scene = s;
+	init_sliders(scene.planet_params);
 	const canvas = document.getElementById('canvas');
 	canvas.addEventListener('mousemove', on_mouse_move);
 	canvas.addEventListener('wheel', on_mouse_wheel);
@@ -27,16 +25,12 @@ export function update_planet_params(){
 	const planet_params = scene.planet_params;
 	
 	// Multiply every slider value by 0.01 to get a number between 0 and 1
-	planet_params.ocean_size = sliders.ocean_size.value * 0.01;
-	planet_params.ocean_floor = sliders.ocean_floor.value * 0.01;
-	planet_params.mountain_height = sliders.mountain_height.value * 0.01;
-	planet_params.mountain_frequency = sliders.mountain_frequency.value * 0.01;
-	planet_params.detail_frequency = sliders.detail_frequency.value * 0.01;
-	planet_params.detail_scale = sliders.detail_scale.value * 0.01;
-	planet_params.texture_scale = sliders.texture_scale.value * 0.01;
-	planet_params.land_edge_smoothing = sliders.land_edge_smoothing.value * 0.01;
-	planet_params.texture_strength = sliders.texture_strength.value * 0.01;
-	planet_params.mountain_mask = sliders.mountain_mask.value * 0.01;
+	for(const param_name in planet_params.generation_params){
+		planet_params.generation_params[param_name] = sliders[param_name].value * 0.01;
+	}
+	for(const param_name in planet_params.color_params){
+		planet_params.color_params[param_name] = sliders[param_name].value * 0.01;
+	}
 }
 
 function on_mouse_move(event){
@@ -54,6 +48,6 @@ function on_mouse_wheel(event){
 
 	// Clamping
 	if(scene.camera.target_distance < 1.2) scene.camera.target_distance = 1.2;
-	if(scene.camera.target_distance > 100) scene.camera.target_distance = 100;
+	if(scene.camera.target_distance > 200) scene.camera.target_distance = 200;
 
 }

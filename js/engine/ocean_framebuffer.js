@@ -1,24 +1,20 @@
 export function create_ocean_framebuffer(gl, width, height){
-	const albedo_texture = create_ocean_albedo_texture(gl, width, height);
-	const depth_texture = create_ocean_depth_texture(gl, width, height);
+	const textures = [
+		create_ocean_albedo_texture(gl, width, height),
+		create_ocean_depth_texture(gl, width, height),
+	];
 	const renderbuffer = create_ocean_renderbuffer(gl, width, height);
 	const id = gl.createFramebuffer();
 	gl.bindFramebuffer(gl.FRAMEBUFFER, id);
-	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, albedo_texture.id, 0);
-	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT1, gl.TEXTURE_2D, depth_texture.id, 0);
+	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, textures[0].id, 0);
+	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT1, gl.TEXTURE_2D, textures[1].id, 0);
 	gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, renderbuffer, 0);
 	gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1]);
 	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	return {
 		id,
-		albedo_texture,
-		depth_texture,
+		textures,
 	};
-}
-
-export function bind_ocean_framebuffer(gl, framebuffer){
-	gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer.id);
-	gl.viewport(0, 0, framebuffer.albedo_texture.width, framebuffer.albedo_texture.height);
 }
 
 function create_ocean_renderbuffer(gl, width, height){

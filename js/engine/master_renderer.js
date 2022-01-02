@@ -1,4 +1,4 @@
-import { init_gl_state, clear } from './base_renderer.js';
+import { init_gl_state } from './base_renderer.js';
 import { init_planet_renderer, prepare_planet_rendering, render_final_planet } from './planet_renderer.js';
 import { init_skybox_renderer, draw_skybox } from './skybox_renderer.js';
 import { update_camera } from './camera.js';

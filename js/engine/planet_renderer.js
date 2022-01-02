@@ -3,8 +3,9 @@ import { generate_sphere, get_neighbouring_indices_array } from './sphere_genera
 import { load_texture_from_data, create_indices_texture, load_texture_from_file } from './texture.js';
 import { draw_model_indices, load_camera_to_shader, bind_texture, draw_indices } from './base_renderer.js';
 import { create_quad, create_indices_buffer } from './mesh_generator.js';
-import { create_framebuffer, bind_default_framebuffer, bind_framebuffer } from './framebuffer.js';
-import { create_ocean_framebuffer, bind_ocean_framebuffer } from './ocean_framebuffer.js';
+import { bind_default_framebuffer, bind_framebuffer } from './framebuffer.js';
+import { create_planet_framebuffer } from './planet_framebuffer.js';
+import { create_ocean_framebuffer } from './ocean_framebuffer.js';
 
 let sphere_texture;
 let indices_texture;
@@ -14,7 +15,7 @@ let sphere_indices_buffer;
 let first_pass_shader;
 let second_pass_shader;
 let third_pass_shader;
-let framebuffer;
+let planet_framebuffer;
 let ocean_framebuffer;
 let quad;
 
@@ -22,7 +23,7 @@ export async function init_planet_renderer(gl){
 	init_sphere(gl);
 	await init_shaders(gl);
 	await init_textures(gl);
-	framebuffer = create_framebuffer(gl, sphere_texture.width, sphere_texture.height);
+	planet_framebuffer = create_planet_framebuffer(gl, sphere_texture.width, sphere_texture.height);
 	ocean_framebuffer = create_ocean_framebuffer(gl, gl.canvas.clientWidth, gl.canvas.clientHeight);
 	quad = create_quad(gl);
 }
@@ -37,7 +38,7 @@ export function render_final_planet(gl, scene){
 }
 
 function first_pass(gl, scene){
-	bind_framebuffer(gl, framebuffer);
+	bind_framebuffer(gl, planet_framebuffer);
 	gl.clear(gl.COLOR_BUFFER_BIT);
 	gl.useProgram(first_pass_shader.program);
 	bind_texture(gl, gl.TEXTURE0, sphere_texture.id);
@@ -47,13 +48,13 @@ function first_pass(gl, scene){
 }
 
 function second_pass(gl, scene){
-	bind_ocean_framebuffer(gl, ocean_framebuffer);
+	bind_framebuffer(gl, ocean_framebuffer);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	gl.useProgram(second_pass_shader.program);
 	load_camera_to_shader(gl, second_pass_shader, scene.camera);
 	load_planet_color_params(gl, scene.planet_params);
 	bind_texture(gl, gl.TEXTURE0, sphere_texture.id);
-	bind_texture(gl, gl.TEXTURE1, framebuffer.texture.id);
+	bind_texture(gl, gl.TEXTURE1, planet_framebuffer.textures[0].id);
 	bind_texture(gl, gl.TEXTURE2, indices_texture.id);
 	bind_texture(gl, gl.TEXTURE3, normal_map_texture_1.id);
 	bind_texture(gl, gl.TEXTURE4, normal_map_texture_2.id);
@@ -63,28 +64,26 @@ function second_pass(gl, scene){
 function third_pass(gl, scene){
 	bind_default_framebuffer(gl);
 	gl.useProgram(third_pass_shader.program);
-	bind_texture(gl, gl.TEXTURE0, ocean_framebuffer.albedo_texture.id);
-	bind_texture(gl, gl.TEXTURE1, ocean_framebuffer.depth_texture.id);
+	bind_texture(gl, gl.TEXTURE0, ocean_framebuffer.textures[0].id);
+	bind_texture(gl, gl.TEXTURE1, ocean_framebuffer.textures[1].id);
 	load_camera_to_shader(gl, third_pass_shader, scene.camera);
 	draw_model_indices(gl, quad);
 }
 
 function load_planet_shape_params(gl, planet_params){
-	const uniforms = ['ocean_size', 'ocean_floor', 'mountain_height', 'mountain_frequency', 'detail_frequency', 'detail_scale', 'land_edge_smoothing', 'mountain_mask'];
-	for(const i of uniforms){
-		set_uniform_f(gl, first_pass_shader, i, planet_params[i]);
+	for(const param_name in planet_params.generation_params){
+		set_uniform_f(gl, first_pass_shader, param_name, planet_params.generation_params[param_name]);
 	}
 }
 
 function load_planet_color_params(gl, planet_params){
-	const uniforms = ['texture_scale', 'texture_strength' ];
-	for(const i of uniforms){
-		set_uniform_f(gl, second_pass_shader, i, planet_params[i]);
+	for(const param_name in planet_params.color_params){
+		set_uniform_f(gl, second_pass_shader, param_name, planet_params.color_params[param_name]);
 	}
 }
 
 function init_sphere(gl){
-	const { positions, indices } = generate_sphere(7);
+	const { positions, indices } = generate_sphere(6);
 	sphere_indices_buffer = create_indices_buffer(gl, indices);
 	sphere_texture = load_texture_from_data(gl, positions);
 	const neighbouring_indices = get_neighbouring_indices_array(indices, positions.length/3);
