@@ -54,6 +54,10 @@ vec3 get_nmap_normal(){
 	return mix(normal1, normal2, pass_nmap_mix);
 }
 
+float LinearEyeDepth(float z) {
+    return 1.0 / (gl_FragCoord.z + gl_FragCoord.w);
+}
+
 void main(){
 	vec3 normal = get_nmap_normal();
 	normal = mix(normal, pass_normal, 1.0 - texture_strength);

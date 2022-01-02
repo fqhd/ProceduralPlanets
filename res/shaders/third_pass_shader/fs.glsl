@@ -66,14 +66,19 @@ vec3 get_cam_pos(){
 	return (inverse(view) * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
 }
 
+float LinearEyeDepth(float z) {
+    return 1.0 / (gl_FragCoord.z + gl_FragCoord.w);
+}
+
 void main(){
 	vec2 uv = (pass_ndc_coords + vec2(1.0)) / 2.0;
 	vec3 original_color = texture(albedo_texture, uv).rgb;
 	float depth = texture(depth_texture, uv).r;
+	depth = depth * length(get_view_vector());
 
 	vec3 ray_pos = get_cam_pos();
 	vec3 ray_dir = normalize(get_view_vector());
-	vec2 hit_info = ray_sphere(vec3(0.0), 1.0, ray_pos, ray_dir);
+	vec2 hit_info = ray_sphere(vec3(0.0), 1.2, ray_pos, ray_dir);
 	float dist_to_ocean = hit_info.x;
 	float dist_through_ocean = hit_info.y;
 	float ocean_view_depth = min(dist_through_ocean, depth - dist_to_ocean);

@@ -60,7 +60,7 @@ float fractal_noise(vec3 pos){
 	float amplitude = 0.5;
 	float frequency = 1.0;
 
-	for(int i = 1; i <= 5; i++){
+	for(int i = 1; i <= 8; i++){
 		total += noise(pos * frequency) * amplitude;
 		amplitude *= 0.5;
 		frequency *= 2.0;
@@ -103,27 +103,9 @@ float blend_mask(vec3 pos){
 }
 
 float planet_shape(vec3 pos){
-	// Planet shape
-	float height = fractal_noise(pos * detail_frequency * MAX_DETAIL_FREQUENCY) * detail_scale * MAX_DETAIL_SCALE;
+	float height = fractal_noise(pos * ocean_size * 4.0 + vec3(ocean_floor * 10.0));
 
-	// Mountains
-	float mountain_noise = ridge_noise(pos * mountain_frequency * 10.0);
-	mountain_noise -= 1.0 - mountain_height;
-	mountain_noise = max(mountain_noise, 0.0);
-	float mask = blend_mask(pos);
-
-	height += mountain_noise * mask;
-
-	// Ocean
-	float ocean_noise = fractal_noise(pos * 2.0);
-	ocean_noise -= ocean_size;
-	ocean_noise = smoothMin(ocean_noise, 0.0, land_edge_smoothing * MAX_EDGE_SMOOTHING);
-	ocean_noise *= ocean_size * MAX_OCEAN_DEPTH;
-	height += ocean_noise;
-	float floor_noise = fractal_noise(pos * 7.0) * 0.1;
-	height = max(height, MIN_OCEAN_FLOOR * (1.0 - ocean_floor) + floor_noise);
-
-	return height;
+	return height * mountain_height;
 }
 
 void main() {
