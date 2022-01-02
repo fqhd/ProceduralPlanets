@@ -80,9 +80,6 @@ void main(){
 
 	out_color = vec4(original_color, 1.0);
 	if(ocean_view_depth > 0.0){
-		float optical_depth = 1.0 - exp(-ocean_view_depth * water_depth);
-		float alpha = 1.0 - exp(-ocean_view_depth * water_transparency);
-		vec3 ocean_color = mix(color_a, color_b, optical_depth);
-		out_color = vec4(mix(ocean_color, original_color, alpha), 1.0);
+		out_color = vec4(1.0);
 	}
 }
