@@ -8,6 +8,7 @@
 
 in vec3 pass_normal;
 in vec3 pass_position;
+in vec3 pass_cam_pos;
 in float pass_nmap_mix;
 
 layout (location = 0) out vec4 out_color;
@@ -61,5 +62,5 @@ void main(){
 	brightness = max(brightness, 0.1);
 
 	out_color = vec4(obj_color * brightness, 1.0);
-	out_depth = 1.0/gl_FragCoord.w;
+	out_depth = 1.0 / gl_FragCoord.w;
 }

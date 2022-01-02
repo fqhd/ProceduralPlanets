@@ -8,7 +8,8 @@
 
 in vec3 pass_position;
 
-out vec4 out_color;
+layout (location = 0) out vec4 out_color;
+layout (location = 1) out float out_depth;
 
 uniform sampler2D ourTexture;
 const float blend_sharpness = 5.5;
@@ -37,4 +38,5 @@ void main(){
 
 	vec3 fragment_color = calc_fragment_color(pos, normal);
 	out_color = vec4(fragment_color, 1.0);
+	out_depth = 1000.0;
 }

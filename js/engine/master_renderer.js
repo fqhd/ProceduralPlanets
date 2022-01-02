@@ -1,5 +1,5 @@
 import { init_gl_state, clear } from './base_renderer.js';
-import { init_planet_renderer, draw_planet } from './planet_renderer.js';
+import { init_planet_renderer, prepare_planet_rendering, render_final_planet } from './planet_renderer.js';
 import { init_skybox_renderer, draw_skybox } from './skybox_renderer.js';
 import { update_camera } from './camera.js';
 
@@ -10,10 +10,9 @@ export async function init_master_renderer(gl){
 }
 
 export function draw_scene(gl, scene){
-	clear(gl);
-	
 	update_camera(scene.camera);
 
-	draw_planet(gl, scene);
+	prepare_planet_rendering(gl, scene);
 	draw_skybox(gl, scene);
+	render_final_planet(gl, scene);
 }

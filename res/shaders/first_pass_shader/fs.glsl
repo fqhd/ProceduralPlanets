@@ -123,12 +123,6 @@ float planet_shape(vec3 pos){
 	float floor_noise = fractal_noise(pos * 7.0) * 0.1;
 	height = max(height, MIN_OCEAN_FLOOR * (1.0 - ocean_floor) + floor_noise);
 
-	// if(pos.x > 0.0){
-	// 	height = 0.0;
-	// }else{
-	// 	height = blend_mask(pos);
-	// }
-
 	return height;
 }
 

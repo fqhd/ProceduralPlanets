@@ -27,9 +27,12 @@ export async function init_planet_renderer(gl){
 	quad = create_quad(gl);
 }
 
-export function draw_planet(gl, scene){
+export function prepare_planet_rendering(gl, scene){
 	first_pass(gl, scene);
 	second_pass(gl, scene);
+}
+
+export function render_final_planet(gl, scene){
 	third_pass(gl, scene);
 }
 
@@ -55,12 +58,14 @@ function second_pass(gl, scene){
 	bind_texture(gl, gl.TEXTURE3, normal_map_texture_1.id);
 	bind_texture(gl, gl.TEXTURE4, normal_map_texture_2.id);
 	draw_indices(gl, sphere_indices_buffer);
-	bind_default_framebuffer(gl);
 }
 
 function third_pass(gl, scene){
+	bind_default_framebuffer(gl);
 	gl.useProgram(third_pass_shader.program);
-	bind_texture(gl, gl.TEXTURE0, ocean_framebuffer.depth_texture.id);
+	bind_texture(gl, gl.TEXTURE0, ocean_framebuffer.albedo_texture.id);
+	bind_texture(gl, gl.TEXTURE1, ocean_framebuffer.depth_texture.id);
+	load_camera_to_shader(gl, third_pass_shader, scene.camera);
 	draw_model_indices(gl, quad);
 }
 
@@ -110,6 +115,9 @@ async function init_second_pass_shader(gl){
 
 async function init_third_pass_shader(gl){
 	third_pass_shader = await load_shader_from_dir(gl, 'res/shaders/third_pass_shader/');
+	gl.useProgram(third_pass_shader.program);
+	set_uniform_i(gl, third_pass_shader, 'albedo_texture', 0);
+	set_uniform_i(gl, third_pass_shader, 'depth_texture', 1);
 }
 
 async function init_textures(gl){
