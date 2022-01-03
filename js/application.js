@@ -4,6 +4,7 @@ import { init_controls, update_planet_params } from './controller.js';
 
 export async function init_application(gl){
 	const scene = {
+		time: 0,
 		planet_params: {
 			generation_params: {
 				noise_frequency: undefined,
@@ -27,7 +28,8 @@ export async function init_application(gl){
 	return scene;
 }
 
-export function draw(gl, scene){
+export function draw(gl, scene, time){
+	scene.time = time * 0.001;
 	update_planet_params();
 	draw_scene(gl, scene);
 }

@@ -1,4 +1,4 @@
-import { load_shader_from_dir, set_uniform_f, set_uniform_i, set_uniform_vec3 } from './shader.js';
+import { load_shader_from_dir, set_uniform_f, set_uniform_i, set_uniform_mat4 } from './shader.js';
 import { generate_sphere, get_neighbouring_indices_array } from './sphere_generator.js';
 import { load_texture_from_data, create_indices_texture, load_texture_from_file } from './texture.js';
 import { draw_model_indices, load_camera_to_shader, bind_texture, draw_indices } from './base_renderer.js';
@@ -6,11 +6,15 @@ import { create_quad, create_indices_buffer } from './mesh_generator.js';
 import { bind_default_framebuffer, bind_framebuffer } from './framebuffer.js';
 import { create_planet_framebuffer } from './planet_framebuffer.js';
 import { create_ocean_framebuffer } from './ocean_framebuffer.js';
+import { deg_to_rad } from './maths.js';
+
+const { mat4 } = glMatrix;
 
 let sphere_texture;
 let indices_texture;
 let normal_map_texture_1;
 let normal_map_texture_2;
+let water_normal_map;
 let sphere_indices_buffer;
 let first_pass_shader;
 let second_pass_shader;
@@ -18,6 +22,8 @@ let third_pass_shader;
 let planet_framebuffer;
 let ocean_framebuffer;
 let quad;
+let water_rotation_matrix_1;
+let water_rotation_matrix_2;
 
 export async function init_planet_renderer(gl){
 	init_sphere(gl);
@@ -26,6 +32,8 @@ export async function init_planet_renderer(gl){
 	planet_framebuffer = create_planet_framebuffer(gl, sphere_texture.width, sphere_texture.height);
 	ocean_framebuffer = create_ocean_framebuffer(gl, gl.canvas.clientWidth, gl.canvas.clientHeight);
 	quad = create_quad(gl);
+	water_rotation_matrix_1 = mat4.create();
+	water_rotation_matrix_2 = mat4.create();
 }
 
 export function prepare_planet_rendering(gl, scene){
@@ -62,10 +70,15 @@ function second_pass(gl, scene){
 }
 
 function third_pass(gl, scene){
+	mat4.fromRotation(water_rotation_matrix_1, deg_to_rad(scene.time), [0, 1, 0]);
+	mat4.fromRotation(water_rotation_matrix_2, deg_to_rad(scene.time), [1, 0, 0]);
 	bind_default_framebuffer(gl);
 	gl.useProgram(third_pass_shader.program);
 	bind_texture(gl, gl.TEXTURE0, ocean_framebuffer.textures[0].id);
 	bind_texture(gl, gl.TEXTURE1, ocean_framebuffer.textures[1].id);
+	bind_texture(gl, gl.TEXTURE2, water_normal_map.id);
+	set_uniform_mat4(gl, third_pass_shader, 'water_rotation_matrix_1', water_rotation_matrix_1);
+	set_uniform_mat4(gl, third_pass_shader, 'water_rotation_matrix_2', water_rotation_matrix_2);
 	load_planet_params(gl, third_pass_shader, scene.planet_params.water_params);
 	load_camera_to_shader(gl, third_pass_shader, scene.camera);
 	draw_model_indices(gl, quad);
@@ -112,9 +125,11 @@ async function init_third_pass_shader(gl){
 	gl.useProgram(third_pass_shader.program);
 	set_uniform_i(gl, third_pass_shader, 'albedo_texture', 0);
 	set_uniform_i(gl, third_pass_shader, 'depth_texture', 1);
+	set_uniform_i(gl, third_pass_shader, 'normal_map', 2);
 }
 
 async function init_textures(gl){
 	normal_map_texture_1 = await load_texture_from_file(gl, 'res/textures/perlinNormal.jpg');
 	normal_map_texture_2 = await load_texture_from_file(gl, 'res/textures/rockNormal.jpg');
+	water_normal_map = await load_texture_from_file(gl, 'res/textures/water_normal.jpg');
 }

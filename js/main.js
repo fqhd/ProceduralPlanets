@@ -22,8 +22,8 @@ async function main(){
 	draw_game();
 }
 
-function draw_game(){
-	draw(gl, scene);
+function draw_game(time){
+	draw(gl, scene, time);
 	requestAnimationFrame(draw_game);
 }
 

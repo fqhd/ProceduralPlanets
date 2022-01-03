@@ -12,15 +12,72 @@ out vec4 out_color;
 
 uniform sampler2D albedo_texture;
 uniform sampler2D depth_texture;
+uniform sampler2D normal_map;
 uniform mat4 view;
 uniform mat4 projection;
 uniform float water_depth;
 uniform float shininess;
+uniform mat4 water_rotation_matrix_1;
+uniform mat4 water_rotation_matrix_2;
 
-const vec3 light_dir = vec3(0.0, 0.0, -1.0);
+const vec3 light_dir = vec3(0.0, -1.0, -1.0);
 const vec3 color_b = vec3(0.0, 0.0, 0.1);
 const vec3 color_a = vec3(0.0, 0.4, 0.6);
 
+// Thanks to Sebastian Lague and Ben Golus for implementing the logic of this triplinar normal map calculation function
+vec3 calc_fragment_normal(sampler2D nmap, vec3 position, vec3 normal) {
+	// Sample normal maps(tangent space)
+	float scale = 20.0;
+	float sharpness = 1.0;
+	vec3 tnormalX = texture(nmap, vec2(0.0, 1.0) - position.zy * scale).rgb * 2.0 - vec3(1.0);
+	vec3 tnormalY = texture(nmap, vec2(0.0, 1.0) - position.xz * scale).rgb * 2.0 - vec3(1.0);
+	vec3 tnormalZ = texture(nmap, vec2(0.0, 1.0) - position.xy * scale).rgb * 2.0 - vec3(1.0);
+
+	// Swizzle surface normal to match tangent space and blend with normals from normal map
+	tnormalX = vec3(tnormalX.xy + normal.zy, tnormalX.z * normal.x);
+	tnormalY = vec3(tnormalY.xy + normal.xz, tnormalY.z * normal.y);
+	tnormalZ = vec3(tnormalZ.xy + normal.xy, tnormalZ.z * normal.z);
+
+	// Calculate blend weight
+	vec3 weight = abs(normal);
+	weight.x = pow(weight.x, sharpness);
+	weight.y = pow(weight.y, sharpness);
+	weight.z = pow(weight.z, sharpness);
+	weight /= dot(weight, vec3(1.0));
+
+	// Swizzle tangent normals to match world normald and blend together
+	return normalize(tnormalX.zyx * weight.x + tnormalY.xzy * weight.y + tnormalZ.xyz * weight.z);
+}
+
+// Thanks to Patricio Gonzalez Vivo for making this noise function
+// Source code can be found here: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
+// Github of author: https://github.com/patriciogonzalezvivo?tab=repositories
+float mod289(float x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
+vec4 mod289(vec4 x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
+vec4 perm(vec4 x){return mod289(((x * 34.0) + 1.0) * x);}
+float noise(vec3 p){
+    vec3 a = floor(p);
+    vec3 d = p - a;
+    d = d * d * (3.0 - 2.0 * d);
+
+    vec4 b = a.xxyy + vec4(0.0, 1.0, 0.0, 1.0);
+    vec4 k1 = perm(b.xyxy);
+    vec4 k2 = perm(k1.xyxy + b.zzww);
+
+    vec4 c = k2 + a.zzzz;
+    vec4 k3 = perm(c);
+    vec4 k4 = perm(c + 1.0);
+
+    vec4 o1 = fract(k3 * (1.0 / 41.0));
+    vec4 o2 = fract(k4 * (1.0 / 41.0));
+
+    vec4 o3 = o2 * d.z + o1 * (1.0 - d.z);
+    vec2 o4 = o3.yw * d.x + o3.xz * (1.0 - d.x);
+
+    return o4.y * d.y + o4.x * (1.0 - d.y);
+}
+
+// Ray sphere intersection function originally written by Sebastian Lague
 vec2 ray_sphere(vec3 center, float radius, vec3 ray_origin, vec3 ray_dir) {
 	vec3 offset = ray_origin - center;
 	float a = 1.0;
@@ -70,7 +127,13 @@ float LinearEyeDepth(float z) {
     return 1.0 / (gl_FragCoord.z + gl_FragCoord.w);
 }
 
-// Lighting calculation by Sebastian Lague
+vec3 get_nmap_normal(vec3 pos, vec3 sphere_normal){
+	vec3 ocean_normal_1 = calc_fragment_normal(normal_map, mat3(water_rotation_matrix_1) * pos, sphere_normal);
+	vec3 ocean_normal_2 = calc_fragment_normal(normal_map, mat3(water_rotation_matrix_2) * pos, sphere_normal);
+	return mix(ocean_normal_1, ocean_normal_2, 0.5);
+}
+
+// Sphere-intersection inspired by Sebastian Lague
 void main(){
 	vec2 uv = (pass_ndc_coords + vec2(1.0)) / 2.0;
 	vec3 original_color = texture(albedo_texture, uv).rgb;
@@ -89,14 +152,21 @@ void main(){
 		float optical_depth = 1.0 - exp(-ocean_view_depth * water_depth * 10.0);
 
 		// Lighting
-		vec3 ocean_normal = normalize(ray_pos + ray_dir * dist_to_ocean);
-		float specular_angle = acos(dot(normalize(-light_dir - ray_dir), ocean_normal));
+		vec3 sphere_pos = ray_pos + ray_dir * dist_to_ocean;
+		vec3 sphere_normal = normalize(sphere_pos);
+		vec3 dir_to_sun = -normalize(light_dir);
+
+		vec3 ocean_normal = normalize(get_nmap_normal(sphere_pos, sphere_normal));
+		ocean_normal = mix(ocean_normal, sphere_normal, 0.5);
+
+		float specular_angle = acos(dot(normalize(dir_to_sun - ray_dir), ocean_normal));
 		float clamped_shininess = 0.5 + shininess * 0.45;
 		float specular_exponent = specular_angle / (1.0 - clamped_shininess);
 		float specular = exp(-specular_exponent * specular_exponent);
-		float diffuse = clamp(dot(ocean_normal, -light_dir), 0.2, 1.0);
+		float diffuse = clamp(dot(ocean_normal, dir_to_sun), 0.2, 1.0);
+
 		vec3 ocean_color = mix(color_a, color_b, optical_depth) * diffuse + vec3(specular);
 
-		out_color = vec4(ocean_color, 1.0);
+		out_color = vec4(mix(ocean_color, original_color, 1.0 - clamp(optical_depth * 10.0, 0.0, 1.0)), 1.0);
 	}
 }
