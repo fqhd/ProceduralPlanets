@@ -17,7 +17,6 @@ export async function init_application(gl){
 			},
 			water_params: {
 				water_depth: undefined,
-				shininess: undefined,
 			}
 		},
 		camera: create_camera(40, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),

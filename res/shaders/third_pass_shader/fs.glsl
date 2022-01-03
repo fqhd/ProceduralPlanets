@@ -16,7 +16,6 @@ uniform sampler2D normal_map;
 uniform mat4 view;
 uniform mat4 projection;
 uniform float water_depth;
-uniform float shininess;
 uniform mat4 water_rotation_matrix_1;
 uniform mat4 water_rotation_matrix_2;
 
@@ -28,7 +27,7 @@ const vec3 color_a = vec3(0.0, 0.4, 0.6);
 vec3 calc_fragment_normal(sampler2D nmap, vec3 position, vec3 normal) {
 	// Sample normal maps(tangent space)
 	float scale = 20.0;
-	float sharpness = 5.5;
+	float sharpness = 1.0;
 	vec3 tnormalX = texture(nmap, vec2(0.0, 1.0) - position.zy * scale).rgb * 2.0 - vec3(1.0);
 	vec3 tnormalY = texture(nmap, vec2(0.0, 1.0) - position.xz * scale).rgb * 2.0 - vec3(1.0);
 	vec3 tnormalZ = texture(nmap, vec2(0.0, 1.0) - position.xy * scale).rgb * 2.0 - vec3(1.0);
