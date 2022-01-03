@@ -28,7 +28,7 @@ const vec3 color_a = vec3(0.0, 0.4, 0.6);
 vec3 calc_fragment_normal(sampler2D nmap, vec3 position, vec3 normal) {
 	// Sample normal maps(tangent space)
 	float scale = 20.0;
-	float sharpness = 1.0;
+	float sharpness = 5.5;
 	vec3 tnormalX = texture(nmap, vec2(0.0, 1.0) - position.zy * scale).rgb * 2.0 - vec3(1.0);
 	vec3 tnormalY = texture(nmap, vec2(0.0, 1.0) - position.xz * scale).rgb * 2.0 - vec3(1.0);
 	vec3 tnormalZ = texture(nmap, vec2(0.0, 1.0) - position.xy * scale).rgb * 2.0 - vec3(1.0);
@@ -47,34 +47,6 @@ vec3 calc_fragment_normal(sampler2D nmap, vec3 position, vec3 normal) {
 
 	// Swizzle tangent normals to match world normald and blend together
 	return normalize(tnormalX.zyx * weight.x + tnormalY.xzy * weight.y + tnormalZ.xyz * weight.z);
-}
-
-// Thanks to Patricio Gonzalez Vivo for making this noise function
-// Source code can be found here: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
-// Github of author: https://github.com/patriciogonzalezvivo?tab=repositories
-float mod289(float x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
-vec4 mod289(vec4 x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
-vec4 perm(vec4 x){return mod289(((x * 34.0) + 1.0) * x);}
-float noise(vec3 p){
-    vec3 a = floor(p);
-    vec3 d = p - a;
-    d = d * d * (3.0 - 2.0 * d);
-
-    vec4 b = a.xxyy + vec4(0.0, 1.0, 0.0, 1.0);
-    vec4 k1 = perm(b.xyxy);
-    vec4 k2 = perm(k1.xyxy + b.zzww);
-
-    vec4 c = k2 + a.zzzz;
-    vec4 k3 = perm(c);
-    vec4 k4 = perm(c + 1.0);
-
-    vec4 o1 = fract(k3 * (1.0 / 41.0));
-    vec4 o2 = fract(k4 * (1.0 / 41.0));
-
-    vec4 o3 = o2 * d.z + o1 * (1.0 - d.z);
-    vec2 o4 = o3.yw * d.x + o3.xz * (1.0 - d.x);
-
-    return o4.y * d.y + o4.x * (1.0 - d.y);
 }
 
 // Ray sphere intersection function originally written by Sebastian Lague
@@ -123,10 +95,6 @@ vec3 get_cam_pos(){
 	return (inverse(view) * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
 }
 
-float LinearEyeDepth(float z) {
-    return 1.0 / (gl_FragCoord.z + gl_FragCoord.w);
-}
-
 vec3 get_nmap_normal(vec3 pos, vec3 sphere_normal){
 	vec3 ocean_normal_1 = calc_fragment_normal(normal_map, mat3(water_rotation_matrix_1) * pos, sphere_normal);
 	vec3 ocean_normal_2 = calc_fragment_normal(normal_map, mat3(water_rotation_matrix_2) * pos, sphere_normal);
@@ -156,7 +124,7 @@ void main(){
 		vec3 sphere_normal = normalize(sphere_pos);
 		vec3 dir_to_sun = -normalize(light_dir);
 
-		vec3 ocean_normal = normalize(get_nmap_normal(sphere_pos, sphere_normal));
+		vec3 ocean_normal = get_nmap_normal(sphere_pos, sphere_normal);
 		ocean_normal = mix(ocean_normal, sphere_normal, 0.5);
 
 		float specular_angle = acos(dot(normalize(dir_to_sun - ray_dir), ocean_normal));
