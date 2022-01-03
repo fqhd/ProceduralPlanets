@@ -6,21 +6,15 @@ export async function init_application(gl){
 	const scene = {
 		planet_params: {
 			generation_params: {
-				ocean_size: undefined,
-				ocean_floor: undefined,
-				mountain_height: undefined,
-				mountain_frequency: undefined,
-				mountain_mask: undefined,
-				detail_frequency: undefined,
-				detail_scale: undefined,
-				land_edge_smoothing: undefined,
+				noise_frequency: undefined,
+				noise_offset: undefined,
+				noise_scale: undefined,
 			},
 			color_params: {
 				texture_scale: undefined,
 				texture_strength: undefined,
 			},
 			water_params: {
-				water_transparency: undefined,
 				water_depth: undefined,
 			}
 		},

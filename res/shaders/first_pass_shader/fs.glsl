@@ -11,21 +11,9 @@ in vec2 uv;
 out vec2 data;
 
 uniform sampler2D sphere_texture;
-uniform float ocean_size;
-uniform float ocean_floor;
-uniform float mountain_height;
-uniform float mountain_frequency;
-uniform float detail_frequency;
-uniform float detail_scale;
-uniform float land_edge_smoothing;
-uniform float mountain_mask;
-
-const float MIN_OCEAN_FLOOR = -0.8;
-const float MAX_OCEAN_DEPTH = 5.0;
-const float MAX_MOUNTAIN_FREQUENCY = 2.0;
-const float MAX_DETAIL_FREQUENCY = 12.0;
-const float MAX_DETAIL_SCALE = 0.1;
-const float MAX_EDGE_SMOOTHING = 0.2;
+uniform float noise_frequency;
+uniform float noise_offset;
+uniform float noise_scale;
 
 // Thanks to Patricio Gonzalez Vivo for making this noise function
 // Source code can be found here: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
@@ -68,50 +56,16 @@ float fractal_noise(vec3 pos){
 	return total;
 }
 
+float get_height_from_pos(vec3 pos){
+	float height = fractal_noise(pos * noise_frequency * 4.0 + vec3(noise_offset * 10.0));
 
-/*
-	Sebastian Lague is the original author of the following smoothMin() and smoothMax() functions.
-	Credit goes to him, the original source file containing these functions
-	can be found here: https://github.com/SebLague/Solar-System/blob/Development/Assets/Scripts/Celestial/Shaders/Includes/Math.cginc
-*/
-// Smooth minimum of two values, controlled by smoothing factor k
-// When k = 0, this behaves identically to min(a, b)
-float smoothMin(float a, float b, float k) {
-	k = max(0.0, k);
-	// https://www.iquilezles.org/www/articles/smin/smin.htm
-	float h = max(0.0, min(1.0, (b - a + k) / (2.0 * k)));
-	return a * h + b * (1.0 - h) - k * h * (1.0 - h);
-}
-
-// Smooth maximum of two values, controlled by smoothing factor k
-// When k = 0, this behaves identically to max(a, b)
-float smoothMax(float a, float b, float k) {
-	k = min(0.0, -k);
-	float h = max(0.0, min(1.0, (b - a + k) / (2.0 * k)));
-	return a * h + b * (1.0 - h) - k * h * (1.0 - h);
-}
-
-float ridge_noise(vec3 pos){
-	float func1 = noise(pos);
-	float func2 = 1.0 - noise(pos);
-	float r = smoothMin(func1, func2, 0.1) * 2.0;
-	return r - fractal_noise(pos) * 0.5;
-}
-
-float blend_mask(vec3 pos){
-	return max(min(1.0, 10.0 - noise(pos * 2.0) * (mountain_mask * 40.0)), 0.0);
-}
-
-float planet_shape(vec3 pos){
-	float height = fractal_noise(pos * ocean_size * 4.0 + vec3(ocean_floor * 10.0));
-
-	return height * mountain_height;
+	return height * noise_scale;
 }
 
 void main() {
 	vec3 pos = texture(sphere_texture, uv).rgb;
 
-	float height = planet_shape(pos);
+	float height = get_height_from_pos(pos);
 
 	data.r = 1.0 + height;
 	data.g = noise(pos * 1.0);

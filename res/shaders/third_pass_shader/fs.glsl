@@ -14,11 +14,10 @@ uniform sampler2D albedo_texture;
 uniform sampler2D depth_texture;
 uniform mat4 view;
 uniform mat4 projection;
-uniform float water_transparency;
 uniform float water_depth;
 
-const vec3 color_a = vec3(1.0, 1.0, 1.0);
-const vec3 color_b = vec3(1.0, 1.0, 1.0);
+const vec3 color_b = vec3(0.0, 0.0, 0.1);
+const vec3 color_a = vec3(0.0, 0.4, 0.6);
 
 vec2 ray_sphere(vec3 center, float radius, vec3 ray_origin, vec3 ray_dir) {
 	vec3 offset = ray_origin - center;
@@ -59,7 +58,6 @@ vec3 get_view_vector(){
 	vec4 eye_coords = to_eye_coords(clip_coords);
 	vec3 world_ray = to_world_coords(eye_coords);
 	return world_ray;
-	return vec3(1.0);
 }
 
 vec3 get_cam_pos(){
@@ -85,6 +83,8 @@ void main(){
 
 	out_color = vec4(original_color, 1.0);
 	if(ocean_view_depth > 0.0){
-		out_color = vec4(1.0);
+		float optical_depth = 1.0 - exp(-ocean_view_depth * water_depth * 10.0);
+		vec3 ocean_color = mix(color_a, color_b, optical_depth);
+		out_color = vec4(ocean_color, 1.0);
 	}
 }
