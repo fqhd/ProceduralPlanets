@@ -123,18 +123,15 @@ void main(){
 		vec3 sphere_pos = ray_pos + ray_dir * dist_to_ocean;
 		vec3 sphere_normal = normalize(sphere_pos);
 		vec3 dir_to_sun = -normalize(light_dir);
-
 		vec3 ocean_normal = get_nmap_normal(sphere_pos, sphere_normal);
 		ocean_normal = mix(ocean_normal, sphere_normal, 0.5);
-
-		float specular_angle = acos(dot(normalize(dir_to_sun - ray_dir), ocean_normal));
-		float clamped_shininess = 0.5 + shininess * 0.45;
-		float specular_exponent = specular_angle / (1.0 - clamped_shininess);
-		float specular = exp(-specular_exponent * specular_exponent);
+		vec3 reflected_vector = reflect(-dir_to_sun, ocean_normal);
+		vec3 to_camera_vector = normalize(ray_pos - sphere_pos);
+		float specular_factor = clamp(dot(reflected_vector, to_camera_vector), 0.0, 1.0);
+		float specular = pow(specular_factor, 35.0);
 		float diffuse = clamp(dot(ocean_normal, dir_to_sun), 0.2, 1.0);
 
 		vec3 ocean_color = mix(color_a, color_b, optical_depth) * diffuse + vec3(specular);
-
 		out_color = vec4(mix(ocean_color, original_color, 1.0 - clamp(optical_depth * 10.0, 0.0, 1.0)), 1.0);
 	}
 }
