@@ -38,5 +38,5 @@ void main(){
 
 	vec3 fragment_color = calc_fragment_color(pos, normal);
 	out_color = vec4(fragment_color, 1.0);
-	out_depth = 1000.0;
+	out_depth = 100.0;
 }
