@@ -15,7 +15,9 @@ uniform sampler2D depth_texture;
 uniform mat4 view;
 uniform mat4 projection;
 uniform float water_depth;
+uniform float shininess;
 
+const vec3 light_dir = vec3(0.0, 0.0, -1.0);
 const vec3 color_b = vec3(0.0, 0.0, 0.1);
 const vec3 color_a = vec3(0.0, 0.4, 0.6);
 
@@ -68,6 +70,7 @@ float LinearEyeDepth(float z) {
     return 1.0 / (gl_FragCoord.z + gl_FragCoord.w);
 }
 
+// Lighting calculation by Sebastian Lague
 void main(){
 	vec2 uv = (pass_ndc_coords + vec2(1.0)) / 2.0;
 	vec3 original_color = texture(albedo_texture, uv).rgb;
@@ -84,7 +87,16 @@ void main(){
 	out_color = vec4(original_color, 1.0);
 	if(ocean_view_depth > 0.0){
 		float optical_depth = 1.0 - exp(-ocean_view_depth * water_depth * 10.0);
-		vec3 ocean_color = mix(color_a, color_b, optical_depth);
+
+		// Lighting
+		vec3 ocean_normal = normalize(ray_pos + ray_dir * dist_to_ocean);
+		float specular_angle = acos(dot(normalize(-light_dir - ray_dir), ocean_normal));
+		float clamped_shininess = 0.5 + shininess * 0.45;
+		float specular_exponent = specular_angle / (1.0 - clamped_shininess);
+		float specular = exp(-specular_exponent * specular_exponent);
+		float diffuse = clamp(dot(ocean_normal, -light_dir), 0.2, 1.0);
+		vec3 ocean_color = mix(color_a, color_b, optical_depth) * diffuse + vec3(specular);
+
 		out_color = vec4(ocean_color, 1.0);
 	}
 }

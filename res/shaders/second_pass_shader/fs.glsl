@@ -63,7 +63,7 @@ void main(){
 	normal = mix(normal, pass_normal, 1.0 - texture_strength);
 
 	float brightness = dot(normalize(-light_dir), normalize(normal));
-	brightness = max(brightness, 0.1);
+	brightness = max(brightness, 0.2);
 
 	out_color = vec4(obj_color * brightness, 1.0);
 	out_depth = 1.0 / gl_FragCoord.w;
