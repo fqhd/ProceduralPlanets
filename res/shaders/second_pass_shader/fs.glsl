@@ -30,6 +30,7 @@ const vec3 light_dir = vec3(0.0, -1.0, -1.0);
 const vec3 snow_color = vec3(1.0, 1.0, 1.0);
 const vec3 grass_color = vec3(0.1, 0.9, 0.2);
 const vec3 sand_color = vec3(1.0, 1.0, 0.3);
+const vec3 dirt_color = vec3(0.15, 0.15, 0.15);
 
 // Thanks to Sebastian Lague and Ben Golus for implementing the logic of this triplinar normal map calculation function
 vec3 calc_fragment_normal(sampler2D normal_map) {
@@ -70,12 +71,20 @@ vec3 lerp(vec3 a, vec3 b, float f){
 	return mix(a, b, f);
 }
 
+float calc_steepness(){
+	float steepness = 1.0 - dot(pass_normal, normalize(pass_position));
+	return steepness / 0.2;
+}
+
 vec3 get_color(){
 	vec3 final_color;
+	float steepness = calc_steepness();
+	vec3 local_grass_color = lerp(grass_color, dirt_color, steepness);
+
 	if (pass_color_mix < GRASS_THRESHOLD){
-		final_color = lerp(sand_color, grass_color, pass_color_mix / GRASS_THRESHOLD);
+		final_color = lerp(sand_color, local_grass_color, pass_color_mix / GRASS_THRESHOLD);
 	}else{
-		final_color = lerp(grass_color, snow_color, (pass_color_mix - GRASS_THRESHOLD) / (SNOW_THRESHOLD - GRASS_THRESHOLD));
+		final_color = lerp(local_grass_color, snow_color, (pass_color_mix - GRASS_THRESHOLD) / (SNOW_THRESHOLD - GRASS_THRESHOLD));
 	}
 
 	return final_color;
