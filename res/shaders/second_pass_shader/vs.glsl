@@ -47,9 +47,9 @@ float get_nmap_mix_factor() {
 }
 
 float get_color_mix_factor() {
-	ivec2 uv = index_to_uv(gl_VertexID, sphere_texture_width);
+	float scale = get_scale(gl_VertexID);
 
-	return texelFetch(vertex_data_texture, uv, 0).b;
+	return scale - 1.0;
 }
 
 vec3 get_neighbouring_pos(int neighbouring_index){

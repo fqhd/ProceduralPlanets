@@ -8,7 +8,7 @@
 
 in vec2 uv;
 
-out vec4 data;
+out vec2 data;
 
 uniform sampler2D sphere_texture;
 uniform float noise_frequency;
@@ -71,6 +71,4 @@ void main() {
 
 	data.r = 1.0 + height; // Vertex height
 	data.g = noise(pos * 1.0); // Normal Map mixing values
-	data.b = height; // Color mixing value
-	data.a = 1.0;
 }

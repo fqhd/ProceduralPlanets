@@ -43,7 +43,7 @@ function create_ocean_albedo_texture(gl, width, height){
 function create_ocean_depth_texture(gl, width, height){
 	const id = gl.createTexture();
 	gl.bindTexture(gl.TEXTURE_2D, id);
-	gl.texStorage2D(gl.TEXTURE_2D, 1, gl.R32F, width, height);
+	gl.texStorage2D(gl.TEXTURE_2D, 1, gl.R16F, width, height);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
