@@ -96,9 +96,14 @@ void main(){
 	vec3 normal = get_nmap_normal();
 	normal = mix(normal, pass_normal, 1.0 - texture_strength);
 
-	float brightness = dot(normalize(-light_dir), normalize(normal));
-	brightness = max(brightness, 0.2);
+	float diffuse = dot(normalize(-light_dir), normalize(normal));
+	diffuse = max(diffuse, 0.2);
 
-	out_color = get_color() * brightness;
+	vec3 reflected_vector = reflect(normalize(light_dir), normal);
+	vec3 to_camera_vector = normalize(pass_cam_pos - pass_position);
+	float specular_factor = clamp(dot(reflected_vector, to_camera_vector), 0.0, 1.0);
+	float specular = pow(specular_factor, 10.0);
+
+	out_color = get_color() * diffuse + vec3(specular) * 0.2;
 	out_depth = 1.0 / gl_FragCoord.w;
 }
