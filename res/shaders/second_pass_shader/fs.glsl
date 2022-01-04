@@ -10,6 +10,7 @@ in vec3 pass_normal;
 in vec3 pass_position;
 in vec3 pass_cam_pos;
 in float pass_nmap_mix;
+in float pass_color_mix;
 
 layout (location = 0) out vec3 out_color;
 layout (location = 1) out float out_depth;
@@ -22,7 +23,12 @@ uniform float texture_strength;
 const float blend_sharpness = 5.5;
 const float MAX_TEXTURE_SCALE = 20.0;
 const vec3 light_dir = vec3(0.0, -1.0, -1.0);
-const vec3 obj_color = vec3(0.4, 0.3, 0.5);
+const vec3 snow_color = vec3(1.0, 1.0, 1.0);
+const vec3 grass_color = vec3(0.1, 0.9, 0.2);
+const vec3 sand_color = vec3(1.0, 1.0, 0.3);
+
+const float GRASS_THRESHOLD = 0.2;
+const float SNOW_THRESHOLD = 1.0;
 
 // Thanks to Sebastian Lague and Ben Golus for implementing the logic of this triplinar normal map calculation function
 vec3 calc_fragment_normal(sampler2D normal_map) {
@@ -58,6 +64,18 @@ float LinearEyeDepth(float z) {
     return 1.0 / (gl_FragCoord.z + gl_FragCoord.w);
 }
 
+vec3 get_color(){
+	vec3 final_color;
+	if (pass_color_mix < GRASS_THRESHOLD){
+		final_color = mix(sand_color, grass_color, pass_color_mix / GRASS_THRESHOLD);
+	}else{
+		final_color = mix(grass_color, snow_color, (pass_color_mix - GRASS_THRESHOLD) / (SNOW_THRESHOLD - GRASS_THRESHOLD));
+	}
+
+	return final_color;
+}
+
+
 void main(){
 	vec3 normal = get_nmap_normal();
 	normal = mix(normal, pass_normal, 1.0 - texture_strength);
@@ -65,6 +83,6 @@ void main(){
 	float brightness = dot(normalize(-light_dir), normalize(normal));
 	brightness = max(brightness, 0.2);
 
-	out_color = obj_color * brightness;
+	out_color = get_color() * brightness;
 	out_depth = 1.0 / gl_FragCoord.w;
 }

@@ -8,7 +8,7 @@
 
 in vec2 uv;
 
-out vec2 data;
+out vec4 data;
 
 uniform sampler2D sphere_texture;
 uniform float noise_frequency;
@@ -59,7 +59,10 @@ float fractal_noise(vec3 pos){
 float get_height_from_pos(vec3 pos){
 	float height = fractal_noise(pos * noise_frequency * 4.0 + vec3(noise_offset * 10.0));
 
-	return height * noise_scale;
+	if(pos.x > 0.0){
+		return 1.0;
+	}
+	return height * (0.3 + noise_scale);
 }
 
 void main() {
@@ -67,6 +70,8 @@ void main() {
 
 	float height = get_height_from_pos(pos);
 
-	data.r = 1.0 + height;
-	data.g = noise(pos * 1.0);
+	data.r = 1.0 + height; // Vertex height
+	data.g = noise(pos * 1.0); // Normal Map mixing values
+	data.b = height; // Color mixing value
+	data.a = 1.0;
 }

@@ -3,6 +3,7 @@
 out vec3 pass_normal;
 out vec3 pass_position;
 out float pass_nmap_mix;
+out float pass_color_mix;
 out vec3 pass_cam_pos;
 
 uniform mat4 projection;
@@ -21,6 +22,12 @@ ivec2 index_to_uv(int index, int width){
 	return ivec2(u, v);
 }
 
+int get_index(int index){
+	ivec2 uv = index_to_uv(index, indices_texture_width);
+
+	return texelFetch(indices_texture, uv, 0).r;
+}
+
 vec3 get_sphere_pos(int index) {
 	ivec2 uv = index_to_uv(index, sphere_texture_width);
 
@@ -33,16 +40,16 @@ float get_scale(int index) {
 	return texelFetch(vertex_data_texture, uv, 0).r;
 }
 
-float get_nmap_mix_factor(int index) {
-	ivec2 uv = index_to_uv(index, sphere_texture_width);
+float get_nmap_mix_factor() {
+	ivec2 uv = index_to_uv(gl_VertexID, sphere_texture_width);
 
 	return texelFetch(vertex_data_texture, uv, 0).g;
 }
 
-int get_index(int index){
-	ivec2 uv = index_to_uv(index, indices_texture_width);
+float get_color_mix_factor() {
+	ivec2 uv = index_to_uv(gl_VertexID, sphere_texture_width);
 
-	return texelFetch(indices_texture, uv, 0).r;
+	return texelFetch(vertex_data_texture, uv, 0).b;
 }
 
 vec3 get_neighbouring_pos(int neighbouring_index){
@@ -87,7 +94,8 @@ void main() {
 
 	pass_normal = calc_average_normal(pos);
 	pass_position = pos;
-	pass_nmap_mix = get_nmap_mix_factor(get_index(gl_VertexID));
+	pass_nmap_mix = get_nmap_mix_factor();
+	pass_color_mix = get_color_mix_factor();
 	pass_cam_pos = (inverse(view) * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
 
 	gl_Position = projection * view * vec4(pos, 1.0);
