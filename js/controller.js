@@ -5,12 +5,15 @@ const sliders = {};
 function init_sliders(planet_params){
 	for(const param_name in planet_params.generation_params){
 		sliders[param_name] = document.getElementById(param_name);
+		planet_params.generation_params[param_name] = sliders[param_name].value * 0.01;
 	}
 	for(const param_name in planet_params.color_params){
 		sliders[param_name] = document.getElementById(param_name);
+		planet_params.color_params[param_name] = sliders[param_name].value * 0.01;
 	}
 	for(const param_name in planet_params.water_params){
 		sliders[param_name] = document.getElementById(param_name);
+		planet_params.water_params[param_name] = sliders[param_name].value * 0.01;
 	}
 }
 
@@ -29,13 +32,19 @@ export function update_planet_params(){
 	
 	// Multiply every slider value by 0.01 to get a number between 0 and 1
 	for(const param_name in planet_params.generation_params){
-		planet_params.generation_params[param_name] = sliders[param_name].value * 0.01;
+		const slider_value = sliders[param_name].value * 0.01;
+		const param_value = planet_params.generation_params[param_name];
+		planet_params.generation_params[param_name] += (slider_value - param_value) * 0.1;
 	}
 	for(const param_name in planet_params.color_params){
-		planet_params.color_params[param_name] = sliders[param_name].value * 0.01;
+		const slider_value = sliders[param_name].value * 0.01;
+		const param_value = planet_params.color_params[param_name];
+		planet_params.color_params[param_name] += (slider_value - param_value) * 0.1;
 	}
 	for(const param_name in planet_params.water_params){
-		planet_params.water_params[param_name] = sliders[param_name].value * 0.01;
+		const slider_value = sliders[param_name].value * 0.01;
+		const param_value = planet_params.water_params[param_name];
+		planet_params.water_params[param_name] += (slider_value - param_value) * 0.1;
 	}
 }
 
