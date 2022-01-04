@@ -15,6 +15,8 @@ uniform float noise_frequency;
 uniform float noise_offset;
 uniform float noise_scale;
 
+const float NOISE_SCALE = 0.4;
+
 // Thanks to Patricio Gonzalez Vivo for making this noise function
 // Source code can be found here: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
 // Github of author: https://github.com/patriciogonzalezvivo?tab=repositories
@@ -59,7 +61,7 @@ float fractal_noise(vec3 pos){
 float get_height_from_pos(vec3 pos){
 	float height = fractal_noise(pos * noise_frequency * 4.0 + vec3(noise_offset * 10.0));
 
-	return height * (0.3 + noise_scale);
+	return height * NOISE_SCALE;
 }
 
 void main() {

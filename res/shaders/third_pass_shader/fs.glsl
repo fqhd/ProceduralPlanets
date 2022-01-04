@@ -116,7 +116,7 @@ void main(){
 
 	out_color = vec4(original_color, 1.0);
 	if(ocean_view_depth > 0.0){
-		float optical_depth = 1.0 - exp(-ocean_view_depth * water_depth * 10.0);
+		float optical_depth = 1.0 - exp(-ocean_view_depth * (5.0 + water_depth * 5.0));
 
 		// Lighting
 		vec3 sphere_pos = ray_pos + ray_dir * dist_to_ocean;

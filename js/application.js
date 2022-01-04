@@ -9,13 +9,10 @@ export async function init_application(gl){
 			generation_params: {
 				noise_frequency: undefined,
 				noise_offset: undefined,
-				noise_scale: undefined,
 			},
 			color_params: {
 				texture_scale: undefined,
 				texture_strength: undefined,
-				grass_threshold: undefined,
-				snow_threshold: undefined,
 			},
 			water_params: {
 				water_depth: undefined,
