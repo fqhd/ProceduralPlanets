@@ -19,6 +19,8 @@ uniform sampler2D normal_map_1;
 uniform sampler2D normal_map_2;
 uniform float texture_scale;
 uniform float texture_strength;
+uniform float grass_threshold;
+uniform float snow_threshold;
 
 const float blend_sharpness = 5.5;
 const float MAX_TEXTURE_SCALE = 20.0;
@@ -26,9 +28,6 @@ const vec3 light_dir = vec3(0.0, -1.0, -1.0);
 const vec3 snow_color = vec3(1.0, 1.0, 1.0);
 const vec3 grass_color = vec3(0.1, 0.9, 0.2);
 const vec3 sand_color = vec3(1.0, 1.0, 0.3);
-
-const float GRASS_THRESHOLD = 0.2;
-const float SNOW_THRESHOLD = 1.0;
 
 // Thanks to Sebastian Lague and Ben Golus for implementing the logic of this triplinar normal map calculation function
 vec3 calc_fragment_normal(sampler2D normal_map) {
@@ -64,12 +63,17 @@ float LinearEyeDepth(float z) {
     return 1.0 / (gl_FragCoord.z + gl_FragCoord.w);
 }
 
+vec3 lerp(vec3 a, vec3 b, float f){
+	f = clamp(f, 0.0, 1.0);
+	return mix(a, b, f);
+}
+
 vec3 get_color(){
 	vec3 final_color;
-	if (pass_color_mix < GRASS_THRESHOLD){
-		final_color = mix(sand_color, grass_color, pass_color_mix / GRASS_THRESHOLD);
+	if (pass_color_mix < grass_threshold){
+		final_color = lerp(sand_color, grass_color, pass_color_mix / grass_threshold);
 	}else{
-		final_color = mix(grass_color, snow_color, (pass_color_mix - GRASS_THRESHOLD) / (SNOW_THRESHOLD - GRASS_THRESHOLD));
+		final_color = lerp(grass_color, snow_color, (pass_color_mix - snow_threshold) / (snow_threshold - grass_threshold));
 	}
 
 	return final_color;

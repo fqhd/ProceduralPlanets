@@ -59,9 +59,6 @@ float fractal_noise(vec3 pos){
 float get_height_from_pos(vec3 pos){
 	float height = fractal_noise(pos * noise_frequency * 4.0 + vec3(noise_offset * 10.0));
 
-	if(pos.x > 0.0){
-		return 1.0;
-	}
 	return height * (0.3 + noise_scale);
 }
 

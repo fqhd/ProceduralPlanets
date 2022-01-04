@@ -14,6 +14,8 @@ export async function init_application(gl){
 			color_params: {
 				texture_scale: undefined,
 				texture_strength: undefined,
+				grass_threshold: undefined,
+				snow_threshold: undefined,
 			},
 			water_params: {
 				water_depth: undefined,
