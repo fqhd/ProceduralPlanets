@@ -24,7 +24,7 @@ uniform float snow_threshold;
 
 const float BLEND_SHARPNESS = 5.5;
 const float MAX_TEXTURE_SCALE = 20.0;
-const float GRASS_THRESHOLD = 0.2;
+const float GRASS_THRESHOLD = 0.26;
 const float SNOW_THRESHOLD = 0.3;
 const vec3 light_dir = vec3(0.0, -1.0, -1.0);
 const vec3 snow_color = vec3(1.0, 1.0, 1.0);
@@ -79,6 +79,7 @@ float calc_steepness(){
 vec3 get_color(){
 	vec3 final_color;
 	float steepness = calc_steepness();
+	
 	vec3 local_grass_color = lerp(grass_color, dirt_color, steepness);
 
 	if (pass_color_mix < GRASS_THRESHOLD){
