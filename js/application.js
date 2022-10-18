@@ -7,15 +7,15 @@ export async function init_application(gl){
 		time: 0,
 		planet_params: {
 			generation_params: {
-				noise_frequency: undefined,
-				noise_offset: undefined,
+				noise_frequency: 1.5,
+				noise_offset: 0.0,
 			},
 			color_params: {
-				texture_scale: undefined,
-				texture_strength: undefined,
+				texture_scale: 1.0,
+				texture_strength: 1.0,
 			},
 			water_params: {
-				water_depth: undefined,
+				water_depth: 1.0,
 			}
 		},
 		camera: create_camera(40, 0, gl.canvas.clientWidth / gl.canvas.clientHeight),
@@ -26,8 +26,12 @@ export async function init_application(gl){
 	return scene;
 }
 
+let lastTime = 0;
 export function draw(gl, scene, time){
-	scene.time = time * 0.001;
-	update_planet_params();
+	time = time * 0.001;
+	scene.time = time;
+	const deltaTime = time - lastTime;
+	lastTime = time;
+	update_planet_params(deltaTime);
 	draw_scene(gl, scene);
 }
