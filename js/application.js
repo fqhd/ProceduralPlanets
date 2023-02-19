@@ -30,7 +30,6 @@ let lastTime = 0;
 export function draw(gl, scene, time){
 	time = time * 0.001;
 	scene.time = time;
-	scene.planet_params.generation_params.noise_offset += 0.01;
 	const deltaTime = time - lastTime;
 	lastTime = time;
 	update_planet_params(deltaTime);
