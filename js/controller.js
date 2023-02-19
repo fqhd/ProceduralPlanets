@@ -1,5 +1,7 @@
 let scene;
 let is_mouse_down = false;
+let animate = false;
+let noiseOffset = 0;
 
 export function init_controls(s){
 	scene = s;
@@ -8,10 +10,27 @@ export function init_controls(s){
 	canvas.addEventListener('wheel', on_mouse_wheel);
 	canvas.addEventListener('mousedown', () => is_mouse_down = true);
 	canvas.addEventListener('mouseup', () => is_mouse_down = false);
+	document.body.addEventListener('keydown', keyDown);
+	document.body.addEventListener('keyup', keyUp);
+}
+
+function keyUp(key){
+	if(key.key == ' '){
+		animate = false;
+	}
+}
+
+function keyDown(key){
+	if(key.key == ' '){
+		animate = true;
+	}
 }
 
 export function update_planet_params(){
-	scene.planet_params.generation_params.noise_offset += 0.0015;
+	if(animate){
+		noiseOffset += 0.005;
+	}
+	scene.planet_params.generation_params.noise_offset += (noiseOffset - scene.planet_params.generation_params.noise_offset) * 0.1;
 }
 
 function on_mouse_move(event){
@@ -25,7 +44,7 @@ function on_mouse_move(event){
 }
 
 function on_mouse_wheel(event){
-	scene.camera.target_distance += event.deltaY * 0.002;
+	scene.camera.target_distance += event.deltaY * 0.02;
 
 	// Clamping
 	if(scene.camera.target_distance < 1.4) scene.camera.target_distance = 1.4;
