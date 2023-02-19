@@ -44,7 +44,7 @@ function on_mouse_move(event){
 }
 
 function on_mouse_wheel(event){
-	scene.camera.target_distance += event.deltaY * 0.02;
+	scene.camera.target_distance += event.deltaY * 0.002;
 
 	// Clamping
 	if(scene.camera.target_distance < 1.4) scene.camera.target_distance = 1.4;
