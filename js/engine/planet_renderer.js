@@ -1,4 +1,4 @@
-import { load_shader_from_dir, set_uniform_f, set_uniform_i, set_uniform_mat4 } from './shader.js';
+import { load_shader_from_dir, set_uniform_f, set_uniform_vec3, set_uniform_i, set_uniform_mat4 } from './shader.js';
 import { generate_sphere, get_neighbouring_indices_array } from './sphere_generator.js';
 import { load_texture_from_data, create_indices_texture, load_texture_from_file } from './texture.js';
 import { draw_model_indices, load_camera_to_shader, bind_texture, draw_indices } from './base_renderer.js';
@@ -86,12 +86,16 @@ function third_pass(gl, scene){
 
 function load_planet_params(gl, shader, params){
 	for(const param_name in params){
-		set_uniform_f(gl, shader, param_name, params[param_name]);
+		if(typeof params[param_name] == 'object') {
+			set_uniform_vec3(gl, shader, param_name, params[param_name]);
+		}else{
+			set_uniform_f(gl, shader, param_name, params[param_name]);
+		}
 	}
 }
 
 function init_sphere(gl){
-	const { positions, indices } = generate_sphere(7);
+	const { positions, indices } = generate_sphere(8);
 	sphere_indices_buffer = create_indices_buffer(gl, indices);
 	sphere_texture = load_texture_from_data(gl, positions);
 	const neighbouring_indices = get_neighbouring_indices_array(indices, positions.length/3);

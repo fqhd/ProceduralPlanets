@@ -11,11 +11,14 @@ in vec2 uv;
 out vec2 data;
 
 uniform sampler2D sphere_texture;
-uniform float noise_frequency;
 uniform float noise_offset;
-uniform float noise_scale;
-
-const float NOISE_SCALE = 0.4;
+uniform float shape_frequency;
+uniform float warp_factor;
+uniform float mountain_frequency;
+uniform float mountain_height;
+uniform float ridge_noise_frequency;
+uniform float ocean_depth;
+uniform float base_height;
 
 // Thanks to Patricio Gonzalez Vivo for making this noise function
 // Source code can be found here: https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
@@ -24,6 +27,7 @@ float mod289(float x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
 vec4 mod289(vec4 x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
 vec4 perm(vec4 x){return mod289(((x * 34.0) + 1.0) * x);}
 float noise(vec3 p){
+	p += noise_offset;
     vec3 a = floor(p);
     vec3 d = p - a;
     d = d * d * (3.0 - 2.0 * d);
@@ -58,10 +62,42 @@ float fractal_noise(vec3 pos){
 	return total;
 }
 
-float get_height_from_pos(vec3 pos){
-	float height = fractal_noise(pos * noise_frequency * 4.0 + vec3(noise_offset * 10.0));
+float smoothMax(float a, float b, float k) {
+	k = min(0.0, -k);
+	float h = max(0.0, min(1.0, (b - a + k) / (2.0 * k)));
+	return a * h + b * (1.0 - h) - k * h * (1.0 - h);
+}
 
-	return height * NOISE_SCALE;
+float warpedNoise(vec3 pos, float warpFactor) {
+	return noise(pos + noise(pos) * warpFactor);
+}
+
+float ridgeNoise(vec3 pos) {
+	float n = noise(pos * 2.0);
+	n = n * 2.0 - 1.0;
+	return 1.0 - abs(n); 
+}
+
+float get_height_from_pos(vec3 pos){
+	float height = base_height;
+
+
+
+	// General Shape
+	float continentShape = warpedNoise(pos * shape_frequency, warp_factor) * 0.5;
+	height += continentShape; 
+
+	// Mountains
+	float mountainShape = fractal_noise(pos * mountain_frequency) * mountain_height;
+	height += mountainShape;
+	
+	height *= 0.5;
+
+	// Water
+	float oceanShape = ridgeNoise(pos * ridge_noise_frequency + 200.0) * ocean_depth;
+	height -= oceanShape;
+
+	return height;
 }
 
 void main() {

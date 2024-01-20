@@ -26,11 +26,12 @@ const float BLEND_SHARPNESS = 5.5;
 const float MAX_TEXTURE_SCALE = 20.0;
 const float GRASS_THRESHOLD = 0.26;
 const float SNOW_THRESHOLD = 0.3;
+
 const vec3 light_dir = vec3(0.0, -1.0, -1.0);
-const vec3 snow_color = vec3(1.0, 1.0, 1.0);
-const vec3 grass_color = vec3(0.1, 0.9, 0.2);
-const vec3 sand_color = vec3(1.0, 1.0, 0.3);
-const vec3 dirt_color = vec3(0.15, 0.15, 0.15);
+uniform vec3 snow_color;
+uniform vec3 grass_color;
+uniform vec3 sand_color;
+uniform vec3 dirt_color;
 
 // Thanks to Sebastian Lague and Ben Golus for implementing the logic of this triplinar normal map calculation function
 vec3 calc_fragment_normal(sampler2D normal_map) {

@@ -1,7 +1,7 @@
-import { init_application, draw } from './application.js'
+import { init_application, draw, create_scene } from './application.js'
+import { download_image } from './engine/utils.js';
 
 let gl;
-let scene;
 
 async function main(){
 	const canvas = document.getElementById('canvas');
@@ -18,12 +18,14 @@ async function main(){
 	console.log('GLSL Version: ' + gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
 
 	// Initialization of the mythical super data structure
-	scene = await init_application(gl);
+	await init_application(gl);
 	draw_game();
 }
 
 function draw_game(time){
+	const scene = create_scene(gl);
 	draw(gl, scene, time);
+	download_image();
 	requestAnimationFrame(draw_game);
 }
 

@@ -20,8 +20,8 @@ uniform mat4 water_rotation_matrix_1;
 uniform mat4 water_rotation_matrix_2;
 
 const vec3 light_dir = vec3(0.0, -1.0, -1.0);
-const vec3 color_b = vec3(0.0, 0.0, 0.1);
-const vec3 color_a = vec3(0.0, 0.4, 0.6);
+uniform vec3 color_a;
+uniform vec3 color_b;
 
 // Thanks to Sebastian Lague and Ben Golus for implementing the logic of this triplinar normal map calculation function
 vec3 calc_fragment_normal(sampler2D nmap, vec3 position, vec3 normal) {
