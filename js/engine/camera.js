@@ -7,21 +7,23 @@ export function create_camera(pitch, yaw, ratio){
 		position: vec3.create(),
 		pitch,
 		yaw,
-		distance: 3,
+		distance: 2,
+		target_pitch: pitch,
+		target_distance: 3,
+		target_yaw: yaw,
 		origin: [0, 0, 0],
 		view: mat4.create(),
 		projection: calc_proj_matrix(ratio),
 	};
-	update_camera(cam);
 	return cam;
 }
 
 export function update_camera(camera){
-	const {view, position, pitch, yaw, distance} = camera;
+	const {view, position, pitch, yaw, distance, target_pitch, target_yaw, target_distance} = camera;
 
-	camera.distance = distance;
-	camera.pitch = pitch;
-	camera.yaw = yaw;
+	camera.distance += (target_distance - distance) * 0.1;
+	camera.pitch += (target_pitch - pitch) * 0.1;
+	camera.yaw += (target_yaw - yaw) * 0.1;
 
 	// Calculate camera position based on pitch and yaw
 	const point = get_point_from_pitch_and_yaw(camera.pitch, camera.yaw);

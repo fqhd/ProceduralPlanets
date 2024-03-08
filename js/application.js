@@ -1,6 +1,7 @@
 import { draw_scene, init_master_renderer } from './engine/master_renderer.js';
 import { create_camera } from './engine/camera.js';
 import { get_random_color, hsv_to_rgb } from './engine/utils.js';
+import { init_controls, update_planet_params } from './controller.js';
 
 export function create_scene(gl) {
 	const random_water_hue = Math.random();
@@ -33,6 +34,7 @@ export function create_scene(gl) {
 		},
 		camera: create_camera(Math.random() * 50.0, -20.0 + Math.random() * 40.0, gl.canvas.clientWidth / gl.canvas.clientHeight),
 	};
+	init_controls(scene);
 	return scene;
 }
 
@@ -40,10 +42,8 @@ export async function init_application(gl){
 	await init_master_renderer(gl);
 }
 
-let lastTime = 0;
 export function draw(gl, scene, time){
-	time = time * 0.001;
-	scene.time = time;
-	lastTime = time;
+	scene.time = time * 0.001;
+	update_planet_params();
 	draw_scene(gl, scene);
 }

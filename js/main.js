@@ -2,6 +2,7 @@ import { init_application, draw, create_scene } from './application.js'
 import { download_image } from './engine/utils.js';
 
 let gl;
+let scene;
 
 async function main(){
 	const canvas = document.getElementById('canvas');
@@ -19,13 +20,13 @@ async function main(){
 
 	// Initialization of the mythical super data structure
 	await init_application(gl);
+	scene = create_scene(gl);
 	draw_game();
 }
 
 function draw_game(time){
-	const scene = create_scene(gl);
 	draw(gl, scene, time);
-	download_image();
+	// download_image();
 	requestAnimationFrame(draw_game);
 }
 
