@@ -1,10 +1,11 @@
 let scene;
 let is_mouse_down = false;
 let animate = false;
-let noiseOffset = 0;
+let noise_offset = 0;
 
 export function init_controls(s){
 	scene = s;
+	noise_offset = s.planet_params.generation_params.noise_offset;
 	const canvas = document.getElementById('canvas');
 	canvas.addEventListener('mousemove', on_mouse_move);
 	canvas.addEventListener('wheel', on_mouse_wheel);
@@ -28,9 +29,18 @@ function keyDown(key){
 
 export function update_planet_params(){
 	if(animate){
-		noiseOffset += 0.005;
+		noise_offset += 0.01;
 	}
-	scene.planet_params.generation_params.noise_offset += (noiseOffset - scene.planet_params.generation_params.noise_offset) * 0.1;
+	scene.planet_params.generation_params.noise_offset += (noise_offset - scene.planet_params.generation_params.noise_offset) * 0.1;
+
+	const gen_params = scene.planet_params.generation_params;
+	gen_params.shape_frequency = (shape_frequency.value / 100) * 3;
+	gen_params.warp_factor = (warp_factor.value / 100) * 10;
+	gen_params.mountain_frequency = (mountain_frequency.value / 100) * 10;
+	gen_params.mountain_height = (mountain_height.value / 100);
+	gen_params.ridge_noise_frequency = (ridge_noise_frequency.value / 100) * 5;
+	gen_params.ocean_depth = (ocean_depth.value / 100) * 0.5;
+	gen_params.base_height = 0.1 + (base_height.value / 100) * 0.2;
 }
 
 function on_mouse_move(event){
@@ -49,5 +59,4 @@ function on_mouse_wheel(event){
 	// Clamping
 	if(scene.camera.target_distance < 1.4) scene.camera.target_distance = 1.4;
 	if(scene.camera.target_distance > 20) scene.camera.target_distance = 20;
-
 }
