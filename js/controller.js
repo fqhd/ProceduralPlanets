@@ -1,4 +1,4 @@
-import { hex_to_rgb } from "./engine/utils.js";
+import { hex_to_rgb, hsv_to_rgb } from "./engine/utils.js";
 
 let scene;
 let is_mouse_down = false;
@@ -48,6 +48,11 @@ export function update_planet_params(){
 	color_params.dirt_color = hex_to_rgb(dirt_color.value);
 	color_params.grass_color = hex_to_rgb(grass_color.value);
 	color_params.sand_color = hex_to_rgb(sand_color.value);
+	const water_params = scene.planet_params.water_params;
+	water_params.water_depth = (water_depth.value / 100);
+	water_params.color_b = hsv_to_rgb(water_hue.value / 100, 0.5, 0.95);
+	water_params.color_a = hsv_to_rgb(Math.max((water_hue.value / 100) - 0.2, 0.0), 0.5, 0.95);
+
 }
 
 function on_mouse_move(event){
