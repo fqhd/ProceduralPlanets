@@ -1,3 +1,5 @@
+import { hex_to_rgb } from "./engine/utils.js";
+
 let scene;
 let is_mouse_down = false;
 let animate = false;
@@ -15,14 +17,14 @@ export function init_controls(s){
 	document.body.addEventListener('keyup', keyUp);
 }
 
-function keyUp(key){
-	if(key.key == ' '){
+function keyUp(key) {
+	if(key.key == ' ') {
 		animate = false;
 	}
 }
 
-function keyDown(key){
-	if(key.key == ' '){
+function keyDown(key) {
+	if(key.key == ' ') {
 		animate = true;
 	}
 }
@@ -41,6 +43,11 @@ export function update_planet_params(){
 	gen_params.ridge_noise_frequency = (ridge_noise_frequency.value / 100) * 5;
 	gen_params.ocean_depth = (ocean_depth.value / 100) * 0.5;
 	gen_params.base_height = 0.1 + (base_height.value / 100) * 0.2;
+	const color_params = scene.planet_params.color_params;
+	color_params.snow_color = hex_to_rgb(snow_color.value);
+	color_params.dirt_color = hex_to_rgb(dirt_color.value);
+	color_params.grass_color = hex_to_rgb(grass_color.value);
+	color_params.sand_color = hex_to_rgb(sand_color.value);
 }
 
 function on_mouse_move(event){

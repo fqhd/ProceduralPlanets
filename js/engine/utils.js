@@ -55,6 +55,11 @@ export function get_resolution_from_num(n){
 	}
 }
 
+export function hex_to_rgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return [parseInt(result[1], 16) / 255, parseInt(result[2], 16) / 255, parseInt(result[3], 16) / 255];
+}
+
 function random_string(length) {
 	const characters = 'abcdefghijklmnopqrstuvwxyz';
 	let randomString = '';
