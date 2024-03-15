@@ -95,7 +95,7 @@ function load_planet_params(gl, shader, params){
 }
 
 function init_sphere(gl){
-	const { positions, indices } = generate_sphere(6);
+	const { positions, indices } = generate_sphere(8);
 	sphere_indices_buffer = create_indices_buffer(gl, indices);
 	sphere_texture = load_texture_from_data(gl, positions);
 	const neighbouring_indices = get_neighbouring_indices_array(indices, positions.length/3);

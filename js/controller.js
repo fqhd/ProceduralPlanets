@@ -31,14 +31,14 @@ function keyDown(key) {
 
 export function update_planet_params(){
 	if(animate){
-		noise_offset += 0.01;
+		noise_offset += 0.05;
 	}
 	scene.planet_params.generation_params.noise_offset += (noise_offset - scene.planet_params.generation_params.noise_offset) * 0.1;
 
 	const gen_params = scene.planet_params.generation_params;
-	gen_params.shape_frequency = (shape_frequency.value / 100) * 3;
+	gen_params.shape_frequency = (shape_frequency.value / 100) * 10;
 	gen_params.warp_factor = (warp_factor.value / 100) * 10;
-	gen_params.mountain_frequency = (mountain_frequency.value / 100) * 10;
+	gen_params.mountain_frequency = (mountain_frequency.value / 100) * 20;
 	gen_params.mountain_height = (mountain_height.value / 100);
 	gen_params.ridge_noise_frequency = (ridge_noise_frequency.value / 100) * 5;
 	gen_params.ocean_depth = (ocean_depth.value / 100) * 0.5;
